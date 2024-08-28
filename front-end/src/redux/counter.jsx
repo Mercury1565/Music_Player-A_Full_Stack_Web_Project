@@ -21,7 +21,7 @@ export const counterSlice = createSlice({
     incrementByAmount: (state, action) => {
       state.count += action.payload
     },
-    incrementByMultipleAmounts: (state, action) => {
+    incrementByMultipleAmounts: (state, action) => {e
         const { amounts } = action.payload;
         amounts.forEach(amount => {
           state.count += amount;

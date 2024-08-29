@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 
+// sidebar
 export const SideBarButtonActive = styled.button`
   background:  ${(props) => props.theme.colors.primary};
   color: ${(props) => props.theme.colors.textPrimary};
@@ -53,3 +54,4 @@ export const SideBarButtonIdle = styled.button`
     background: ${(props) => props.theme.click.sidebarButtonClick};
   }
 `;
+

@@ -40,6 +40,7 @@ export const theme = {
     small: '6px',
     medium: '8px',
     large: '12px',
+    xlarge: '20px',
   },
 
   shadows: {

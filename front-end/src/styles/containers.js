@@ -57,3 +57,18 @@ export const TopMusicHeader = styled.div`
     margin: 15px;
   }
 `
+// music player container
+export const MusicPlayerContainer = styled.div`
+  background: ${(props) => props.theme.colors.musicCard};
+  
+  position: fixed;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px 25px;
+
+  width: calc(100vw - 50px); 
+  height: 100px;
+`;
+

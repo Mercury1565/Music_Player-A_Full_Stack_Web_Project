@@ -43,4 +43,23 @@ export const TopMusicCardPlayPauseIconStyle = styled.img`
 export const TopMusicHeaderIcon = styled.img`
     width: 22.29px;
     height: 22.29px;
-`
+`;
+
+// music player icons
+export const MusicPlayerIconStyle = styled.img`
+    width: 25px;
+    height: 25px;
+    &:hover {
+        filter: brightness(2);
+        cursor: pointer
+    }
+`;
+
+export const MusicPlayerUtilityIconStyle = styled.img`
+    width: 22px;
+    height: 18px;
+    &:hover {
+        filter: brightness(2);
+        cursor: pointer
+    }
+`;

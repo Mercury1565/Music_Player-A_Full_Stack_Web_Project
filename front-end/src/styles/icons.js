@@ -1,10 +1,12 @@
 import styled from '@emotion/styled';
 
+// sidebar icons
 export const SidebarIconStyle = styled.img`
     width: 20px;
     height: 20px;
 `;
 
+// genre section icons
 export const GenreCardIconStyle = styled.img`
     width: 40px;
     height: 40px;
@@ -27,3 +29,18 @@ export const GenreListNavIconStyle = styled.img`
         cursor: pointer
     }
 `;
+
+// top music icons
+export const TopMusicCardPlayPauseIconStyle = styled.img`
+    width: 20px;
+    height: 20px;
+    &:hover {
+        filter: brightness(2);
+        cursor: pointer
+    }
+`;
+
+export const TopMusicHeaderIcon = styled.img`
+    width: 22.29px;
+    height: 22.29px;
+`

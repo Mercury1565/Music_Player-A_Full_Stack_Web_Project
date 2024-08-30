@@ -2,12 +2,14 @@ export const theme = {
   colors: {
     background: '#000000',  // Dark background
     sidebarBackground: 'rgba(17,17,17, 0.3)',  // Slightly darker for sidebar
+    musicCard: 'rgba(35, 35, 35, 0.7)',  
 
     primary: 'linear-gradient(90deg, #B5179E 0%, #7209B7 100%)', // Purple highlight color with linear gradient
     secondary: 'rgba(17, 17, 17)',  // accent color for the lists
 
     textPrimary: '#FFFFFF',  // Main text color
     textSecondary: '#B8B8B8',  // Secondary text color
+    textTeritary: '#7209B7',  // Tertiary text color
 
     iconColor: '#B8B8B8',  // Icon color
 
@@ -29,6 +31,7 @@ export const theme = {
   fontSizes: {
     small: '12px',
     medium: '16px',
+    xmedium: '18px',
     large: '24px',
   },
 

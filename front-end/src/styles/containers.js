@@ -1,5 +1,11 @@
 import styled from '@emotion/styled';
 
+export const GlobalContainer = styled.div`
+  margin: 10px 290px;
+  padding-bottom: 85px;
+  width: 100%;
+`
+
 // sidebar containers
 export const SidebarContainer = styled.div`
   background: ${(props) => props.theme.colors.sidebarBackground};
@@ -9,12 +15,17 @@ export const SidebarContainer = styled.div`
   
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   gap: ${(props) => props.theme.space[6]}px;
+
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 250px;
 `;
 
 export const GenreContainer = styled.div`
-  width: 817px;
+  width: 75%;
 `;
 
 // genre card containers
@@ -38,11 +49,16 @@ export const GenreHeader = styled.div`
     margin: 15px;
   }
 `
-// top music containers
-export const TopMusicCardsConainer = styled.div`
+// music list containers
+export const MusicCardsContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: ${(props) => props.theme.space[4]}px;
+  width: 100%;
+`;
+
+export const MusicListContainer = styled.div`
+  margin-top: 20px;
 `;
 
 export const TopMusicHeader = styled.div`
@@ -59,7 +75,7 @@ export const TopMusicHeader = styled.div`
 `
 // music player container
 export const MusicPlayerContainer = styled.div`
-  background: ${(props) => props.theme.colors.musicCard};
+  background: ${(props) => props.theme.colors.secondary};
   
   position: fixed;
   bottom: 0;
@@ -69,6 +85,12 @@ export const MusicPlayerContainer = styled.div`
   padding: 5px 25px;
 
   width: calc(100vw - 50px); 
-  height: 100px;
+  height: 80px;
 `;
 
+// Add Music Container
+export const AddMusicContainer = styled.div`
+  width: 60%;
+  margin: 10px 290px;
+  padding-bottom: 85px;
+`;

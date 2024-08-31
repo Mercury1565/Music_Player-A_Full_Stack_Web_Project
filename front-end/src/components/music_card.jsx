@@ -2,14 +2,11 @@ import { TopMusicCardContainer, TopMusicCardDescription, TopMusicCardImage, Styl
 import { TopMusicCardPlayPauseIconStyle } from "../styles/icons";
 import { music_card_play_icon, music_card_pause_icon } from "../assets/assets";
 
-const MusicCard = ({ music, index, isSelected, onClick }) => {
+const TopMusicCard = ({ music, isSelected, onClick }) => {
 
     return (
         <TopMusicCardContainer onClick={onClick} isSelected={isSelected}>
             <TopMusicCardDescription>
-                <Styled_h4 isSelected={isSelected}>
-                    {index + 1}
-                </Styled_h4>
                 <TopMusicCardImage src={music.image} />
                 <Styled_p isSelected={isSelected}>
                     {music.artist} - {music.title}
@@ -26,4 +23,4 @@ const MusicCard = ({ music, index, isSelected, onClick }) => {
     );
 }
 
-export default MusicCard;
+export default TopMusicCard;

@@ -17,6 +17,7 @@ import music_card from './music_card.jpg';
 import music_card_play_icon from './play.svg';
 import music_card_pause_icon from './pause.svg';
 import top_music_header_icon from './top_music_head.svg';
+import favourtie_music_header_icon from './favourite_music_head.svg'
 
 // music player icon
 import fwd_icon from './fwd_icon.svg';
@@ -25,6 +26,9 @@ import player_play_icon from './player_play.svg';
 import player_pause_icon from './player_pause.svg';
 import shuffle_icon from './shuffle_icon.svg';
 import repeat_icon from './repeat_icon.svg';
+
+// add music icons
+import add_music_icon from './add_music_icon.svg';
 
 export {
     search_icon,
@@ -43,6 +47,7 @@ export {
     music_card_play_icon,
     music_card_pause_icon,
     top_music_header_icon,
+    favourtie_music_header_icon,
 
     fwd_icon,
     bwd_icon,
@@ -50,4 +55,6 @@ export {
     player_pause_icon,
     shuffle_icon,
     repeat_icon,
+
+    add_music_icon,
 }

@@ -6,7 +6,7 @@ export const TopMusicCardContainer = styled.div`
     color: ${(props) => props.theme.colors.textPrimary};
 
     padding: ${(props) => props.theme.space[0]}px ${(props) => props.theme.space[6]}px;
-    width: 550px;
+    width: 70%;
     height: 55px;
 
     font-size: ${(props) => props.theme.fontSizes.medium};

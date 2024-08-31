@@ -12,7 +12,7 @@ export const SideBarButtonActive = styled.button`
   font-size: ${(props) => props.theme.fontSizes.medium};
   font-weight: ${(props) => props.theme.fontWeight.medium};
 
-  width: 212px;
+  width: 90%;
   height: 47px;
   padding: ${(props) => props.theme.space[4]}px ${(props) => props.theme.space[3]}px;
 
@@ -35,7 +35,7 @@ export const SideBarButtonIdle = styled.button`
   font-size: ${(props) => props.theme.fontSizes.medium};
   font-weight: ${(props) => props.theme.fontWeight.medium};
 
-  width: 212px;
+  width: 90%;
   height: 47px;
   padding: ${(props) => props.theme.space[4]}px ${(props) => props.theme.space[3]}px;
   
@@ -55,3 +55,20 @@ export const SideBarButtonIdle = styled.button`
   }
 `;
 
+export const AddMusicPageButton = styled.button`
+    background: ${(props) => props.theme.colors.primary};
+    color: ${(props) => props.theme.colors.textPrimary};
+    width: 70%;
+
+    border: none;
+    border-radius: ${(props) => props.theme.radii.xlarge};
+    padding: ${(props) => props.theme.space[1]}px ${(props) => props.theme.space[2]}px;
+
+    margin-top: ${(props) => props.theme.space[4]}px;
+    margin-left: ${(props) => props.theme.space[5]}px;
+
+    &:hover {
+        filter: brightness(0.8);
+        cursor: pointer
+    }
+`;

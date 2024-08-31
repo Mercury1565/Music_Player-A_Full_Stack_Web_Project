@@ -1,4 +1,4 @@
-export const theme = {
+export const my_theme = {
   colors: {
     background: '#000000',  // Dark background
     sidebarBackground: 'rgba(17,17,17, 0.3)',  // Slightly darker for sidebar
@@ -30,12 +30,14 @@ export const theme = {
  
   fontSizes: {
     small: '12px',
+    xsmall: '14px',
     medium: '16px',
     xmedium: '18px',
     large: '24px',
   },
 
   fontWeight: {
+    small: 300,
     medium: 500,
   },
 

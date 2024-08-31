@@ -1,5 +1,11 @@
 import styled from '@emotion/styled';
 
+// golbal icon style
+export const GlobalIconStyle = styled.img`
+    width: 20px;
+    height: 20px;
+`;
+
 // sidebar icons
 export const SidebarIconStyle = styled.img`
     width: 20px;
@@ -41,8 +47,8 @@ export const TopMusicCardPlayPauseIconStyle = styled.img`
 `;
 
 export const TopMusicHeaderIcon = styled.img`
-    width: 22.29px;
-    height: 22.29px;
+    width: 25px;
+    height: 25px;
 `;
 
 // music player icons
@@ -62,4 +68,9 @@ export const MusicPlayerUtilityIconStyle = styled.img`
         filter: brightness(2);
         cursor: pointer
     }
+`;
+
+export const AddMusicIconStyle = styled.img`
+    width: 25px;
+    height: 25px;
 `;

@@ -1,4 +1,6 @@
-export const my_theme = {
+import { createTheme } from "@mui/material";
+
+export const my_theme =  createTheme({
   colors: {
     background: '#000000',  // Dark background
     sidebarBackground: 'rgba(17,17,17, 0.3)',  // Slightly darker for sidebar
@@ -59,5 +61,5 @@ export const my_theme = {
 
   space: [4, 8, 12, 16, 20, 24, 28],  // Padding and margin sizes
 
-};
+});
 

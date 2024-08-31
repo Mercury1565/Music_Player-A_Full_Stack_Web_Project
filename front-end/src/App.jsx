@@ -30,9 +30,11 @@ function App() {
   return (
     <>
       <Global styles={globalStyles} />
-      {/*
+      
       <Router>
         <Sidebar />
+        <MusicPlayer track={track}/> 
+
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/your_music" element={<YourMusicPage />} />
@@ -40,10 +42,7 @@ function App() {
           <Route path="/favourite" element={<Favourites />} />
           <Route path="/search" element={<SearchPage />} />
         </Routes>
-      </Router> */}
-        <MusicPlayer track={track}/> 
-
-      
+      </Router>      
     </>
   )
 }

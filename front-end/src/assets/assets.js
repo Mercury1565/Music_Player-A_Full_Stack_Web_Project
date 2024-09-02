@@ -26,6 +26,7 @@ import player_play_icon from './player_play.svg';
 import player_pause_icon from './player_pause.svg';
 import shuffle_icon from './shuffle_icon.svg';
 import repeat_icon from './repeat_icon.svg';
+import selected_favourite_icon from './selected_favourite_icon.svg';
 
 // add music icons
 import add_music_icon from './add_music_icon.svg';
@@ -55,6 +56,7 @@ export {
     player_pause_icon,
     shuffle_icon,
     repeat_icon,
+    selected_favourite_icon,
 
     add_music_icon,
 }

@@ -1,24 +1,29 @@
 import { MusicCardsContainer } from "../styles/containers";
-import TopMusicCard from "./top_music_card";
+import MusicCard from "./music_card";
 
 import { useState } from 'react';
+import { useDispatch} from "react-redux";
+import { setMusic } from "../redux/slices/musicSlice";
 
 const MusicList = ({ tracks }) => {
     const [selectedMusic, setSelectedMusic] = useState(null);
 
+    const dispatch = useDispatch();    
+
     const handleCardClick = (index) => {
         setSelectedMusic(index);
+        dispatch(setMusic(tracks[index]));
     };
 
     return (
         <MusicCardsContainer>
             {tracks.map((music, index) => (
-                <TopMusicCard 
+                <MusicCard 
                     key={index}
-                    music={music}
+                    music={tracks[index]}
                     index={index}
-                    selectedMusic={selectedMusic}
-                    handleCardClick={handleCardClick}
+                    isSelected={selectedMusic == index}
+                    onClick={() => {handleCardClick(index)}}
                 />
             ))}
         </MusicCardsContainer>

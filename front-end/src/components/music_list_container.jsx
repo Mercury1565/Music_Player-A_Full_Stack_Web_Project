@@ -25,6 +25,10 @@ const MusicContainer = ({type, tracks}) => {
             head_icon = top_music_header_icon;
             head_title = "Your Music";
             break;
+        case "search":
+            head_icon = top_music_header_icon;
+            head_title = "Your Search Results";
+            break;
     }
 
     return (

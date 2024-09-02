@@ -3,7 +3,7 @@ import { MusicPlayerContainer } from "../styles/containers";
 import { MusicInfoContainer, MusicImageContainer, MusicTitleContainer, ControllerContainer, Seeker, SeekPositionContainer, TinyText, UtilityContainer } from "../styles/music_player";
 import { MusicPlayerIconStyle, MusicPlayerUtilityIconStyle } from "../styles/icons";
 import { my_theme } from "../styles/theme";
-import { fwd_icon, bwd_icon, player_play_icon, player_pause_icon, shuffle_icon, repeat_icon, favourite_icon } from "../assets/assets";
+import { fwd_icon, bwd_icon, player_play_icon, player_pause_icon, shuffle_icon, repeat_icon, favourite_icon, selected_favourite_icon } from "../assets/assets";
 
 import Slider from '@mui/material/Slider';
 
@@ -32,10 +32,19 @@ const MusicPlayer = ({ track }) => {
   };
 
   const [isPlaying, setIsPlaying] = useState(false);
+
   const handlePlayPause= (event) => {
     setIsPlaying(!isPlaying);
   }
-
+  const handleFavourite = (track) => {
+    if(track.isFavourite){
+      console.log("Remove from favorite");
+    }
+    else{
+      console.log("Add to favorite");
+    }
+  }
+  
   return(
     <ThemeProvider theme={my_theme}>
       <MusicPlayerContainer>
@@ -71,7 +80,7 @@ const MusicPlayer = ({ track }) => {
         </Seeker>
 
         {/* Volume Slider */}
-        {/* <Box sx={{ width: 140 }}>
+        <Box sx={{ width: 140 }}>
           <Stack spacing={2} direction="row" sx={{ alignItems: 'center', mb: 1 }}>
             <VolumeUp style={{ color: '#ffffff' }} />
             <Slider 
@@ -83,12 +92,15 @@ const MusicPlayer = ({ track }) => {
               onChange={handleChange} 
             />
           </Stack>
-        </Box> */}
+        </Box>
 
         <UtilityContainer>
           <MusicPlayerUtilityIconStyle src={shuffle_icon}/>
           <MusicPlayerUtilityIconStyle src={repeat_icon}/>
-          <MusicPlayerUtilityIconStyle src={favourite_icon}/>
+          <MusicPlayerUtilityIconStyle 
+            src={track.isFavourite ? selected_favourite_icon: favourite_icon}
+            onClick={() => {handleFavourite(track)}}
+          />
         </UtilityContainer> 
 
       </MusicPlayerContainer>

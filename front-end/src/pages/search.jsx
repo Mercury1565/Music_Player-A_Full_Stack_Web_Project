@@ -1,13 +1,18 @@
+import MusicContainer from "../components/music_list_container";
 import SearchBar from "../components/search_bar";
 import { GlobalContainer} from "../styles/containers"
 import { my_theme } from "../styles/theme"
 import { ThemeProvider } from "@emotion/react";
+import { useSelector } from "react-redux";
 
 const SearchPage = () => {
+    const searchedMusicList = useSelector((state) => state.searchedMusicList);
+
     return(
         <ThemeProvider theme={my_theme}>
             <GlobalContainer>
                 <SearchBar />
+                <MusicContainer type={"search"} tracks={searchedMusicList}/>
             </GlobalContainer>  
         </ThemeProvider> 
     )

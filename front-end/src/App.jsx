@@ -4,28 +4,24 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import Sidebar from './components/sidebar';
 import GenreCardsContainer from './components/genre_cards_container';
-import TopMusicCard from './components/top_music_card';
+import TopMusicCard from './components/music_card';
 import MusicContainer from './components/music_list_container';
 import MusicPlayer from './components/music_player';
 
 import { music_card } from "./assets/assets"
-import MusicCard from './components/top_music_card';
+import MusicCard from './components/music_card';
 import SearchBar from './components/search_bar';
-import AddMusicCard from './components/add_music_card';
+import AddMusicCard from './pages/add_music_page';
 import Dashboard from './pages/dashboard';
 import YourMusicPage from './pages/your_music';
 import Favourites from './pages/favourites';
 import SearchPage from './pages/search';
 
+import { useSelector } from 'react-redux';
+
 
 function App() {
-  
-  const track = {
-    artist: "Michael Jackson",
-    title: "Thriller",
-    image: music_card,
-    length: 200,
-  }
+  const playing_track = useSelector((state) => state.music);
 
   return (
     <>
@@ -33,7 +29,7 @@ function App() {
       
       <Router>
         <Sidebar />
-        <MusicPlayer track={track}/> 
+        <MusicPlayer track={playing_track}/> 
 
         <Routes>
           <Route path="/" element={<Dashboard />} />

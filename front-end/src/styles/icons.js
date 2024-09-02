@@ -74,3 +74,13 @@ export const AddMusicIconStyle = styled.img`
     width: 25px;
     height: 25px;
 `;
+
+export const FavouriteIconStyle = styled.img`
+    color: red;
+    width: 22px;
+    height: 18px;
+    &:hover {
+        filter: brightness(2);
+        cursor: pointer
+    }
+`;

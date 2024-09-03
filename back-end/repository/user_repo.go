@@ -23,6 +23,7 @@ func NewUserRepo(database mongo.Database, collection string) interfaces.UserRepo
 
 func (ur *userRepo) CreateUser(ctx context.Context, user *models.User) *models.ErrorResponse {
 	user.ID = primitive.NewObjectID()
+	user.FavouriteMusics = []primitive.ObjectID{}
 
 	_, err := ur.collection.InsertOne(ctx, user)
 	if err != nil {

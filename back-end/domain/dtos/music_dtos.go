@@ -1,6 +1,10 @@
 package dtos
 
-import "go.mongodb.org/mongo-driver/bson/primitive"
+import (
+	"time"
+
+	"go.mongodb.org/mongo-driver/bson/primitive"
+)
 
 type CreateMusicRequest struct {
 	Title  string   `json:"title" validate:"required"`
@@ -19,7 +23,7 @@ type FilterMusicRequest struct {
 	Title     string   `json:"title,omitempty"`
 	Artist    string   `json:"artist,omitempty"`
 	Genres    []string `json:"tags,omitempty"`
-	Date      string   `json:"date,omitempty"`
+	Date      time.Time   `json:"date,omitempty"`
 	PlayCount int      `bson:"play_count" json:"play_count"`
 }
 

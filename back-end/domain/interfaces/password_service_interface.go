@@ -12,8 +12,8 @@ type PasswordService interface {
 }
 
 type PasswordUsecase interface {
-	GenerateResetURL(ctx context.Context, email string) (string, *models.ErrorResponse)
-	SendResetEmail(ctx context.Context, email string, resetURL string) *models.ErrorResponse
+	// GenerateResetURL(ctx context.Context, email string) (string, *models.ErrorResponse)
+	// SendResetEmail(ctx context.Context, email string, resetURL string) *models.ErrorResponse
 	SetNewUserPassword(ctx context.Context, shortURlCode string, password string) *models.ErrorResponse
-	SetUpdateUserPassword(ctx context.Context, shortURlCode string, password string) *models.ErrorResponse
+	// SetUpdateUserPassword(ctx context.Context, shortURlCode string, password string) *models.ErrorResponse
 }

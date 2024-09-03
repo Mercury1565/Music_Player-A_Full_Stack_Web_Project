@@ -11,18 +11,18 @@ import (
 
 type MusicRepository interface {
 	CreateMusic(ctx context.Context, Music *models.Music) (*models.Music, *models.ErrorResponse)
-	GetMusic(ctx context.Context, id string) (*models.Music, *models.ErrorResponse)
-	GetMusics(ctx context.Context, page int) ([]*models.Music, *models.ErrorResponse)
+	GetMusics(ctx context.Context) ([]*models.Music, *models.ErrorResponse)
+	GetMusic(ctx context.Context, id primitive.ObjectID) (*models.Music, *models.ErrorResponse)
 	SearchMusics(ctx context.Context, filter dtos.FilterMusicRequest) ([]*models.Music, *models.ErrorResponse)
 	// UpdateMusic(ctx context.Context, MusicID primitive.ObjectID, Music *models.Music) *models.ErrorResponse
-	DeleteMusic(ctx context.Context, id string) *models.ErrorResponse
+	DeleteMusic(ctx context.Context, id primitive.ObjectID) *models.ErrorResponse
 	IncreasePlayCount(ctx context.Context, MusicID primitive.ObjectID) *models.ErrorResponse
 }
 
 type MusicUsecase interface {
-	CreateMusic(ctx context.Context, Music *models.Music) (*models.ErrorResponse)
-	GetMusic(ctx context.Context, id string) (*models.Music, *models.ErrorResponse)
-	GetMusics(ctx context.Context, page int) ([]*models.Music, *models.ErrorResponse)
+	CreateMusic(ctx context.Context, Music *models.Music) (*models.Music, *models.ErrorResponse)
+	GetMusic(ctx context.Context, id primitive.ObjectID) (*models.Music, *models.ErrorResponse)
+	GetMusics(ctx context.Context) ([]*models.Music, *models.ErrorResponse)
 	SearchMusics(ctx context.Context, filter dtos.FilterMusicRequest) ([]*models.Music, *models.ErrorResponse)
 	// UpdateMusic(ctx context.Context, MusicID primitive.ObjectID, Music *models.Music) *models.ErrorResponse
 	DeleteMusic(ctx context.Context, deleteMusicReq dtos.DeleteMusicRequest) *models.ErrorResponse

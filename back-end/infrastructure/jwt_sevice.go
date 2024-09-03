@@ -26,9 +26,8 @@ func (j *JwtService) CreateAccessToken(user models.User, expTim int) (accessToke
 	secret := []byte(j.Env.JWT_SECRET)
 
 	claims := &models.JWTCustom{
-		ID:    user.ID.Hex(),
+		ID:    user.ID,
 		Email: user.Email,
-		Role:  string(user.Role),
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expTime,
 		},
@@ -49,7 +48,7 @@ func (j *JwtService) CreateRefreshToken(user models.User, expTim int) (refreshTo
 	secret := []byte(j.Env.JWT_SECRET)
 
 	claims := &models.JWTCustom{
-		ID: user.ID.Hex(),
+		ID: user.ID,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expTime,
 		},

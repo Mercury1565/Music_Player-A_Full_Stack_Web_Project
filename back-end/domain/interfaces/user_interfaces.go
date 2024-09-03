@@ -20,11 +20,6 @@ type UserRepository interface {
 	DemoteUser(ctx context.Context, id primitive.ObjectID) *models.ErrorResponse
 }
 
-type PromoteDemoteUserUsecase interface {
-	PromoteUser(ctx context.Context, id primitive.ObjectID) *models.ErrorResponse
-	DemoteUser(ctx context.Context, id primitive.ObjectID) *models.ErrorResponse
-}
-
 type UserProfileUpdateUsecase interface {
 	GetUserProfile(ctx context.Context, userID string) (*dtos.Profile, *models.ErrorResponse)
 	DeleteUserProfile(ctx context.Context, userID string) *models.ErrorResponse

@@ -2,6 +2,7 @@ package interfaces
 
 import (
 	"context"
+	"mime/multipart"
 	"music_player_backend/domain/dtos"
 	"music_player_backend/domain/models"
 
@@ -20,7 +21,7 @@ type MusicRepository interface {
 }
 
 type MusicUsecase interface {
-	CreateMusic(ctx context.Context, Music *models.Music) (*models.Music, *models.ErrorResponse)
+	CreateMusic(ctx context.Context, newMusic *dtos.CreateMusicRequest, audioFile *multipart.FileHeader, coverImage *multipart.FileHeader) (*models.Music, *models.ErrorResponse)
 	GetMusic(ctx context.Context, id primitive.ObjectID) (*models.Music, *models.ErrorResponse)
 	GetMusics(ctx context.Context) ([]*models.Music, *models.ErrorResponse)
 	SearchMusics(ctx context.Context, filter dtos.FilterMusicRequest) ([]*models.Music, *models.ErrorResponse)

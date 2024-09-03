@@ -41,7 +41,6 @@ func (uc *signupUsecase) CreateUser(ctx context.Context, user *models.User) *mod
 		Name:     user.Name,
 		Email:    user.Email,
 		Password: hashedPassword,
-		Role:     "user",
 	}
 
 	// create user

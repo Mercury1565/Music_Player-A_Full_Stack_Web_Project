@@ -14,7 +14,7 @@ import (
 
 func NewMusicRouter(env *config.Env, database mongo.Database, group *gin.RouterGroup) {
 	musicRepo := repository.NewMusicRepo(database, "music")
-	storage := infrastructure.NewFileStorage("uploads")
+	storage := infrastructure.NewFileStorage("../uploads")
 	timeout := time.Duration(env.CONTEXT_TIMEOUT) * time.Second
 
 	musicUsecase := usecases.NewMusicUsecase(musicRepo, storage, timeout)
@@ -23,6 +23,7 @@ func NewMusicRouter(env *config.Env, database mongo.Database, group *gin.RouterG
 	group.POST("/music", musicController.CreateMusicController)
 	group.GET("/music/:id", musicController.GetMusicController)
 	group.GET("/musics", musicController.GetMusicsController)
+	group.GET("/musics/your", musicController.GetMusicsByArtistIDController)
 	group.DELETE("/music/:id", musicController.DeleteMusicController)
 	group.GET("/music/filter", musicController.SearchMusicsController)
 }

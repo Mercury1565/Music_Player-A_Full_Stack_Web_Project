@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"fmt"
 	"music_player_backend/domain/interfaces"
 	"music_player_backend/domain/models"
 
@@ -21,6 +22,8 @@ func NewUserRepo(database mongo.Database, collection string) interfaces.UserRepo
 }
 
 func (ur *userRepo) CreateUser(ctx context.Context, user *models.User) *models.ErrorResponse {
+	user.ID = primitive.NewObjectID()
+
 	_, err := ur.collection.InsertOne(ctx, user)
 	if err != nil {
 		return models.InternalServerError(err.Error())
@@ -31,31 +34,32 @@ func (ur *userRepo) CreateUser(ctx context.Context, user *models.User) *models.E
 
 // GetUserByID fetches a user by their ID.
 func (ur *userRepo) GetUserByID(ctx context.Context, id primitive.ObjectID) (*models.User, *models.ErrorResponse) {
-	var user *models.User
+	var user models.User
 
-	err := ur.collection.FindOne(ctx, bson.M{"_id": id}).Decode(user)
+	err := ur.collection.FindOne(ctx, bson.M{"_id": id}).Decode(&user)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
 			return nil, models.NotFound("user with the given ID not found")
 		}
-		return nil, models.InternalServerError("error fetching user" + err.Error())
+		return nil, models.InternalServerError("error fetching user " + err.Error())
 	}
 
-	return user, nil
+	return &user, nil
 }
 
 func (ur *userRepo) GetUserByEmail(ctx context.Context, email string) (*models.User, *models.ErrorResponse) {
-	var user *models.User
+	var user models.User
 
-	err := ur.collection.FindOne(ctx, bson.M{"email": email}).Decode(user)
+	err := ur.collection.FindOne(ctx, bson.M{"email": email}).Decode(&user)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
 			return nil, models.NotFound("user not found")
 		}
+		fmt.Println("right here")
 		return nil, models.NotFound(err.Error())
 	}
 
-	return user, nil
+	return &user, nil
 }
 
 func (ur *userRepo) GetUserByName(ctx context.Context, name string) (*models.User, *models.ErrorResponse) {
@@ -109,14 +113,13 @@ func (ur *userRepo) DeleteUser(ctx context.Context, id primitive.ObjectID) *mode
 	return nil
 }
 
-// updateUserRole is a helper method to update a user's role.
-func (ur *userRepo) updateUserRole(ctx context.Context, id primitive.ObjectID, role string) *models.ErrorResponse {
-	filter := bson.M{"_id": id}
+func (userRepo *userRepo) AddFavouriteMusic(ctx context.Context, userID primitive.ObjectID, musicID primitive.ObjectID) *models.ErrorResponse {
+	filter := bson.M{"_id": userID}
 	update := bson.M{
-		"$set": bson.M{"role": role},
+		"$push": bson.M{"favourite_musics": musicID},
 	}
 
-	_, err := ur.collection.UpdateOne(ctx, filter, update)
+	_, err := userRepo.collection.UpdateOne(ctx, filter, update)
 	if err != nil {
 		return models.InternalServerError(err.Error())
 	}
@@ -124,14 +127,41 @@ func (ur *userRepo) updateUserRole(ctx context.Context, id primitive.ObjectID, r
 	return nil
 }
 
-// PromoteUser promotes a user to an admin role.
-func (ur *userRepo) PromoteUser(ctx context.Context, id primitive.ObjectID) *models.ErrorResponse {
-	err := ur.updateUserRole(ctx, id, "admin")
-	return err
+func (userRepo *userRepo) RemoveFavouriteMusic(ctx context.Context, userID primitive.ObjectID, musicID primitive.ObjectID) *models.ErrorResponse {
+	filter := bson.M{"_id": userID}
+	update := bson.M{
+		"$pull": bson.M{"favourite_musics": musicID},
+	}
+
+	_, err := userRepo.collection.UpdateOne(ctx, filter, update)
+	if err != nil {
+		return models.InternalServerError(err.Error())
+	}
+
+	return nil
 }
 
-// DemoteUser demotes a user to a lower role.
-func (ur *userRepo) DemoteUser(ctx context.Context, id primitive.ObjectID) *models.ErrorResponse {
-	err := ur.updateUserRole(ctx, id, "user")
-	return err
+func (userRepo *userRepo) GetUserFavouriteMusics(ctx context.Context, userID primitive.ObjectID) ([]primitive.ObjectID, *models.ErrorResponse) {
+	var user models.User
+	err := userRepo.collection.FindOne(ctx, bson.M{"_id": userID}).Decode(&user)
+	if err != nil {
+		return nil, models.InternalServerError(err.Error())
+	}
+
+	return user.FavouriteMusics, nil
 }
+
+// updateUserRole is a helper method to update a user's role.
+// func (ur *userRepo) updateUserRole(ctx context.Context, id primitive.ObjectID, role string) *models.ErrorResponse {
+// 	filter := bson.M{"_id": id}
+// 	update := bson.M{
+// 		"$set": bson.M{"role": role},
+// 	}
+
+// 	_, err := ur.collection.UpdateOne(ctx, filter, update)
+// 	if err != nil {
+// 		return models.InternalServerError(err.Error())
+// 	}
+
+// 	return nil
+// }

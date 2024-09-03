@@ -23,4 +23,11 @@ func Setup(env *config.Env, db mongo.Database, gin *gin.Engine) {
 	protectedRoute.Use(jwtMiddleware.JWTAuthMiddelware())
 
 	NewMusicRouter(env, db, protectedRoute)
+	NewLogoutRouter(env, db, protectedRoute)
+	NewFavouritesRouter(env, db, protectedRoute)
+
+	NewAuthenticationRouter(env, db, publicRoute)
+	NewRefreshRouter(env, db, refreshRoute)
 }
+
+

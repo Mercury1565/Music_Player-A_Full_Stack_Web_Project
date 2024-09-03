@@ -36,8 +36,8 @@ func (musicRepo *musicRepo) CreateMusic(c context.Context, music *models.Music) 
 	return music, nil
 }
 
-func (musicRepo *musicRepo) GetMusics(c context.Context) ([]*models.Music, *models.ErrorResponse) {
-	var musics []*models.Music
+func (musicRepo *musicRepo) GetMusics(c context.Context) ([]models.Music, *models.ErrorResponse) {
+	var musics []models.Music
 
 	cursor, err := musicRepo.collection.Find(c, bson.M{})
 	if err != nil {
@@ -45,8 +45,8 @@ func (musicRepo *musicRepo) GetMusics(c context.Context) ([]*models.Music, *mode
 	}
 	defer cursor.Close(c)
 
-	_ = cursor.All(c, musics)
-	if len(musics) == 0 {
+	_ = cursor.All(c, &musics)
+	if musics == nil {
 		return nil, models.NotFound("no music found")
 	}
 
@@ -58,26 +58,39 @@ func (musicRepo *musicRepo) GetMusic(c context.Context, musicID primitive.Object
 
 	err := musicRepo.collection.FindOne(c, bson.M{"_id": musicID}).Decode(&music)
 	if err != nil {
-		return nil, models.InternalServerError("Failed to get music")
+		return nil, models.NotFound("music not found")
 	}
 
 	return music, nil
 }
 
-func (musicRepo *musicRepo) SearchMusics(ctx context.Context, filter dtos.FilterMusicRequest) ([]*models.Music, *models.ErrorResponse) {
-	var musics []*models.Music
+func (musicRepo *musicRepo) GetMusicByArtistID(c context.Context, artistID primitive.ObjectID) (*models.Music, *models.ErrorResponse) {
+	var music *models.Music
+
+	err := musicRepo.collection.FindOne(c, bson.M{"artist_id": artistID}).Decode(&music)
+	if err != nil {
+		return nil, models.NotFound("music not found")
+	}
+
+	return music, nil
+}
+
+func (musicRepo *musicRepo) SearchMusics(ctx context.Context, filter dtos.FilterMusicRequest) ([]models.Music, *models.ErrorResponse) {
+	var musics []models.Music
 	query := bson.M{}
+
+	fmt.Println(filter)
 
 	if filter.Title != "" {
 		query["title"] = bson.M{"$regex": filter.Title, "$options": "i"}
 	}
 
-	if len(filter.Genres) > 0 {
-		query["genres"] = bson.M{"$in": filter.Genres}
+	if filter.Artist != "" {
+		query["artist"] = bson.M{"$regex": filter.Artist, "$options": "i"}
 	}
 
-	if filter.Artist != "" {
-		query["artist"] = bson.M{"$eq": filter.Artist}
+	if len(filter.Genres) > 0 {
+		query["genres"] = bson.M{"$in": filter.Genres}
 	}
 
 	if filter.PlayCount > 0 {
@@ -94,7 +107,7 @@ func (musicRepo *musicRepo) SearchMusics(ctx context.Context, filter dtos.Filter
 	}
 	defer cursor.Close(ctx)
 
-	cursor.All(ctx, musics)
+	cursor.All(ctx, &musics)
 	if err := cursor.Err(); err != nil {
 		return nil, models.InternalServerError("Cursor error occurred while searching musics")
 	}

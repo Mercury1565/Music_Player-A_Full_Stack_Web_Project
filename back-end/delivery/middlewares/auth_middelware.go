@@ -6,6 +6,7 @@ import (
 	"music_player_backend/domain/interfaces"
 
 	"github.com/gin-gonic/gin"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type AuthMiddleware struct {
@@ -40,7 +41,14 @@ func (auth *AuthMiddleware) JWTAuthMiddelware() gin.HandlerFunc {
 			return
 		}
 
-		session, nErr := auth.sessionRepo.GetToken(c, authorizedTokenJWT.ID)
+		objId, e := primitive.ObjectIDFromHex(authorizedTokenJWT.ID)
+		if e != nil {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+			c.Abort()
+			return
+		}
+
+		session, nErr := auth.sessionRepo.GetToken(c, objId)
 
 		// access token is not in the session
 		if nErr != nil {
@@ -84,7 +92,14 @@ func (auth *AuthMiddleware) JWTRefreshAuthMiddelware() gin.HandlerFunc {
 			return
 		}
 
-		_, nErr := auth.sessionRepo.GetToken(c, authorizedTokenJWT.ID)
+		objId, e := primitive.ObjectIDFromHex(authorizedTokenJWT.ID)
+		if e != nil {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+			c.Abort()
+			return
+		}
+
+		_, nErr := auth.sessionRepo.GetToken(c, objId)
 
 		// access token is not in the session
 		if nErr != nil {

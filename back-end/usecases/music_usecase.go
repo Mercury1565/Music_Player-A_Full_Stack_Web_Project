@@ -17,14 +17,14 @@ import (
 
 type musicUsecase struct {
 	// Add any dependencies or fields needed for the usecase
-	repository interfaces.MusicRepository
+	musicRepo interfaces.MusicRepository
 	storage    interfaces.FileUploadService
 	timeout    time.Duration
 }
 
 func NewMusicUsecase(repo interfaces.MusicRepository, storage interfaces.FileUploadService, timeout time.Duration) interfaces.MusicUsecase {
 	return &musicUsecase{
-		repository: repo,
+		musicRepo: repo,
 		storage:    storage,
 		timeout:    timeout,
 	}
@@ -41,6 +41,7 @@ func (uc *musicUsecase) CreateMusic(ctx context.Context, newMusic *dtos.CreateMu
 	}
 
 	music.Artist = newMusic.Artist
+	music.ArtistID = newMusic.ArtistID
 	music.Title = newMusic.Title
 	music.Genres = newMusic.Genres
 
@@ -58,28 +59,35 @@ func (uc *musicUsecase) CreateMusic(ctx context.Context, newMusic *dtos.CreateMu
 	music.AudioFilePath = audioFilePath
 	music.CoverImagePath = coverImageFilePath
 
-	return uc.repository.CreateMusic(ctx, &music)
+	return uc.musicRepo.CreateMusic(ctx, &music)
 }
 
 func (uc *musicUsecase) GetMusic(ctx context.Context, id primitive.ObjectID) (*models.Music, *models.ErrorResponse) {
 	ctx, cancel := context.WithTimeout(ctx, uc.timeout)
 	defer cancel()
 
-	uc.repository.IncreasePlayCount(ctx, id)
-	return uc.repository.GetMusic(ctx, id)
+	uc.musicRepo.IncreasePlayCount(ctx, id)
+	return uc.musicRepo.GetMusic(ctx, id)
 }
 
-func (uc *musicUsecase) GetMusics(ctx context.Context) ([]*models.Music, *models.ErrorResponse) {
+func (uc *musicUsecase) GetMusics(ctx context.Context) ([]models.Music, *models.ErrorResponse) {
 	ctx, cancel := context.WithTimeout(ctx, uc.timeout)
 	defer cancel()
 
-	return uc.repository.GetMusics(ctx)
+	return uc.musicRepo.GetMusics(ctx)
 }
 
-func (uc *musicUsecase) SearchMusics(ctx context.Context, filter dtos.FilterMusicRequest) ([]*models.Music, *models.ErrorResponse) {
+func (uc *musicUsecase) GetMusicByArtistID(ctx context.Context, artistID primitive.ObjectID) (*models.Music, *models.ErrorResponse) {
 	ctx, cancel := context.WithTimeout(ctx, uc.timeout)
 	defer cancel()
-	return uc.repository.SearchMusics(ctx, filter)
+
+	return uc.musicRepo.GetMusicByArtistID(ctx, artistID)
+}
+
+func (uc *musicUsecase) SearchMusics(ctx context.Context, filter dtos.FilterMusicRequest) ([]models.Music, *models.ErrorResponse) {
+	ctx, cancel := context.WithTimeout(ctx, uc.timeout)
+	defer cancel()
+	return uc.musicRepo.SearchMusics(ctx, filter)
 }
 
 func (uc *musicUsecase) DeleteMusic(ctx context.Context, deleteMusicReq dtos.DeleteMusicRequest) *models.ErrorResponse {
@@ -87,7 +95,7 @@ func (uc *musicUsecase) DeleteMusic(ctx context.Context, deleteMusicReq dtos.Del
 	defer cancel()
 
 	// check if delete operation is authorized
-	music, err := uc.repository.GetMusic(ctx, deleteMusicReq.MusicID)
+	music, err := uc.musicRepo.GetMusic(ctx, deleteMusicReq.MusicID)
 	if err != nil {
 		return err
 	}
@@ -97,11 +105,14 @@ func (uc *musicUsecase) DeleteMusic(ctx context.Context, deleteMusicReq dtos.Del
 	}
 
 	// delete the music and cover image files
-	if err := uc.deleteFile(music.Artist, music.Title); err != nil {
+	musicExt := filepath.Ext(music.AudioFilePath) 
+	coverExt := filepath.Ext(music.CoverImagePath)
+
+	if err := uc.deleteFile(music.Artist, music.Title, musicExt, coverExt); err != nil {
 		return err
 	}
 
-	return uc.repository.DeleteMusic(ctx, deleteMusicReq.MusicID)
+	return uc.musicRepo.DeleteMusic(ctx, deleteMusicReq.MusicID)
 }
 
 // The below two don't get exported
@@ -128,10 +139,10 @@ func (uc *musicUsecase) uploadFile(file *multipart.FileHeader, directory, artist
 	return uc.storage.SaveFile(directory, filename, data)
 }
 
-func (uc *musicUsecase) deleteFile(artist, title string) *models.ErrorResponse {
-	// Generate the filenames for the music and cover image
-	musicFilename := fmt.Sprintf("%s-%s.mp3", strings.ReplaceAll(artist, " ", "_"), strings.ReplaceAll(title, " ", "_"))
-	coverFilename := fmt.Sprintf("%s-%s.jpg", strings.ReplaceAll(artist, " ", "_"), strings.ReplaceAll(title, " ", "_"))
+func (uc *musicUsecase) deleteFile(artist, title, musicExtension, coverExtension string) *models.ErrorResponse {
+	// Generate the filenames for the music and cover image with the correct extensions
+	musicFilename := fmt.Sprintf("%s-%s%s", strings.ReplaceAll(artist, " ", "_"), strings.ReplaceAll(title, " ", "_"), musicExtension)
+	coverFilename := fmt.Sprintf("%s-%s%s", strings.ReplaceAll(artist, " ", "_"), strings.ReplaceAll(title, " ", "_"), coverExtension)
 
 	return uc.storage.DeleteFile(musicFilename, coverFilename)
 }

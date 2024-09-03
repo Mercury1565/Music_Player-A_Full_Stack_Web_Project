@@ -19,20 +19,10 @@ type Env struct {
 
 	SERVER_ADDRESS  string `mapstructure:"SERVER_ADDRESS"`
 	CONTEXT_TIMEOUT int    `mapstructure:"CONTEXT_TIMEOUT"`
-
-	OAUTH_CLIENT_ID       string `mapstructure:"OAUTH_CLIENT_ID"`
-	OAUTH_CLIENT_SECRET   string `mapstructure:"OAUTH_CLIENT_SECRET"`
-	OAUTH_REDIRECT_URL    string `mapstructure:"OAUTH_REDIRECT_URL"`
-	GOOGEL_CLIENT_ID      string `mapstructure:"GOOGEL_CLIENT_ID"`
-	GOOGLE_TOKEN_INFO_URL string `mapstructure:"GOOGLE_TOKEN_INFO_URL"`
-
-	CLOUDINARY_CLOUD_NAME string `mapstructure:"CLOUDINARY_CLOUD_NAME"`
-	CLOUDINARY_API_KEY    string `mapstructure:"CLOUDINARY_API_KEY"`
-	CLOUDINARY_API_SECRET string `mapstructure:"CLOUDINARY_API_SECRET"`
 }
 
 func NewEnv() *Env {
-	projectRoot, err := filepath.Abs(filepath.Join("/home/mercury/Desktop/a2sv_starter_project/a2sv-g5-project-phase-starter-project/backend/AAiT-backend-group-5/"))
+	projectRoot, err := filepath.Abs(filepath.Join("/home/mercury/Desktop/Addis_Project/back-end/"))
 
 	if err != nil {
 		log.Fatalf("Error getting project root path: %v", err)
@@ -56,16 +46,6 @@ func NewEnv() *Env {
 
 	viper.BindEnv("ACCESS_TOKEN_EXPIRY_HOUR")
 	viper.BindEnv("REFRESH_TOKEN_EXPIRY_HOUR")
-
-	viper.BindEnv("OAUTH_CLIENT_ID")
-	viper.BindEnv("OAUTH_CLIENT_SECRET")
-	viper.BindEnv("OAUTH_REDIRECT_URL")
-	viper.BindEnv("GOOGLE_CLIENT_ID")
-	viper.BindEnv("GOOGLE_TOKEN_INFO_URL")
-
-	viper.BindEnv("CLOUDINARY_CLOUD_NAME")
-	viper.BindEnv("CLOUDINARY_API_KEY")
-	viper.BindEnv("CLOUDINARY_API_SECRET")
 
 	env := Env{}
 

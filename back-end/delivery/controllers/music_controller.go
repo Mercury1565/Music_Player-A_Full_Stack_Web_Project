@@ -30,6 +30,11 @@ func (musicController *MusicController) CreateMusicController(ctx *gin.Context) 
 	artistId := ctx.GetString("id")
 	validate := validator.New()
 
+	newMusic.ArtistID, _ = primitive.ObjectIDFromHex(artistId)
+	newMusic.Artist = ctx.PostForm("artist")
+	newMusic.Title = ctx.PostForm("title")
+	newMusic.Genres = strings.Split(ctx.PostForm("genres"), ",")
+
 	audioFile, err := ctx.FormFile("music")
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Audio file is missing"})
@@ -40,11 +45,6 @@ func (musicController *MusicController) CreateMusicController(ctx *gin.Context) 
 	if err != nil {
 		coverImage = &multipart.FileHeader{}
 	}
-
-	newMusic.Artist = ctx.PostForm("artist")
-	newMusic.ArtistID, _ = primitive.ObjectIDFromHex(artistId)
-	newMusic.Title = ctx.PostForm("title")
-	newMusic.Genres = strings.Split(ctx.PostForm("genres"), ",")
 
 	if err := validate.Struct(newMusic); err != nil {
 		ctx.IndentedJSON(http.StatusBadRequest, gin.H{"error": "One or more fields are missing"})
@@ -73,14 +73,7 @@ func (musicController *MusicController) GetMusicController(ctx *gin.Context) {
 		return
 	}
 
-	musicPath := music.AudioFilePath
-	coverImagePath := music.CoverImagePath
-
-	ctx.IndentedJSON(http.StatusOK, gin.H{
-		"music":            music,
-		"music_path":       musicPath,
-		"cover_image_path": coverImagePath,
-	})
+	ctx.IndentedJSON(http.StatusOK, gin.H{"music": music})
 }
 
 func (musicController *MusicController) GetMusicsController(ctx *gin.Context) {
@@ -93,6 +86,22 @@ func (musicController *MusicController) GetMusicsController(ctx *gin.Context) {
 	ctx.IndentedJSON(http.StatusOK, gin.H{"musics": musics})
 }
 
+func (musicController *MusicController) GetMusicsByArtistIDController(ctx *gin.Context) {
+	artistID, e := primitive.ObjectIDFromHex(ctx.Param("id"))
+	if e != nil {
+		ctx.IndentedJSON(http.StatusBadRequest, gin.H{"error": "Invalid artist id"})
+		return
+	}
+
+	music, err := musicController.usecase.GetMusicByArtistID(ctx, artistID)
+	if err != nil {
+		ctx.IndentedJSON(err.Code, gin.H{"error": err.Message})
+		return
+	}
+
+	ctx.IndentedJSON(http.StatusOK, gin.H{"music": music})
+}
+
 func (musicController *MusicController) SearchMusicsController(ctx *gin.Context) {
 
 	title := ctx.DefaultQuery("title", "")
@@ -102,7 +111,7 @@ func (musicController *MusicController) SearchMusicsController(ctx *gin.Context)
 	genres := ctx.DefaultQuery("genres", "")
 
 	playCountInt, _ := strconv.Atoi(playCount)
-	dateTime, _ := time.Parse("2000-01-02", date)
+	dateTime, _ := time.Parse("2006-01-02", date)
 
 	genresSlice := []string{}
 	if genres != "" {
@@ -123,7 +132,7 @@ func (musicController *MusicController) SearchMusicsController(ctx *gin.Context)
 		return
 	}
 
-	ctx.IndentedJSON(http.StatusOK, gin.H{"data": musics})
+	ctx.IndentedJSON(http.StatusOK, gin.H{"musics": musics})
 }
 
 func (musicController *MusicController) DeleteMusicController(ctx *gin.Context) {

@@ -8,14 +8,12 @@ import (
 
 type signupUsecase struct {
 	repository interfaces.UserRepository
-	jwtService interfaces.JwtService
 	passwordService interfaces.PasswordService
 }
 
-func NewSignupUsecase(repository interfaces.UserRepository, jwtService interfaces.JwtService, passwordService interfaces.PasswordService) interfaces.SignupUsecase {
+func NewSignupUsecase(repository interfaces.UserRepository, passwordService interfaces.PasswordService) interfaces.SignupUsecase {
 	return &signupUsecase{
 		repository: repository,
-		jwtService: jwtService,
 		passwordService: passwordService,
 	}
 }

@@ -21,6 +21,7 @@ func NewLoginUsecase(jwtService interfaces.JwtService, passwordService interface
 		jwtService:      jwtService,
 		passwordService: passwordService,
 		repository:      repository,
+		sessionRepo:     sessionRepo,
 		env:             env,
 	}
 }

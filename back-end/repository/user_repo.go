@@ -117,7 +117,7 @@ func (ur *userRepo) DeleteUser(ctx context.Context, id primitive.ObjectID) *mode
 func (userRepo *userRepo) AddFavouriteMusic(ctx context.Context, userID primitive.ObjectID, musicID primitive.ObjectID) *models.ErrorResponse {
 	filter := bson.M{"_id": userID}
 	update := bson.M{
-		"$push": bson.M{"favourite_musics": musicID},
+		"$addToSet": bson.M{"favourite_musics": musicID},
 	}
 
 	_, err := userRepo.collection.UpdateOne(ctx, filter, update)

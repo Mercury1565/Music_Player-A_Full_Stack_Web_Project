@@ -64,15 +64,21 @@ func (musicRepo *musicRepo) GetMusic(c context.Context, musicID primitive.Object
 	return music, nil
 }
 
-func (musicRepo *musicRepo) GetMusicByArtistID(c context.Context, artistID primitive.ObjectID) (*models.Music, *models.ErrorResponse) {
-	var music *models.Music
+func (musicRepo *musicRepo) GetMusicByArtistID(c context.Context, artistID primitive.ObjectID) ([]models.Music, *models.ErrorResponse) {
+	var musics []models.Music
 
-	err := musicRepo.collection.FindOne(c, bson.M{"artist_id": artistID}).Decode(&music)
+	cursor, err := musicRepo.collection.Find(c, bson.M{"artist_id": artistID})
 	if err != nil {
-		return nil, models.NotFound("music not found")
+		return nil, models.InternalServerError("Failed to get musics")
+	}
+	defer cursor.Close(c)
+
+	_ = cursor.All(c, &musics)
+	if musics == nil {
+		return nil, models.NotFound("no music found")
 	}
 
-	return music, nil
+	return musics, nil
 }
 
 func (musicRepo *musicRepo) SearchMusics(ctx context.Context, filter dtos.FilterMusicRequest) ([]models.Music, *models.ErrorResponse) {

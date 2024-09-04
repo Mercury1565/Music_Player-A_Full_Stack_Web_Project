@@ -87,7 +87,7 @@ func (musicController *MusicController) GetMusicsController(ctx *gin.Context) {
 }
 
 func (musicController *MusicController) GetMusicsByArtistIDController(ctx *gin.Context) {
-	artistID, e := primitive.ObjectIDFromHex(ctx.Param("id"))
+	artistID, e := primitive.ObjectIDFromHex(ctx.GetString("id"))
 	if e != nil {
 		ctx.IndentedJSON(http.StatusBadRequest, gin.H{"error": "Invalid artist id"})
 		return

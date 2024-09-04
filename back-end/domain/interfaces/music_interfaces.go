@@ -18,7 +18,7 @@ type MusicRepository interface {
 	// UpdateMusic(ctx context.Context, MusicID primitive.ObjectID, Music *models.Music) *models.ErrorResponse
 	DeleteMusic(ctx context.Context, id primitive.ObjectID) *models.ErrorResponse
 	IncreasePlayCount(ctx context.Context, MusicID primitive.ObjectID) *models.ErrorResponse
-	GetMusicByArtistID(c context.Context, artistID primitive.ObjectID) (*models.Music, *models.ErrorResponse)
+	GetMusicByArtistID(c context.Context, artistID primitive.ObjectID) ([]models.Music, *models.ErrorResponse)
 }
 
 type MusicUsecase interface {
@@ -28,7 +28,7 @@ type MusicUsecase interface {
 	SearchMusics(ctx context.Context, filter dtos.FilterMusicRequest) ([]models.Music, *models.ErrorResponse)
 	// UpdateMusic(ctx context.Context, MusicID primitive.ObjectID, Music *models.Music) *models.ErrorResponse
 	DeleteMusic(ctx context.Context, deleteMusicReq dtos.DeleteMusicRequest) *models.ErrorResponse
-	GetMusicByArtistID(c context.Context, artistID primitive.ObjectID) (*models.Music, *models.ErrorResponse)
+	GetMusicByArtistID(c context.Context, artistID primitive.ObjectID) ([]models.Music, *models.ErrorResponse)
 }
 
 type MusicController interface {

@@ -77,7 +77,7 @@ func (uc *musicUsecase) GetMusics(ctx context.Context) ([]models.Music, *models.
 	return uc.musicRepo.GetMusics(ctx)
 }
 
-func (uc *musicUsecase) GetMusicByArtistID(ctx context.Context, artistID primitive.ObjectID) (*models.Music, *models.ErrorResponse) {
+func (uc *musicUsecase) GetMusicByArtistID(ctx context.Context, artistID primitive.ObjectID) ([]models.Music, *models.ErrorResponse) {
 	ctx, cancel := context.WithTimeout(ctx, uc.timeout)
 	defer cancel()
 

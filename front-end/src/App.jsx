@@ -17,11 +17,22 @@ import YourMusicPage from './pages/your_music';
 import Favourites from './pages/favourites';
 import SearchPage from './pages/search';
 
-import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
 
+import { useDispatch, useSelector } from 'react-redux';
+import { setFavourites } from './redux/slices/favouriteMusicListSlice';
 
 function App() {
   const playing_track = useSelector((state) => state.music);
+
+  const musicList = useSelector((state) => state.favouriteMusicList);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch({ type: 'music/fetchMusicList' });
+  }, [dispatch]);
+
+  console.log(musicList);
 
   return (
     <>

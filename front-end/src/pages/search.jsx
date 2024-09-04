@@ -1,5 +1,7 @@
 import MusicContainer from "../components/music_list_container";
+import MusicPlayer from "../components/music_player";
 import SearchBar from "../components/search_bar";
+import SideBar from "../components/sidebar";
 import { GlobalContainer} from "../styles/containers"
 import { my_theme } from "../styles/theme"
 import { ThemeProvider } from "@emotion/react";

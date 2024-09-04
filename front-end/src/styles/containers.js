@@ -6,6 +6,20 @@ export const GlobalContainer = styled.div`
   width: 100%;
 `
 
+export const AuthContainer = styled.div`
+  background: ${(props) => props.theme.colors.cardBackground};
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 50px 0;
+
+  border-radius: ${(props) => props.theme.radii.xxlarge};
+  margin: 100px 300px;
+
+  color: ${(props) => props.theme.colors.textPrimary};
+`;
+
 // sidebar containers
 export const SidebarContainer = styled.div`
   background: ${(props) => props.theme.colors.sidebarBackground};

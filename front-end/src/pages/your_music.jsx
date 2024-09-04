@@ -2,15 +2,21 @@ import { ThemeProvider } from "@emotion/react";
 import { my_theme } from "../styles/theme";
 import { GlobalContainer } from "../styles/containers";
 import MusicContainer from "../components/music_list_container";
-import { music_card } from "../assets/assets";
 import { AddMusicPageButton} from "../styles/buttons";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { useEffect } from "react";
 
 const YourMusicPage = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+
     const yourMusicList = useSelector((state) => state.yourMusicList);
     
+    useEffect(() => {
+        dispatch({ type: 'music/fetchYourMusicList' });
+    }, [dispatch]);
+
     return(
         <ThemeProvider theme={my_theme}>
             <GlobalContainer>

@@ -48,6 +48,7 @@ export const my_theme =  createTheme({
     medium: '8px',
     large: '12px',
     xlarge: '20px',
+    xxlarge: '30px',
   },
 
   shadows: {

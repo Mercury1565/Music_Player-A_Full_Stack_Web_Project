@@ -57,7 +57,7 @@ func (musicController *MusicController) CreateMusicController(ctx *gin.Context) 
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{"music": music, "message": "new music added sucessfully"})
+	ctx.JSON(http.StatusOK, gin.H{"data": music, "message": "new music added sucessfully"})
 }
 
 func (musicController *MusicController) GetMusicController(ctx *gin.Context) {
@@ -73,7 +73,7 @@ func (musicController *MusicController) GetMusicController(ctx *gin.Context) {
 		return
 	}
 
-	ctx.IndentedJSON(http.StatusOK, gin.H{"music": music})
+	ctx.IndentedJSON(http.StatusOK, gin.H{"data": music})
 }
 
 func (musicController *MusicController) GetMusicsController(ctx *gin.Context) {
@@ -83,7 +83,7 @@ func (musicController *MusicController) GetMusicsController(ctx *gin.Context) {
 		return
 	}
 
-	ctx.IndentedJSON(http.StatusOK, gin.H{"musics": musics})
+	ctx.IndentedJSON(http.StatusOK, gin.H{"data": musics})
 }
 
 func (musicController *MusicController) GetMusicsByArtistIDController(ctx *gin.Context) {
@@ -99,7 +99,31 @@ func (musicController *MusicController) GetMusicsByArtistIDController(ctx *gin.C
 		return
 	}
 
-	ctx.IndentedJSON(http.StatusOK, gin.H{"music": music})
+	ctx.IndentedJSON(http.StatusOK, gin.H{"data": music})
+}
+
+func (musicController *MusicController) GetTopMusicsController(ctx *gin.Context) {
+	limit, _ := strconv.ParseInt(ctx.DefaultQuery("limit", "30"), 10, 64)
+
+	musics, err := musicController.usecase.GetTopMusics(ctx, int(limit))
+	if err != nil {
+		ctx.IndentedJSON(err.Code, gin.H{"error": err.Message})
+		return
+	}
+
+	ctx.IndentedJSON(http.StatusOK, gin.H{"data": musics})
+}
+
+func (musicController *MusicController) GetRecentMusicsController(ctx *gin.Context) {
+	limit, _ := strconv.ParseInt(ctx.DefaultQuery("limit", "30"), 10, 64)
+
+	musics, err := musicController.usecase.GetRecentMusics(ctx, int(limit))
+	if err != nil {
+		ctx.IndentedJSON(err.Code, gin.H{"error": err.Message})
+		return
+	}
+
+	ctx.IndentedJSON(http.StatusOK, gin.H{"data": musics})
 }
 
 func (musicController *MusicController) SearchMusicsController(ctx *gin.Context) {
@@ -132,7 +156,7 @@ func (musicController *MusicController) SearchMusicsController(ctx *gin.Context)
 		return
 	}
 
-	ctx.IndentedJSON(http.StatusOK, gin.H{"musics": musics})
+	ctx.IndentedJSON(http.StatusOK, gin.H{"data": musics})
 }
 
 func (musicController *MusicController) DeleteMusicController(ctx *gin.Context) {
@@ -165,4 +189,16 @@ func (musicController *MusicController) DeleteMusicController(ctx *gin.Context) 
 	}
 
 	ctx.IndentedJSON(http.StatusOK, gin.H{"message": "Music deleted successfully"})
+}
+
+func (musicController *MusicController) GetMusicAudioController(ctx *gin.Context) {
+	id, _ := primitive.ObjectIDFromHex(ctx.Param("id"))
+
+	music, err := musicController.usecase.GetMusic(ctx, id)
+	if err != nil {
+		ctx.IndentedJSON(err.Code, gin.H{"error": err.Message})
+		return
+	}
+
+	ctx.File(music.AudioFilePath)
 }

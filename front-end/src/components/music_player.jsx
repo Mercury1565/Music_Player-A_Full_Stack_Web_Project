@@ -13,10 +13,13 @@ import Stack from '@mui/material/Stack';
 import {VolumeUp} from '@mui/icons-material';
 
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 
 
-const MusicPlayer = ({ track }) => {
+const MusicPlayer = () => {
+  const track = useSelector((state) => state.music);
+
   const [position, setPosition] = useState(0);
 
   function formatDuration(value) {

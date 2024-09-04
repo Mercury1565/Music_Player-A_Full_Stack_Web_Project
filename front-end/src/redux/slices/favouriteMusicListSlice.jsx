@@ -1,24 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import { music_card } from '../../assets/assets';
-const initialState = [
-  {
-      artist: 'Maroon 5',
-      title: 'Memories',
-      image: music_card,
-      length: 500, 
-      link: '',
-      isFavourite: true,
-  },
-  {
-      artist: 'Michael Jackson',
-      title: 'Thriller',
-      image: music_card,
-      length: 300,
-      link: '' ,
-      isFavourite: true,
-  },
-];
+const initialState = [];
 
 const favouriteMusicListSlice = createSlice ({
   name: 'music-list',

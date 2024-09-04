@@ -6,6 +6,7 @@ import (
 	"music_player_backend/domain/dtos"
 	"music_player_backend/domain/interfaces"
 	"music_player_backend/domain/models"
+	"sort"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -79,6 +80,56 @@ func (musicRepo *musicRepo) GetMusicByArtistID(c context.Context, artistID primi
 	}
 
 	return musics, nil
+}
+
+func (musicRepo *musicRepo) GetTopMusics(c context.Context, limit int) ([]models.Music, *models.ErrorResponse) {
+	var musics []models.Music
+
+	cursor, err := musicRepo.collection.Find(c, bson.M{})
+	if err != nil {
+		return nil, models.InternalServerError("Failed to get top musics")
+	}
+	defer cursor.Close(c)
+
+	_ = cursor.All(c, &musics)
+	if musics == nil {
+		return nil, models.NotFound("no music found")
+	}
+
+	sort.Slice(musics, func(i, j int) bool {
+		return musics[i].PlayCount > musics[j].PlayCount
+	})
+
+	if limit > len(musics) {
+		limit = len(musics)
+	}
+
+	return musics[:limit], nil
+}
+
+func (musicRepo *musicRepo) GetRecentMusics(c context.Context, limit int) ([]models.Music, *models.ErrorResponse) {
+	var musics []models.Music
+
+	cursor, err := musicRepo.collection.Find(c, bson.M{})
+	if err != nil {
+		return nil, models.InternalServerError("Failed to get recent musics")
+	}
+	defer cursor.Close(c)
+
+	_ = cursor.All(c, &musics)
+	if musics == nil {
+		return nil, models.NotFound("no music found")
+	}
+
+	sort.Slice(musics, func(i, j int) bool {
+		return musics[i].CreatedAt.After(musics[j].CreatedAt)
+	})
+
+	if limit > len(musics) {
+		limit = len(musics)
+	}
+
+	return musics[:limit], nil
 }
 
 func (musicRepo *musicRepo) SearchMusics(ctx context.Context, filter dtos.FilterMusicRequest) ([]models.Music, *models.ErrorResponse) {

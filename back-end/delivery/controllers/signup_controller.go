@@ -31,7 +31,7 @@ func (signupController *SignupController) Signup(ctx *gin.Context) {
 	}
 
 	if err := validate.Struct(userCreateRequest); err != nil {
-		ctx.IndentedJSON(http.StatusBadRequest, gin.H{"error": "One or more fields are missing"})
+		ctx.IndentedJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 

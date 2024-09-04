@@ -84,6 +84,20 @@ func (uc *musicUsecase) GetMusicByArtistID(ctx context.Context, artistID primiti
 	return uc.musicRepo.GetMusicByArtistID(ctx, artistID)
 }
 
+func (uc *musicUsecase) GetTopMusics(ctx context.Context, limit int) ([]models.Music, *models.ErrorResponse) {
+	ctx, cancel := context.WithTimeout(ctx, uc.timeout)
+	defer cancel()
+	
+	return uc.musicRepo.GetTopMusics(ctx, limit)
+}
+
+func (uc *musicUsecase) GetRecentMusics(ctx context.Context, limit int) ([]models.Music, *models.ErrorResponse) {
+	ctx, cancel := context.WithTimeout(ctx, uc.timeout)
+	defer cancel()
+
+	return uc.musicRepo.GetRecentMusics(ctx, limit)
+}
+
 func (uc *musicUsecase) SearchMusics(ctx context.Context, filter dtos.FilterMusicRequest) ([]models.Music, *models.ErrorResponse) {
 	ctx, cancel := context.WithTimeout(ctx, uc.timeout)
 	defer cancel()

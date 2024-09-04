@@ -21,9 +21,14 @@ func NewMusicRouter(env *config.Env, database mongo.Database, group *gin.RouterG
 	musicController := controllers.NewMusicController(musicUsecase)
 
 	group.POST("/music", musicController.CreateMusicController)
-	group.GET("/music/:id", musicController.GetMusicController)
-	group.GET("/musics", musicController.GetMusicsController)
-	group.GET("/musics/your", musicController.GetMusicsByArtistIDController)
 	group.DELETE("/music/:id", musicController.DeleteMusicController)
+
+	group.GET("/music/:id", musicController.GetMusicController)
+	group.GET("/musics/your", musicController.GetMusicsByArtistIDController)
 	group.GET("/music/filter", musicController.SearchMusicsController)
+	group.GET("/musics", musicController.GetMusicsController)
+	group.GET("/musics/top", musicController.GetTopMusicsController)
+	group.GET("/musics/recent", musicController.GetRecentMusicsController)
+
+	group.GET("/audio", musicController.GetMusicAudioController)
 }

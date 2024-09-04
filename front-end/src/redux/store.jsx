@@ -4,16 +4,20 @@ import rootSaga from './sagas';
 
 import musicReducer from './slices/musicSlice';
 import genreListReducer from './slices/genresSlice';
+import authReducer from './slices/authSlice';
 
 import topMusicListReducer from './slices/topMusicListSlice';
 import favouriteMusicListReducer from './slices/favouriteMusicListSlice';
 import searchedMusicListReducer from './slices/searchedMusicListSlice';
 import yourMusicListReducer from './slices/yourMusicListSlice';
 
+
 const sagaMiddleware = createSagaMiddleware(); // Create the saga middleware
 
 export const store = configureStore({
   reducer: {
+    auth: authReducer,
+
     music: musicReducer,
     genreList: genreListReducer,
 

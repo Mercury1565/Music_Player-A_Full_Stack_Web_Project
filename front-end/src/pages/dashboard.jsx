@@ -4,11 +4,18 @@ import MusicContainer from "../components/music_list_container"
 import { GlobalContainer} from "../styles/containers"
 import { my_theme } from "../styles/theme"
 
-import { useSelector } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
+import { useEffect } from "react"
 
 const Dashboard=() => {
     const genres = useSelector((state) => state.genreList);
     const topMusicList = useSelector((state) => state.topMusicList);
+
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch({ type: 'music/fetchTopMusicList' });
+    }, [dispatch]);
     
     return(
         <ThemeProvider theme={my_theme}>

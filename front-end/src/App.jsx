@@ -1,57 +1,62 @@
 import { Global } from '@emotion/react';
 import { globalStyles } from './styles/global_styles';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 
-import Sidebar from './components/sidebar';
-import GenreCardsContainer from './components/genre_cards_container';
-import TopMusicCard from './components/music_card';
-import MusicContainer from './components/music_list_container';
 import MusicPlayer from './components/music_player';
+import SideBar from './components/sidebar';
 
-import { music_card } from "./assets/assets"
-import MusicCard from './components/music_card';
-import SearchBar from './components/search_bar';
 import AddMusicCard from './pages/add_music_page';
 import Dashboard from './pages/dashboard';
 import YourMusicPage from './pages/your_music';
 import Favourites from './pages/favourites';
 import SearchPage from './pages/search';
 
-import { useEffect } from 'react';
-
-import { useDispatch, useSelector } from 'react-redux';
-import { setFavourites } from './redux/slices/favouriteMusicListSlice';
+import Login from './pages/login_page';
+import Signup from './pages/signup_page';
 
 function App() {
-  const playing_track = useSelector((state) => state.music);
+  // const musicList = useSelector((state) => state.favouriteMusicList);
+  // const dispatch = useDispatch();
 
-  const musicList = useSelector((state) => state.favouriteMusicList);
-  const dispatch = useDispatch();
+  // useEffect(() => {
+  //   dispatch({ type: 'music/fetchMusicList' });
+  // }, [dispatch]);
 
-  useEffect(() => {
-    dispatch({ type: 'music/fetchMusicList' });
-  }, [dispatch]);
+  // console.log(musicList);
+  
+  return (
+    <Router>
+      <RouteSwitch />
+    </Router>
+  );
+}
 
-  console.log(musicList);
+function RouteSwitch() {
+  const location = useLocation();
+  const noDisplayRoutes = ['/login', '/signup'];
 
   return (
     <>
       <Global styles={globalStyles} />
       
-      <Router>
-        <Sidebar />
-        <MusicPlayer track={playing_track}/> 
+      {!noDisplayRoutes.includes(location.pathname) && (
+        <>
+          <SideBar />
+          <MusicPlayer /> 
+        </>
+      )}
 
-        <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/your_music" element={<YourMusicPage />} />
-          <Route path="/your_music/add" element={<AddMusicCard/>} />
-          <Route path="/favourite" element={<Favourites />} />
-          <Route path="/search" element={<SearchPage />} />
-        </Routes>
-      </Router>      
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/your_music" element={<YourMusicPage />} />
+        <Route path="/your_music/add" element={<AddMusicCard />} />
+        <Route path="/favourite" element={<Favourites />} />
+        <Route path="/search" element={<SearchPage />} />
+      </Routes>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

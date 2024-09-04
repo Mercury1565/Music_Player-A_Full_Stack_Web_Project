@@ -5,6 +5,8 @@ import { my_theme } from "../styles/theme";
 import { AddMusicContainer } from "../styles/containers";
 import { TopMusicHeaderIcon } from "../styles/icons";
 import { add_music_icon } from "../assets/assets";
+import SideBar from "../components/sidebar";
+import MusicPlayer from "../components/music_player";
 
 const AddMusicCard = () => {
     const [title, setTitle] = useState("");
@@ -40,6 +42,7 @@ const AddMusicCard = () => {
 
     return (
         <ThemeProvider theme={my_theme}>
+
         <AddMusicContainer>
             <AddMusicHeader>
                 <TopMusicHeaderIcon src={add_music_icon}/>

@@ -1,42 +1,17 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import { music_card } from '../../assets/assets';
-const initialState = [
-  {
-      artist: 'Maroon 5',
-      title: 'Memories',
-      image: music_card,
-      length: 500, 
-      link: '',
-      isFavourite: true,
-  },
-  {
-      artist: 'Tilahun Gessesse',
-      title: 'Monaliza',
-      image: music_card,
-      length: 150, 
-      link: '',
-      isFavourite: false,
-  },
-  {
-      artist: 'Michael Jackson',
-      title: 'Thriller',
-      image: music_card,
-      length: 300,
-      link: '' ,
-      isFavourite: true,
-  },
-];
+const initialState = [];
 
 const yourMusicListSlice = createSlice ({
   name: 'music-list',
   initialState,
 
   reducers: {
-    setMusicList(state, action) {
+    setYourMusicList(state, action) {
         return action.payload;
     },
-    appendMusic(state, action) {
+    appenYourdMusic(state, action) {
         state.push(action.payload);
     },
     removeMusic(state, action) {
@@ -45,5 +20,5 @@ const yourMusicListSlice = createSlice ({
   },
 });
 
-export const { setMusicList, appendMusicList } = yourMusicListSlice.actions;
+export const { setYourMusicList, appendYourMusicList } = yourMusicListSlice.actions;
 export default yourMusicListSlice.reducer;

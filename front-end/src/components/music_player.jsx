@@ -12,103 +12,206 @@ import Stack from '@mui/material/Stack';
 
 import {VolumeUp} from '@mui/icons-material';
 
-import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-
-
+import { useEffect, useState, useRef } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { setMusic } from "../redux/slices/musicSlice";
 
 const MusicPlayer = () => {
-  const track = useSelector((state) => state.music);
+      const dispatch = useDispatch()
 
-  const [position, setPosition] = useState(0);
+      const current_track = useSelector((state) => state.track);
+      const nowPlaying = useSelector((state) => state.nowPlaying);
 
-  function formatDuration(value) {
-    const minute = Math.floor(value / 60);
-    const secondLeft = value - minute * 60;
-    return `${minute}:${secondLeft < 10 ? `0${secondLeft}` : secondLeft}`;
-  }
+      const favourites = useSelector((state) => state.favouriteMusicList);
+      const [isFavourite, setIsFavourite] =  useState(false);
 
-  const [volume, setVolume] = useState(30);
+      const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
+      const [playMode, setPlayMode] = useState('sequential');  // Mode: 'sequential' or 'random'
 
-  const handleChange = (event, newValue) => {
-    setVolume(newValue);
-  };
+      useEffect(() => {
+          if (!current_track) return
+          dispatch({ type: 'music/fetchFavouriteMusicList' });
+          setIsFavourite(favourites && favourites.some((m) => m._id === current_track._id));
+          setCurrentTrackIndex(nowPlaying.findIndex(track => track._id === current_track._id));
+      }, [dispatch]);
 
-  const [isPlaying, setIsPlaying] = useState(false);
+      const audioPath = current_track.audio_file_path;
+      const coverImageURL = `http://localhost:8080/uploads/cover/${current_track.cover_image_path}`;
 
-  const handlePlayPause= (event) => {
-    setIsPlaying(!isPlaying);
-  }
-  const handleFavourite = (track) => {
-    if(track.isFavourite){
-      console.log("Remove from favorite");
-    }
-    else{
-      console.log("Add to favorite");
-    }
-  }
-  
-  return(
-    <ThemeProvider theme={my_theme}>
-      <MusicPlayerContainer>
+      const audioRef = useRef(null);  // Reference to the audio element
+      const [isPlaying, setIsPlaying] = useState(true);
+      const [position, setPosition] = useState(0);
+      const [volume, setVolume] = useState(30);  // Default volume
+      const [duration, setDuration] = useState(0);
 
-        <MusicInfoContainer>
-          <MusicImageContainer src={track.image}/>
-          <MusicTitleContainer>
-            <h3>{track.title}</h3>
-            <p>{track.artist}</p>
-          </MusicTitleContainer>
-        </MusicInfoContainer>
+      useEffect(() => {
+        if (audioRef.current && current_track) {
+          const audio = audioRef.current;
 
-        <ControllerContainer>
-          <MusicPlayerIconStyle src={bwd_icon}/>
-          <MusicPlayerIconStyle src={isPlaying ? player_pause_icon : player_play_icon} onClick={handlePlayPause}/>
-          <MusicPlayerIconStyle src={fwd_icon}/>
-        </ControllerContainer>
+          // Update duration when the metadata is loaded
+          audio.onloadedmetadata = () => {
+            setDuration(audio.duration);
+          };
 
-        <Seeker>
-          <Slider 
-            aria-label="time-indicator"
-            value={position}
-            min={0}
-            step={1}
-            max={track.length}
-            onChange={(_, value) => setPosition(value)}
-            color="secondary"
-          />
-          <SeekPositionContainer>
-            <TinyText>{formatDuration(position)}</TinyText>
-            <TinyText>-{formatDuration(track.length - position)}</TinyText>
-          </SeekPositionContainer>
-        </Seeker>
+          // Update position as the audio plays
+          audio.ontimeupdate = () => {
+            setPosition(audio.currentTime);
+          };
 
-        {/* Volume Slider */}
-        <Box sx={{ width: 140 }}>
-          <Stack spacing={2} direction="row" sx={{ alignItems: 'center', mb: 1 }}>
-            <VolumeUp style={{ color: '#ffffff' }} />
-            <Slider 
-              size="small"
-              defaultValue={30} 
-              aria-label="Volume" 
-              color="secondary"
-              value={volume} 
-              onChange={handleChange} 
+          audio.onended = handleTrackEnd;
+
+          audio.play();
+          setIsPlaying(true);
+          
+        }
+      }, [current_track]);  // Re-run when current_track or isPlaying changes
+
+      const formatDuration = (seconds) => {
+        const minutes = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60);
+        return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
+      };
+
+      const handlePlayPause = () => {
+        if (isPlaying) {
+          audioRef.current.pause();
+        } else {
+          audioRef.current.play();
+        }
+        setIsPlaying(!isPlaying);
+      };
+
+      const handleSeek = (event, value) => {
+        audioRef.current.currentTime = value;
+        setPosition(value);
+      };
+
+      const handleVolumeChange = (event, value) => {
+        audioRef.current.volume = value / 100;  // Volume should be between 0 and 1
+        setVolume(value);
+      };
+
+      const handleFavourite = () => {
+        if (isFavourite) {
+            setIsFavourite(false);
+            dispatch({ type: 'music/removeFavourite', payload: current_track._id });
+        }
+        else{
+            setIsFavourite(true);
+            dispatch({ type: 'music/appendFavourite', payload: current_track._id });
+        }
+      }
+
+
+    const handleTrackEnd = () => {
+      if (playMode === 'sequential') {
+        handleNextTrack();
+      } 
+      else if (playMode === 'random') {
+        handleRandomTrack();
+      }
+      else if (playMode === 'repeat') {
+        dispatch(setMusic(current_track));
+      }
+    };
+
+    const handleNextTrack = () => {
+      if (currentTrackIndex < nowPlaying.length - 1) {
+          setCurrentTrackIndex((prev_index) => prev_index + 1);
+      } 
+      else {
+        setCurrentTrackIndex(0);  // Loop back to the first track
+      }
+      dispatch(setMusic(nowPlaying[currentTrackIndex]));
+
+    };
+
+    const handlePreviousTrack = () => {
+      if (currentTrackIndex > 0) {
+        setCurrentTrackIndex((prev_index) => prev_index - 1);
+      } else {
+        setCurrentTrackIndex(nowPlaying.length - 1);  // Loop to the last track
+      }
+      dispatch(setMusic(nowPlaying[currentTrackIndex]));
+
+    };
+
+    const handleRandomTrack = () => {
+      const randomIndex = Math.floor(Math.random() * nowPlaying.length);
+      setCurrentTrackIndex(randomIndex);
+      dispatch(setMusic(nowPlaying[currentTrackIndex]));
+    };
+
+    const togglePlayMode = () => {
+      setPlayMode((prevMode) => (prevMode === 'random' ? 'sequential' : 'random'));
+    };
+
+    
+    return(
+      <ThemeProvider theme={my_theme}>
+        <MusicPlayerContainer>
+          <MusicInfoContainer>
+            <MusicImageContainer src={coverImageURL}/>
+            <MusicTitleContainer>
+              <h3>{current_track.title}</h3>
+              <p>{current_track.artist}</p>
+            </MusicTitleContainer>
+          </MusicInfoContainer>
+
+          <audio ref={audioRef} src={`http://localhost:8080/uploads/music/${audioPath}`} />
+
+          <ControllerContainer>
+            <MusicPlayerIconStyle src={bwd_icon} onClick={handlePreviousTrack} />
+            <MusicPlayerIconStyle 
+              src={isPlaying ? player_pause_icon : player_play_icon} 
+              onClick={handlePlayPause}
             />
-          </Stack>
-        </Box>
+            <MusicPlayerIconStyle src={fwd_icon} onClick={handleNextTrack}/>
+          </ControllerContainer>
 
-        <UtilityContainer>
-          <MusicPlayerUtilityIconStyle src={shuffle_icon}/>
-          <MusicPlayerUtilityIconStyle src={repeat_icon}/>
-          <MusicPlayerUtilityIconStyle 
-            src={track.isFavourite ? selected_favourite_icon: favourite_icon}
-            onClick={() => {handleFavourite(track)}}
-          />
-        </UtilityContainer> 
+          <Seeker>
+            <Slider 
+              aria-label="time-indicator"
+              value={position}
+              min={0}
+              step={1}
+              max={duration}
+              onChange={handleSeek}
+              color="secondary"
+            />
+            <SeekPositionContainer>
+              <TinyText>{formatDuration(position)}</TinyText>
+              <TinyText>-{formatDuration(duration - position)}</TinyText>
+            </SeekPositionContainer>
+          </Seeker>
 
-      </MusicPlayerContainer>
-    </ThemeProvider>
-  )
+          {/* Volume Slider */}
+          <Box sx={{ width: 140 }}>
+            <Stack spacing={2} direction="row" sx={{ alignItems: 'center', mb: 1 }}>
+              <VolumeUp style={{ color: '#ffffff' }} />
+              <Slider 
+                size="small"
+                defaultValue={30} 
+                aria-label="Volume" 
+                color="secondary"
+                value={volume} 
+                onChange={handleVolumeChange}
+              />
+            </Stack>
+          </Box>
+
+          <UtilityContainer>
+            <MusicPlayerUtilityIconStyle src={shuffle_icon} isActive={playMode === 'random'} onClick={togglePlayMode}/>
+            <MusicPlayerUtilityIconStyle src={repeat_icon} isActive={playMode === 'repeat'} onClick={() => {setPlayMode("repeat")}}/>
+            <MusicPlayerUtilityIconStyle 
+              src={isFavourite ? selected_favourite_icon: favourite_icon}
+              onClick={handleFavourite}
+            />
+          </UtilityContainer> 
+
+        </MusicPlayerContainer>
+      </ThemeProvider>
+    )
 }
 
 export default MusicPlayer;

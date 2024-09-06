@@ -56,7 +56,7 @@ export const MusicPlayerIconStyle = styled.img`
     width: 25px;
     height: 25px;
     &:hover {
-        filter: brightness(2);
+        filter: brightness(0.9);
         cursor: pointer
     }
 `;
@@ -64,9 +64,12 @@ export const MusicPlayerIconStyle = styled.img`
 export const MusicPlayerUtilityIconStyle = styled.img`
     width: 22px;
     height: 18px;
+    filter: ${({ isActive }) => (isActive ? 'brightness(2) saturate(50%) invert(30%) sepia(85%) saturate(1000%) hue-rotate(260deg) brightness(85%) contrast(90%)' : 'none')};
+
+
     &:hover {
         filter: brightness(2);
-        cursor: pointer
+        cursor: pointer;
     }
 `;
 

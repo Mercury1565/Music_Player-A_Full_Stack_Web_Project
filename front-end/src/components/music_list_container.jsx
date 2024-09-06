@@ -3,10 +3,19 @@ import { MusicListContainer, TopMusicHeader} from '../styles/containers';
 import { TopMusicHeaderIcon } from '../styles/icons';
 import { top_music_header_icon, favourtie_music_header_icon, genre_icon } from '../assets/assets';
 import MusicList from './music_list';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+
 
 const MusicContainer = ({type, tracks}) => {  
+    const dispatch = useDispatch();    
+
     let head_icon;
     let head_title;
+
+    useEffect(() => {
+        dispatch({ type: 'music/fetchFavouriteMusicList' });
+    }, [dispatch]);
 
     switch(type){
         case "top":

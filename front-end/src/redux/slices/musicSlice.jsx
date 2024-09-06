@@ -1,14 +1,7 @@
 import { createSlice, isFluxStandardAction } from '@reduxjs/toolkit';
 
 import { music_card } from '../../assets/assets';
-const initialState = {
-  artist: "Michael Jackson",
-  title: "Thriller",
-  image: music_card,
-  length: 200,
-  link: '',
-  isFavourite: false,
-};
+const initialState = {};
 
 const musicSlice = createSlice ({
   name: 'music',
@@ -16,12 +9,7 @@ const musicSlice = createSlice ({
 
   reducers: {
     setMusic(state, action) {
-      state.artist = action.payload.artist;
-      state.title = action.payload.title;
-      state.image = action.payload.image;
-      state.length = action.payload.length;
-      state.link = action.payload.link;
-      state.isFavourite = action.payload.isFavourite;
+      return action.payload;
     },
     
     clearMusic(state) {

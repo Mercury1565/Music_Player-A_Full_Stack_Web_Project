@@ -26,7 +26,7 @@ func Setup(env *config.Env, db mongo.Database, gin *gin.Engine) {
 		MaxAge:           12 * time.Hour,
 	}))
 
-	gin.Static("/uploads", "./uploads")
+	gin.Static("/uploads", "../uploads")
 
 	publicRoute := gin.Group("")
 	protectedRoute := gin.Group("")

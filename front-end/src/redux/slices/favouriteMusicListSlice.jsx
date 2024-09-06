@@ -1,10 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { music_card } from '../../assets/assets';
 const initialState = [];
 
 const favouriteMusicListSlice = createSlice ({
-  name: 'music-list',
+  name: 'musicID-list',
   initialState,
 
   reducers: {
@@ -15,7 +14,7 @@ const favouriteMusicListSlice = createSlice ({
         state.push(action.payload);
     },
     removeFavourite(state, action) {
-        return state.filter(music => music !== action.payload);
+        return state.filter(musicID => musicID !== action.payload);
     }
   },
 });

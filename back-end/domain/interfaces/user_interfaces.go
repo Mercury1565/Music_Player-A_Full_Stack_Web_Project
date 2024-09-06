@@ -18,14 +18,13 @@ type UserRepository interface {
 	DeleteUser(ctx context.Context, id primitive.ObjectID) *models.ErrorResponse
 	AddFavouriteMusic(ctx context.Context, userID primitive.ObjectID, musicID primitive.ObjectID) *models.ErrorResponse
 	RemoveFavouriteMusic(ctx context.Context, userID primitive.ObjectID, musicID primitive.ObjectID) *models.ErrorResponse
-	GetUserFavouriteMusics(ctx context.Context, userID primitive.ObjectID) ([]primitive.ObjectID, *models.ErrorResponse)
-
+	GetUserFavouriteMusics(ctx context.Context, userID primitive.ObjectID) ([]models.Music, *models.ErrorResponse)
 }
 
 type FavouriteUsecase interface {
 	AddFavouriteMusic(ctx context.Context, userID primitive.ObjectID, musicID primitive.ObjectID) *models.ErrorResponse
 	RemoveFavouriteMusic(ctx context.Context, userID primitive.ObjectID, musicID primitive.ObjectID) *models.ErrorResponse
-	GetUserFavouriteMusics(ctx context.Context, userID primitive.ObjectID) ([]primitive.ObjectID, *models.ErrorResponse)
+	GetUserFavouriteMusics(ctx context.Context, userID primitive.ObjectID) ([]models.Music, *models.ErrorResponse)
 }
 
 type UserProfileUpdateUsecase interface {

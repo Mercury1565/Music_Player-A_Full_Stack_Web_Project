@@ -21,6 +21,8 @@ type MusicRepository interface {
 	GetMusicByArtistID(c context.Context, artistID primitive.ObjectID) ([]models.Music, *models.ErrorResponse)
 	GetTopMusics(c context.Context, limit int) ([]models.Music, *models.ErrorResponse)
 	GetRecentMusics(c context.Context, limit int) ([]models.Music, *models.ErrorResponse) 
+	GetGenreList(c context.Context) ([]map[string]interface{}, *models.ErrorResponse)
+
 }
 
 type MusicUsecase interface {
@@ -33,6 +35,7 @@ type MusicUsecase interface {
 	GetMusicByArtistID(c context.Context, artistID primitive.ObjectID) ([]models.Music, *models.ErrorResponse)
 	GetTopMusics(ctx context.Context, limit int) ([]models.Music, *models.ErrorResponse) 
 	GetRecentMusics(ctx context.Context, limit int) ([]models.Music, *models.ErrorResponse)	
+	GetGenreList(ctx context.Context) ([]map[string]interface{}, *models.ErrorResponse) 
 }
 
 type MusicController interface {

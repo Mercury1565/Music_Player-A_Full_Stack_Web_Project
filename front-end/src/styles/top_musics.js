@@ -20,6 +20,7 @@ export const TopMusicCardContainer = styled.div`
 
     &:hover {
         background: ${(props) => props.theme.colors.cardBackground};
+        cursor: pointer;
     }
 
     &:active {

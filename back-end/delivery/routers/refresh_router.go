@@ -13,7 +13,7 @@ import (
 
 func NewRefreshRouter(env *config.Env, database mongo.Database, group *gin.RouterGroup) {
 
-	user_repository := repository.NewUserRepo(database, "users")
+	user_repository := repository.NewUserRepo(database, "users", "music")
 	session_repository := repository.NewSessionRepository(database, "sessions")
 	jwt_service := infrastructure.NewJwtService(env)
 

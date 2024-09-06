@@ -12,7 +12,7 @@ import (
 )
 
 func NewFavouritesRouter(env *config.Env, database mongo.Database, group *gin.RouterGroup) {
-	userRepo := repository.NewUserRepo(database, "users")
+	userRepo := repository.NewUserRepo(database, "users", "music")
 	timeout := time.Duration(env.CONTEXT_TIMEOUT) * time.Second
 
 	favouritesUsecase := usecases.NewFavouriteUsecase(userRepo, timeout)

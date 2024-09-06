@@ -5,7 +5,6 @@ import { genre_icon, left, right } from "../assets/assets";
 import { GenreIconStyle, GenreListNavIconStyle } from "../styles/icons";
 
 const GenreCardsContainer = ({genres}) => {
-    
 
     const [startIndex, setStartIndex] = useState(0);
 

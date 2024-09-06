@@ -35,7 +35,7 @@ func (uc *favouriteUsecase) RemoveFavouriteMusic(ctx context.Context, userID, mu
 	return uc.userRepository.RemoveFavouriteMusic(ctx, userID, musicID)
 }
 
-func (uc *favouriteUsecase) GetUserFavouriteMusics(ctx context.Context, userID primitive.ObjectID) ([]primitive.ObjectID, *models.ErrorResponse) {
+func (uc *favouriteUsecase) GetUserFavouriteMusics(ctx context.Context, userID primitive.ObjectID) ([]models.Music, *models.ErrorResponse) {
 	ctx, cancel := context.WithTimeout(ctx, uc.timeout)
 	defer cancel()
 

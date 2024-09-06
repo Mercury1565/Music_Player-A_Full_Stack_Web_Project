@@ -26,6 +26,7 @@ func (musicController *FavouritesController) AddFavouriteMusicController(ctx *gi
 	}
 
 	musicID, e := primitive.ObjectIDFromHex(ctx.Param("id"))
+
 	if e != nil {
 		ctx.IndentedJSON(http.StatusBadRequest, gin.H{"error": "Invalid music id"})
 		return
@@ -73,5 +74,5 @@ func (musicController *FavouritesController) GetFavouriteMusicController(ctx *gi
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{"musics": musics})
+	ctx.JSON(http.StatusOK, gin.H{"data": musics})
 }

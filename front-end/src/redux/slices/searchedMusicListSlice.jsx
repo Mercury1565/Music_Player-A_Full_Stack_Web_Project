@@ -1,32 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
+const initialState = [];
 
-import { music_card } from '../../assets/assets';
-const initialState = [
-  {
-      artist: 'Maroon 5',
-      title: 'Memories',
-      image: music_card,
-      length: 500, 
-      link: '',
-      isFavourite: true,
-  },
-  {
-      artist: 'Tilahun Gessesse',
-      title: 'Monaliza',
-      image: music_card,
-      length: 150, 
-      link: '',
-      isFavourite: false,
-  },
-  {
-      artist: 'Michael Jackson',
-      title: 'Thriller',
-      image: music_card,
-      length: 300,
-      link: '' ,
-      isFavourite: true,
-  },
-];
 const searchedMusicListSlice = createSlice ({
   name: 'music-list',
   initialState,
@@ -38,5 +12,5 @@ const searchedMusicListSlice = createSlice ({
   },
 });
 
-export const { setMusicList } = searchedMusicListSlice.actions;
+export const { setSearchList } = searchedMusicListSlice.actions;
 export default searchedMusicListSlice.reducer;

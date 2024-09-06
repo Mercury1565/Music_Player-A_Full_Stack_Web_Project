@@ -8,19 +8,21 @@ import { useSelector, useDispatch } from "react-redux"
 import { useEffect } from "react"
 
 const Dashboard=() => {
-    const genres = useSelector((state) => state.genreList);
+    const genreList = useSelector((state) => state.genreList);
     const topMusicList = useSelector((state) => state.topMusicList);
 
     const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch({ type: 'music/fetchTopMusicList' });
+        dispatch({ type: 'music/fetchGenreList' });
     }, [dispatch]);
+
     
     return(
         <ThemeProvider theme={my_theme}>
             <GlobalContainer>
-                <GenreCardsContainer genres={genres}/>
+                <GenreCardsContainer genres={genreList}/>
                 <MusicContainer type={"top"} tracks={topMusicList}/>
             </GlobalContainer>  
         </ThemeProvider> 

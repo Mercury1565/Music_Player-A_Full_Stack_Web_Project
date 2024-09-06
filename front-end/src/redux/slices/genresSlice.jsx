@@ -1,28 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { acoustic } from "../../assets/assets";
 
-const initialState = [
-    {
-        name: '1',
-        count: 98,
-        image: acoustic
-    },
-    {
-        name: '2',
-        count: 143,
-        image: acoustic
-    },
-    {
-        name: '4',
-        count: 98,
-        image: acoustic
-    },
-    {
-        name: '4',
-        count: 143,
-        image: acoustic
-    },
-];
+const initialState = [];
 
 const genreListSlice = createSlice ({
   name: 'genreList',

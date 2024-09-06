@@ -18,7 +18,7 @@ const Favourites=() => {
     return(
         <ThemeProvider theme={my_theme}>
             <GlobalContainer>
-                <MusicContainer type={"favourite"} tracks={favouriteMusicList}/>
+                {favouriteMusicList && <MusicContainer type={"favourite"} tracks={favouriteMusicList}/>}
             </GlobalContainer>  
         </ThemeProvider> 
     )

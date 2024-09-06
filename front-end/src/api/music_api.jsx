@@ -55,10 +55,30 @@ export const fetchFavouriteMusicList = async () => {
   return response.data;
 };
 
+export const addToFavouriteMusicList = async (musicId) => {
+  const response = await api.post(`/favourites/add/${musicId}`);
+  return response.data;
+}
+
+export const removeFromFavouriteMusicList = async (musicId) => {
+  const response = await api.post(`/favourites/remove/${musicId}`);
+  return response.data;
+}
+
 export const searchMusic = async (search) => {
   const response = await api.get(`/music/filter?artist=${search}&title=${search}&genre=${search}`);
   return response.data;
 };
+
+export const fetchGenreList = async () => {
+  const response = await api.get(`/music/genres`);
+  return response.data;
+}
+
+export const fetchGenreMusicList = async (genre) => {
+  const response = await api.get(`/music/filter?genres=${genre}`);
+  return response.data;
+}
 
 export const fetchMusicAudio = async (id) => {
   const response = await api.get(`/audio/${id}`, { responseType: 'blob' });

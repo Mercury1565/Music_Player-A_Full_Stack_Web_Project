@@ -16,11 +16,13 @@ import (
 
 type musicRepo struct {
 	collection *mongo.Collection
+	genreCollection *mongo.Collection
 }
 
-func NewMusicRepo(database mongo.Database, collection string) interfaces.MusicRepository {
+func NewMusicRepo(database mongo.Database, collection string, genreCollection string) interfaces.MusicRepository {
 	return &musicRepo{
 		collection: database.Collection(collection),
+		genreCollection: database.Collection(genreCollection),
 	}
 }
 
@@ -136,26 +138,30 @@ func (musicRepo *musicRepo) SearchMusics(ctx context.Context, filter dtos.Filter
 	var musics []models.Music
 	query := bson.M{}
 
-	fmt.Println(filter)
+	orConditions := []bson.M{}
 
 	if filter.Title != "" {
-		query["title"] = bson.M{"$regex": filter.Title, "$options": "i"}
+		orConditions = append(orConditions, bson.M{"title": bson.M{"$regex": filter.Title, "$options": "i"}})
 	}
 
 	if filter.Artist != "" {
-		query["artist"] = bson.M{"$regex": filter.Artist, "$options": "i"}
+		orConditions = append(orConditions, bson.M{"artist": bson.M{"$regex": filter.Artist, "$options": "i"}})
 	}
 
 	if len(filter.Genres) > 0 {
-		query["genres"] = bson.M{"$in": filter.Genres}
+		orConditions = append(orConditions, bson.M{"genres": bson.M{"$in": filter.Genres}})
 	}
 
 	if filter.PlayCount > 0 {
-		query["play_count"] = bson.M{"$gt": filter.PlayCount}
+		orConditions = append(orConditions, bson.M{"play_count": bson.M{"$gt": filter.PlayCount}})
 	}
 
 	if !filter.Date.IsZero() {
-		query["created_at"] = bson.M{"$gt": filter.Date}
+		orConditions = append(orConditions, bson.M{"created_at": bson.M{"$gt": filter.Date}})
+	}
+
+	if len(orConditions) > 0 {
+		query["$or"] = orConditions
 	}
 
 	cursor, err := musicRepo.collection.Find(ctx, query)
@@ -172,6 +178,60 @@ func (musicRepo *musicRepo) SearchMusics(ctx context.Context, filter dtos.Filter
 	return musics, nil
 }
 
+func (musicRepo *musicRepo) GetGenreList(c context.Context) ([]map[string]interface{}, *models.ErrorResponse) {
+	// A map to store the genre counts
+	genreCounts := make(map[string]int)
+
+	// Find all music entries
+	cursor, err := musicRepo.collection.Find(c, bson.M{})
+	if err != nil {
+		return nil, models.InternalServerError("Failed to retrieve music data")
+	}
+	defer cursor.Close(c)
+
+	// Iterate over each music entry
+	for cursor.Next(c) {
+		var music struct {
+			Genres []string `bson:"genres"`
+		}
+		if err := cursor.Decode(&music); err != nil {
+			return nil, models.InternalServerError("Failed to decode music data")
+		}
+
+		// Count each genre in the music entry
+		for _, genre := range music.Genres {
+			genreCounts[genre]++
+		}
+	}
+
+	// Query to get image URLs for each genre from the database
+	var genreList []map[string]interface{}
+	for genre, count := range genreCounts {
+		var genreInfo models.Genre
+
+		err := musicRepo.genreCollection.FindOne(c, bson.M{"genre": genre}).Decode(&genreInfo)
+		if err != nil {
+			// If no image found, set default image
+			genreInfo.Image = "https://demofree.sirv.com/nope-not-here.jpg"
+		}
+
+		// Construct the genre object with image
+		genreList = append(genreList, map[string]interface{}{
+			"genre": genre,
+			"count": count,
+			"image": genreInfo.Image,
+		})
+	}
+
+	// Check if any genres were found
+	if len(genreList) == 0 {
+		return nil, models.NotFound("No genres found")
+	}
+
+	return genreList, nil
+}
+
+	
 func (musicRepo *musicRepo) DeleteMusic(c context.Context, musicID primitive.ObjectID) *models.ErrorResponse {
 	deleteResult, err := musicRepo.collection.DeleteOne(c, bson.M{"_id": musicID})
 	if err != nil {

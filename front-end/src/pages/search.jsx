@@ -14,7 +14,7 @@ const SearchPage = () => {
         <ThemeProvider theme={my_theme}>
             <GlobalContainer>
                 <SearchBar />
-                <MusicContainer type={"search"} tracks={searchedMusicList}/>
+                {searchedMusicList && <MusicContainer type={"search"} tracks={searchedMusicList}/>}
             </GlobalContainer>  
         </ThemeProvider> 
     )

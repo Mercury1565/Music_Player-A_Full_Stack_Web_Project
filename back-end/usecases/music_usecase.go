@@ -104,6 +104,12 @@ func (uc *musicUsecase) SearchMusics(ctx context.Context, filter dtos.FilterMusi
 	return uc.musicRepo.SearchMusics(ctx, filter)
 }
 
+func (uc *musicUsecase) GetGenreList(ctx context.Context) ([]map[string]interface{}, *models.ErrorResponse) {
+	ctx, cancel := context.WithTimeout(ctx, uc.timeout)
+	defer cancel()
+	return uc.musicRepo.GetGenreList(ctx)
+}
+
 func (uc *musicUsecase) DeleteMusic(ctx context.Context, deleteMusicReq dtos.DeleteMusicRequest) *models.ErrorResponse {
 	ctx, cancel := context.WithTimeout(ctx, uc.timeout)
 	defer cancel()

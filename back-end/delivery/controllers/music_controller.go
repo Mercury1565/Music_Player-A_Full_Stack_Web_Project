@@ -159,6 +159,16 @@ func (musicController *MusicController) SearchMusicsController(ctx *gin.Context)
 	ctx.IndentedJSON(http.StatusOK, gin.H{"data": musics})
 }
 
+func (musicController *MusicController) GetGenreListController(ctx *gin.Context) {
+	genres, err := musicController.usecase.GetGenreList(ctx)
+	if err != nil {
+		ctx.IndentedJSON(err.Code, gin.H{"error": err.Message})
+		return
+	}
+
+	ctx.IndentedJSON(http.StatusOK, gin.H{"data": genres})
+}
+
 func (musicController *MusicController) DeleteMusicController(ctx *gin.Context) {
 	validate := validator.New()
 
@@ -192,13 +202,6 @@ func (musicController *MusicController) DeleteMusicController(ctx *gin.Context) 
 }
 
 func (musicController *MusicController) GetMusicAudioController(ctx *gin.Context) {
-	id, _ := primitive.ObjectIDFromHex(ctx.Param("id"))
-
-	music, err := musicController.usecase.GetMusic(ctx, id)
-	if err != nil {
-		ctx.IndentedJSON(err.Code, gin.H{"error": err.Message})
-		return
-	}
-
-	ctx.File(music.AudioFilePath)
+	audioFilePath := ctx.Query("path")
+	ctx.File(audioFilePath)
 }

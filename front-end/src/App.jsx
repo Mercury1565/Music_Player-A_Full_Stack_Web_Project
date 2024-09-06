@@ -14,16 +14,7 @@ import SearchPage from './pages/search';
 import Login from './pages/login_page';
 import Signup from './pages/signup_page';
 
-function App() {
-  // const musicList = useSelector((state) => state.favouriteMusicList);
-  // const dispatch = useDispatch();
-
-  // useEffect(() => {
-  //   dispatch({ type: 'music/fetchMusicList' });
-  // }, [dispatch]);
-
-  // console.log(musicList);
-  
+function App() {  
   return (
     <Router>
       <RouteSwitch />

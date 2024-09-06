@@ -12,12 +12,14 @@ import (
 )
 
 type userRepo struct {
-	collection *mongo.Collection
+	collection      *mongo.Collection
+	musicCollection *mongo.Collection
 }
 
-func NewUserRepo(database mongo.Database, collection string) interfaces.UserRepository {
+func NewUserRepo(database mongo.Database, collection string, musicCollection string) interfaces.UserRepository {
 	return &userRepo{
-		collection: database.Collection(collection),
+		collection:      database.Collection(collection),
+		musicCollection: database.Collection(musicCollection),
 	}
 }
 
@@ -142,14 +144,27 @@ func (userRepo *userRepo) RemoveFavouriteMusic(ctx context.Context, userID primi
 	return nil
 }
 
-func (userRepo *userRepo) GetUserFavouriteMusics(ctx context.Context, userID primitive.ObjectID) ([]primitive.ObjectID, *models.ErrorResponse) {
+func (userRepo *userRepo) GetUserFavouriteMusics(ctx context.Context, userID primitive.ObjectID) ([]models.Music, *models.ErrorResponse) {
 	var user models.User
 	err := userRepo.collection.FindOne(ctx, bson.M{"_id": userID}).Decode(&user)
 	if err != nil {
 		return nil, models.InternalServerError(err.Error())
 	}
 
-	return user.FavouriteMusics, nil
+	favourites := user.FavouriteMusics
+	var favouriteMusics []models.Music
+
+	for _, favouriteMusicID := range favourites {
+		var music models.Music
+		err := userRepo.musicCollection.FindOne(ctx, bson.M{"_id": favouriteMusicID}).Decode(&music)
+		if err != nil {
+			return nil, models.InternalServerError("music not found")
+		}
+
+		favouriteMusics = append(favouriteMusics, music)
+	}
+
+	return favouriteMusics, nil
 }
 
 // updateUserRole is a helper method to update a user's role.

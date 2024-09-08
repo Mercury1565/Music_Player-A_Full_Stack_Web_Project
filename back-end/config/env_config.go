@@ -2,7 +2,6 @@ package config
 
 import (
 	"log"
-	"path/filepath"
 
 	"github.com/spf13/viper"
 )
@@ -12,7 +11,7 @@ type Env struct {
 
 	DB_USERNAME string `mapstructure:"DB_USERNAME"`
 	DB_PASSWORD string `mapstructure:"DB_PASSWORD"`
-	DB_NAME string `mapstructure:"DB_NAME"`
+	DB_NAME     string `mapstructure:"DB_NAME"`
 
 	ACCESS_TOKEN_EXPIRY_HOUR  int `mapstructure:"ACCESS_TOKEN_EXPIRY_HOUR"`
 	REFRESH_TOKEN_EXPIRY_HOUR int `mapstructure:"REFRESH_TOKEN_EXPIRY_HOUR"`
@@ -22,36 +21,23 @@ type Env struct {
 }
 
 func NewEnv() *Env {
-	projectRoot, err := filepath.Abs(filepath.Join("/home/mercury/Desktop/Addis_Project/back-end/"))
+    viper.AutomaticEnv()
 
-	if err != nil {
-		log.Fatalf("Error getting project root path: %v", err)
-	}
+    // Bind environment variables
+    viper.BindEnv("JWT_SECRET")
+    viper.BindEnv("DB_USERNAME")
+    viper.BindEnv("DB_PASSWORD")
+    viper.BindEnv("DB_NAME")
+    viper.BindEnv("ACCESS_TOKEN_EXPIRY_HOUR")
+    viper.BindEnv("REFRESH_TOKEN_EXPIRY_HOUR")
+    viper.BindEnv("SERVER_ADDRESS")
+    viper.BindEnv("CONTEXT_TIMEOUT")
 
-	// Set the path to the .env file
-	viper.SetConfigFile(filepath.Join(projectRoot, ".env"))
+    env := Env{}
 
-	viper.AutomaticEnv()
+    if err := viper.Unmarshal(&env); err != nil {
+        log.Fatalf("Error unmarshaling environment variables: %v", err)
+    }
 
-	if err := viper.ReadInConfig(); err != nil {
-		log.Fatalf("Error reading .env file: %v", err)
-	}
-	viper.BindEnv("JWT_SECRET")
-
-	viper.BindEnv("MONGO_URI")
-	viper.BindEnv("DB_NAME")
-
-	viper.BindEnv("SERVER_ADDRESS")
-	viper.BindEnv("CONTEXT_TIMEOUT")
-
-	viper.BindEnv("ACCESS_TOKEN_EXPIRY_HOUR")
-	viper.BindEnv("REFRESH_TOKEN_EXPIRY_HOUR")
-
-	env := Env{}
-
-	if err := viper.Unmarshal(&env); err != nil {
-		log.Fatalf("Error unmarshaling environment variables: %v", err)
-	}
-
-	return &env
+    return &env
 }

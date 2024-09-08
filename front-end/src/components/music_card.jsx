@@ -13,7 +13,6 @@ const MusicCard = ({ music, index, onClick, type }) => {
     
     const [isFavourite, setIsFavourite] =  useState(favouriteMusicList && favouriteMusicList.some((m) => m._id === music._id));
 
-    // const cover = `http://localhost:8080/cover/${music.cover_image_path}`;
     const [audioURL, setAudioURL] = useState(null);
     const [coverURL, setCoverURL] = useState(null);
     const [duration, setDuration] = useState(0);

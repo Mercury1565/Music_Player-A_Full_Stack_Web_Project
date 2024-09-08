@@ -1,7 +1,15 @@
 {
-  "trailingSlash": false,
-  "rewrites": [{
-    "source": "/cmd(.*)",
-    "destination": "/cmd/main.go"
-  }]
+  "version": 2,
+  "builds": [
+    {
+      "src": "cmd/main.go",
+      "use": "@vercel/go"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/cmd/main"
+    }
+  ]
 }

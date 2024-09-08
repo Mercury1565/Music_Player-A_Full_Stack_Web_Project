@@ -1,6 +1,7 @@
 package routers
 
 import (
+	"log"
 	"music_player_backend/delivery/controllers"
 
 	"music_player_backend/config"
@@ -26,8 +27,13 @@ func NewAuthenticationRouter(env *config.Env, database mongo.Database, group *gi
 	}
 
 	SignupController := &controllers.SignupController{
-		SignupUsecase:   usecases.NewSignupUsecase(user_repository, password_service),
+		SignupUsecase: usecases.NewSignupUsecase(user_repository, password_service),
 	}
+
+	// TEST ROUTE
+	group.GET("/", func(ctx *gin.Context) {
+		log.Println("Hello there")
+	})
 
 	group.POST("/signup", SignupController.Signup)
 	group.POST("/login", LoginController.Login)

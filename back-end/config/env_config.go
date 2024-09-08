@@ -18,6 +18,10 @@ type Env struct {
 
 	SERVER_ADDRESS  string `mapstructure:"SERVER_ADDRESS"`
 	CONTEXT_TIMEOUT int    `mapstructure:"CONTEXT_TIMEOUT"`
+
+    CLOUDINARY_CLOUD_NAME string `mapstructure:"CLOUDINARY_CLOUD_NAME"`
+    CLOUDINARY_API_KEY    string `mapstructure:"CLOUDINARY_API_KEY"`
+    CLOUDINARY_API_SECRET string `mapstructure:"CLOUDINARY_API_SECRET"`
 }
 
 func NewEnv() *Env {
@@ -32,6 +36,7 @@ func NewEnv() *Env {
     viper.BindEnv("REFRESH_TOKEN_EXPIRY_HOUR")
     viper.BindEnv("SERVER_ADDRESS")
     viper.BindEnv("CONTEXT_TIMEOUT")
+    viper.BindEnv("CLOUDINARY_CLOUD_NAME")
 
     env := Env{}
 

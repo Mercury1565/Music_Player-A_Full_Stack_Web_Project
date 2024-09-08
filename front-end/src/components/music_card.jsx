@@ -52,11 +52,11 @@ const MusicCard = ({ music, index, onClick, type }) => {
     useEffect(() => {
         const fetchAudioAndCover = async () => {
             try {
-                const audioBlob = await fetchMusicAudio(music.audio_file_path);
-                const coverBlob = await fetchMusicCover(music.cover_image_path);
+                const audioUrl = await fetchMusicAudio(music.audio_file_path);
+                const coverUrl = await fetchMusicCover(music.cover_image_path);
     
-                setAudioURL(URL.createObjectURL(audioBlob));
-                setCoverURL(URL.createObjectURL(coverBlob));
+                setAudioURL(audioUrl);
+                setCoverURL(coverUrl);
             } 
             catch (error) {
             }

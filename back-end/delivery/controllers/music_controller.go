@@ -3,8 +3,6 @@ package controllers
 import (
 	"mime/multipart"
 	"net/http"
-	"os"
-	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
@@ -18,12 +16,14 @@ import (
 )
 
 type MusicController struct {
-	usecase interfaces.MusicUsecase
+	usecase    interfaces.MusicUsecase
+	cloudinary interfaces.CloudinaryInterface
 }
 
-func NewMusicController(usecase interfaces.MusicUsecase) *MusicController {
+func NewMusicController(usecase interfaces.MusicUsecase, cloudinary interfaces.CloudinaryInterface) *MusicController {
 	return &MusicController{
-		usecase: usecase,
+		usecase:    usecase,
+		cloudinary: cloudinary,
 	}
 }
 
@@ -204,27 +204,15 @@ func (musicController *MusicController) DeleteMusicController(ctx *gin.Context) 
 }
 
 func (mc *MusicController) GetMusic(c *gin.Context) {
-	fileName := c.Param("fileName")
-	filePath := filepath.Join("../uploads/music", fileName)
+	musicPublicID := c.Param("publicID")
+	musicURL := mc.cloudinary.GetAudioURL(musicPublicID)
 
-	if _, err := os.Stat(filePath); os.IsNotExist(err) {
-		c.JSON(http.StatusNotFound, gin.H{"message": "File not found"})
-		return
-	}
-
-	c.Header("Content-Type", "audio/mpeg")
-	c.File(filePath)
+	c.IndentedJSON(http.StatusOK, gin.H{"data": musicURL})
 }
 
 func (mc *MusicController) GetCoverImage(c *gin.Context) {
-	fileName := c.Param("fileName")
-	filePath := filepath.Join("../uploads/cover", fileName)
+	coverPublicID := c.Param("publicID")
+	coverURL := mc.cloudinary.GetAudioURL(coverPublicID)
 
-	if _, err := os.Stat(filePath); os.IsNotExist(err) {
-		c.JSON(http.StatusNotFound, gin.H{"message": "File not found"})
-		return
-	}
-
-	c.Header("Content-Type", "image/jpeg")
-	c.File(filePath)
+	c.IndentedJSON(http.StatusOK, gin.H{"data": coverURL})
 }

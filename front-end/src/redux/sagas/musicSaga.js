@@ -142,9 +142,7 @@ function* fetchSearchMusicListSaga(action) {
 
 function* fetchMusicAudioSaga(action) {
   try {
-    const blob = yield call(fetchMusicAudio, action.payload);
-    const audioURL = URL.createObjectURL(blob); 
-
+    const audioURL = yield call(fetchMusicAudio, action.payload);
     yield put(setAudio(audioURL)); 
   } 
   catch (e) {
@@ -155,9 +153,7 @@ function* fetchMusicAudioSaga(action) {
 
 function* fetchMusicCoverSaga(action) {
   try {
-    const blob = yield call(fetchMusicCover, action.payload);
-    const coverURL = URL.createObjectURL(blob);
-
+    const coverURL = yield call(fetchMusicCover, action.payload);
     yield put(setCover(coverURL)); 
   } 
   catch (e) {

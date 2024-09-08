@@ -67,12 +67,12 @@ export const fetchGenreMusicList = async (genre) => {
   return response.data;
 }
 
-export const fetchMusicAudio = async (filePath) => {
-  const response = await api.get(`/audio/${filePath}`, { responseType: 'blob' });
+export const fetchMusicAudio = async (publicID) => {
+  const response = await api.get(`/audio/${publicID}`, { responseType: 'blob' });
   return response.data;
 }
 
-export const fetchMusicCover = async (filePath) => {
-  const response = await api.get(`/cover/${filePath}`, { responseType: 'blob' });
+export const fetchMusicCover = async (publicID) => {
+  const response = await api.get(`/cover/${publicID}`, { responseType: 'blob' });
   return response.data;
 }

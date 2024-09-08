@@ -13,12 +13,14 @@ import (
 )
 
 func NewMusicRouter(env *config.Env, database mongo.Database, group *gin.RouterGroup) {
+	cloud, _ := config.NewCloudinaryConfig(env)
+
 	musicRepo := repository.NewMusicRepo(database, "music", "genres")
-	storage := infrastructure.NewFileStorage("../uploads")
+	cloudinaryService := infrastructure.NewCloudinaryService(cloud, env)
 	timeout := time.Duration(env.CONTEXT_TIMEOUT) * time.Second
 
-	musicUsecase := usecases.NewMusicUsecase(musicRepo, storage, timeout)
-	musicController := controllers.NewMusicController(musicUsecase)
+	musicUsecase := usecases.NewMusicUsecase(musicRepo, cloudinaryService, timeout)
+	musicController := controllers.NewMusicController(musicUsecase, cloudinaryService)
 
 	group.POST("/music", musicController.CreateMusicController)
 	group.DELETE("/music/:id", musicController.DeleteMusicController)
@@ -31,8 +33,8 @@ func NewMusicRouter(env *config.Env, database mongo.Database, group *gin.RouterG
 	group.GET("/musics/recent", musicController.GetRecentMusicsController)
 	group.GET("/music/genres", musicController.GetGenreListController)
 
-	group.GET("/audio/:fileName", musicController.GetMusic)
-    group.GET("/cover/:fileName", musicController.GetCoverImage)
+	group.GET("/audio/:publicID", musicController.GetMusic)
+    group.GET("/cover/:publicID", musicController.GetCoverImage)
 }
 
 

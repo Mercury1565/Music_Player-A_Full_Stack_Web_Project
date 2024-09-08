@@ -8,19 +8,19 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Handler(w http.ResponseWriter, r *http.Request) {
-	// Create a new Gin engine
-	app := config.App()
+var ginEngine *gin.Engine
+var app config.Application
+
+func init() {
+	app = config.App()
 	env := app.Env
-	ginEngine := gin.New()
 
-	// Connect to the database
+	ginEngine = gin.New()
 	database := app.Mongo.Database(env.DB_NAME)
-	defer app.CloseMongoDBConnection()
 
-	// Set up your routes
 	routers.Setup(env, *database, ginEngine)
+}
 
-	// Use gin's ServeHTTP to handle requests via HTTP
+func Handler(w http.ResponseWriter, r *http.Request) {
 	ginEngine.ServeHTTP(w, r)
 }

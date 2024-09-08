@@ -1,6 +1,6 @@
 import api from './apiClient.js';  
 import axios from 'axios';
-const API_BASE_URL = 'https://music-player-web-project-server.vercel.app';
+const API_BASE_URL = 'https://music-player-a-full-stack-web-project-f8g3.vercel.app/';
 
 
 // login and signup are open APIs

@@ -1,7 +1,7 @@
 package routers
 
 import (
-	"log"
+	"fmt"
 	"music_player_backend/delivery/controllers"
 
 	"music_player_backend/config"
@@ -32,7 +32,8 @@ func NewAuthenticationRouter(env *config.Env, database mongo.Database, group *gi
 
 	// TEST ROUTE
 	group.GET("/", func(ctx *gin.Context) {
-		log.Println("Hello there")
+		fmt.Println("<h1>Hello from Go!</h1>")
+
 	})
 
 	group.POST("/signup", SignupController.Signup)

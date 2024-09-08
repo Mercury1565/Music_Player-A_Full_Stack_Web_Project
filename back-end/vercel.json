@@ -1,15 +1,17 @@
 {
-  "version": 2,
   "builds": [
     {
       "src": "cmd/main.go",
-      "use": "@vercel/go"
+      "use": "@vercel/go",
+      "config": {
+        "zeroConfig": true
+      }
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "/cmd/main"
+      "dest": "/"
     }
   ]
 }

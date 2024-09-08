@@ -24,7 +24,7 @@ func main() {
 	if port == "" {
 		port = env.SERVER_ADDRESS
 		if port == "" {
-			port = ":8080"
+			port = "8080"
 		}
 	}
 

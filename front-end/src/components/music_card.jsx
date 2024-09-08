@@ -55,8 +55,8 @@ const MusicCard = ({ music, index, onClick, type }) => {
                 const audioUrl = await fetchMusicAudio(music.audio_file_path);
                 const coverUrl = await fetchMusicCover(music.cover_image_path);
     
-                setAudioURL(audioUrl);
-                setCoverURL(coverUrl);
+                setAudioURL(audioUrl.data);
+                setCoverURL(coverUrl.data);
             } 
             catch (error) {
             }

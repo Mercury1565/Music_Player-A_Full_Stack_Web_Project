@@ -143,7 +143,7 @@ function* fetchSearchMusicListSaga(action) {
 function* fetchMusicAudioSaga(action) {
   try {
     const audioURL = yield call(fetchMusicAudio, action.payload);
-    yield put(setAudio(audioURL)); 
+    yield put(setAudio(audioURL.data)); 
   } 
   catch (e) {
     // Handle error by dispatching an error action
@@ -154,7 +154,8 @@ function* fetchMusicAudioSaga(action) {
 function* fetchMusicCoverSaga(action) {
   try {
     const coverURL = yield call(fetchMusicCover, action.payload);
-    yield put(setCover(coverURL)); 
+    console.log(coverURL);
+    yield put(setCover(coverURL.data)); 
   } 
   catch (e) {
     // Handle error by dispatching an error action

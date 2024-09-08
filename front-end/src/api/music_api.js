@@ -68,11 +68,11 @@ export const fetchGenreMusicList = async (genre) => {
 }
 
 export const fetchMusicAudio = async (publicID) => {
-  const response = await api.get(`/audio/${publicID}`, { responseType: 'blob' });
+  const response = await api.get(`/audio/${publicID}`);
   return response.data;
 }
 
 export const fetchMusicCover = async (publicID) => {
-  const response = await api.get(`/cover/${publicID}`, { responseType: 'blob' });
+  const response = await api.get(`/cover/${publicID}`);
   return response.data;
 }

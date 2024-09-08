@@ -42,7 +42,7 @@ func (uc *musicUsecase) CreateMusic(ctx context.Context, newMusic *dtos.CreateMu
 	music.Genres = newMusic.Genres
 
 	// Upload the audio file to cloudinary
-	audioPublicID, err := uc.cloudinary.UploadAudio(*audioFile, ctx)
+	audioPublicID, err := uc.cloudinary.UploadAudio(audioFile, ctx)
 	if err != nil {
 		return nil, err
 	}

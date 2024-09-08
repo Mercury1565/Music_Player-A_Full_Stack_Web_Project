@@ -19,30 +19,33 @@ type Env struct {
 	SERVER_ADDRESS  string `mapstructure:"SERVER_ADDRESS"`
 	CONTEXT_TIMEOUT int    `mapstructure:"CONTEXT_TIMEOUT"`
 
-    CLOUDINARY_CLOUD_NAME string `mapstructure:"CLOUDINARY_CLOUD_NAME"`
-    CLOUDINARY_API_KEY    string `mapstructure:"CLOUDINARY_API_KEY"`
-    CLOUDINARY_API_SECRET string `mapstructure:"CLOUDINARY_API_SECRET"`
+	CLOUDINARY_CLOUD_NAME string `mapstructure:"CLOUDINARY_CLOUD_NAME"`
+	CLOUDINARY_API_KEY    string `mapstructure:"CLOUDINARY_API_KEY"`
+	CLOUDINARY_API_SECRET string `mapstructure:"CLOUDINARY_API_SECRET"`
 }
 
 func NewEnv() *Env {
-    viper.AutomaticEnv()
+	viper.AutomaticEnv()
 
-    // Bind environment variables
-    viper.BindEnv("JWT_SECRET")
-    viper.BindEnv("DB_USERNAME")
-    viper.BindEnv("DB_PASSWORD")
-    viper.BindEnv("DB_NAME")
-    viper.BindEnv("ACCESS_TOKEN_EXPIRY_HOUR")
-    viper.BindEnv("REFRESH_TOKEN_EXPIRY_HOUR")
-    viper.BindEnv("SERVER_ADDRESS")
-    viper.BindEnv("CONTEXT_TIMEOUT")
-    viper.BindEnv("CLOUDINARY_CLOUD_NAME")
+	// Bind environment variables
+	viper.BindEnv("JWT_SECRET")
+	viper.BindEnv("DB_USERNAME")
+	viper.BindEnv("DB_PASSWORD")
+	viper.BindEnv("DB_NAME")
+	viper.BindEnv("ACCESS_TOKEN_EXPIRY_HOUR")
+	viper.BindEnv("REFRESH_TOKEN_EXPIRY_HOUR")
+	viper.BindEnv("SERVER_ADDRESS")
+	viper.BindEnv("CONTEXT_TIMEOUT")
 
-    env := Env{}
+	viper.BindEnv("CLOUDINARY_CLOUD_NAME")
+	viper.BindEnv("CLOUDINARY_API_KEY")
+	viper.BindEnv("CLOUDINARY_API_SECRET")
 
-    if err := viper.Unmarshal(&env); err != nil {
-        log.Fatalf("Error unmarshaling environment variables: %v", err)
-    }
+	env := Env{}
 
-    return &env
+	if err := viper.Unmarshal(&env); err != nil {
+		log.Fatalf("Error unmarshaling environment variables: %v", err)
+	}
+
+	return &env
 }

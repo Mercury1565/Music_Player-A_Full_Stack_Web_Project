@@ -18,7 +18,8 @@ func Setup(env *config.Env, db mongo.Database, gin *gin.Engine) {
 	jwtMiddleware := middlewares.NewJwtAuthMiddleware(jwt_service, session_repo)
 
 	gin.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"https://music-player-a-full-stack-web-project.vercel.app"},
+		// AllowOrigins:     []string{"https://music-player-a-full-stack-web-project.vercel.app"},
+		AllowOrigins:     []string{"*"},
 		AllowMethods:     []string{"POST", "GET", "OPTIONS", "PUT", "DELETE"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length", "Content-Type"},

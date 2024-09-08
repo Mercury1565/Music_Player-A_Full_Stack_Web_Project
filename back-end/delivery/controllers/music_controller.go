@@ -212,7 +212,7 @@ func (mc *MusicController) GetMusic(c *gin.Context) {
 
 func (mc *MusicController) GetCoverImage(c *gin.Context) {
 	coverPublicID := c.Param("publicID")
-	coverURL := mc.cloudinary.GetAudioURL(coverPublicID)
+	coverURL := mc.cloudinary.GetCoverURL(coverPublicID)
 
 	c.IndentedJSON(http.StatusOK, gin.H{"data": coverURL})
 }

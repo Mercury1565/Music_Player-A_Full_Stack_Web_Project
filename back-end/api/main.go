@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"music_player_backend/config"
 	"music_player_backend/delivery/routers"
 	"net/http"
@@ -23,4 +24,6 @@ func init() {
 
 func Handler(w http.ResponseWriter, r *http.Request) {
 	ginEngine.ServeHTTP(w, r)
+	fmt.Fprintf(w, "<h1>Hello from Go!</h1>")
 }
+git 

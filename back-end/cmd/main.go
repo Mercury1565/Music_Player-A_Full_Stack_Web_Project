@@ -1,34 +1,26 @@
 package main
 
 import (
-	"log"
 	"music_player_backend/config"
 	"music_player_backend/delivery/routers"
-	"os"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
-func main() {
+func Handler(w http.ResponseWriter, r *http.Request) {
+	// Create a new Gin engine
 	app := config.App()
 	env := app.Env
-	gin := gin.Default()
+	ginEngine := gin.New()
 
+	// Connect to the database
 	database := app.Mongo.Database(env.DB_NAME)
 	defer app.CloseMongoDBConnection()
 
-	routers.Setup(env, *database, gin)
+	// Set up your routes
+	routers.Setup(env, *database, ginEngine)
 
-	// Get the PORT from the environment (used by Vercel)
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = env.SERVER_ADDRESS
-		if port == "" {
-			port = "8080"
-		}
-	}
-
-	// Run the server
-	log.Printf("Starting server on port %s...", port)
-	gin.Run(":" + port)
+	// Use gin's ServeHTTP to handle requests via HTTP
+	ginEngine.ServeHTTP(w, r)
 }

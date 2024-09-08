@@ -1,6 +1,7 @@
 {
-  "router": [{
-    "src": "/(.*)",
-    "dest": "/cmd"
+  "trailingSlash": false,
+  "rewrites": [{
+    "source": "/cmd(.*)",
+    "destination": "/cmd/main.go"
   }]
 }

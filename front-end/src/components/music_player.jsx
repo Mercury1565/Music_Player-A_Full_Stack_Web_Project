@@ -19,29 +19,25 @@ import { setMusic } from "../redux/slices/musicSlice";
 const MusicPlayer = () => {
       const dispatch = useDispatch()
 
+      const {loggedIn} = useSelector((state) => state.auth);
+
       const current_track = useSelector((state) => state.track);
       const nowPlaying = useSelector((state) => state.nowPlaying);
-
-      const favourites = useSelector((state) => state.favouriteMusicList);
-      const [isFavourite, setIsFavourite] =  useState(false);
+      const { cover, audioFile, error} = useSelector((state) => state.fetchedMusic);
 
       const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
       const [playMode, setPlayMode] = useState('sequential');  // Mode: 'sequential' or 'random'
 
       useEffect(() => {
-          if (!current_track) return
-          dispatch({ type: 'music/fetchFavouriteMusicList' });
-          setIsFavourite(favourites && favourites.some((m) => m._id === current_track._id));
+          if (!loggedIn || !current_track) return
+
           setCurrentTrackIndex(nowPlaying.findIndex(track => track._id === current_track._id));
-      }, [dispatch]);
+      }, [dispatch, loggedIn]);
 
-      const audioPath = current_track.audio_file_path;
-      const coverImageURL = `http://localhost:8080/uploads/cover/${current_track.cover_image_path}`;
-
-      const audioRef = useRef(null);  // Reference to the audio element
+      const audioRef = useRef(null);
       const [isPlaying, setIsPlaying] = useState(true);
       const [position, setPosition] = useState(0);
-      const [volume, setVolume] = useState(30);  // Default volume
+      const [volume, setVolume] = useState(30);  
       const [duration, setDuration] = useState(0);
 
       useEffect(() => {
@@ -59,12 +55,10 @@ const MusicPlayer = () => {
           };
 
           audio.onended = handleTrackEnd;
-
           audio.play();
           setIsPlaying(true);
-          
         }
-      }, [current_track]);  // Re-run when current_track or isPlaying changes
+      }, [current_track, audioFile, cover]);  // Re-run when current_track or isPlaying changes
 
       const formatDuration = (seconds) => {
         const minutes = Math.floor(seconds / 60);
@@ -90,18 +84,6 @@ const MusicPlayer = () => {
         audioRef.current.volume = value / 100;  // Volume should be between 0 and 1
         setVolume(value);
       };
-
-      const handleFavourite = () => {
-        if (isFavourite) {
-            setIsFavourite(false);
-            dispatch({ type: 'music/removeFavourite', payload: current_track._id });
-        }
-        else{
-            setIsFavourite(true);
-            dispatch({ type: 'music/appendFavourite', payload: current_track._id });
-        }
-      }
-
 
     const handleTrackEnd = () => {
       if (playMode === 'sequential') {
@@ -146,19 +128,22 @@ const MusicPlayer = () => {
       setPlayMode((prevMode) => (prevMode === 'random' ? 'sequential' : 'random'));
     };
 
-    
+    if (!loggedIn){
+      return null
+    }
+
     return(
       <ThemeProvider theme={my_theme}>
         <MusicPlayerContainer>
           <MusicInfoContainer>
-            <MusicImageContainer src={coverImageURL}/>
+            <MusicImageContainer src={cover}/>
             <MusicTitleContainer>
               <h3>{current_track.title}</h3>
               <p>{current_track.artist}</p>
             </MusicTitleContainer>
           </MusicInfoContainer>
 
-          <audio ref={audioRef} src={`http://localhost:8080/uploads/music/${audioPath}`} />
+          <audio ref={audioRef} src={audioFile} />
 
           <ControllerContainer>
             <MusicPlayerIconStyle src={bwd_icon} onClick={handlePreviousTrack} />
@@ -203,10 +188,6 @@ const MusicPlayer = () => {
           <UtilityContainer>
             <MusicPlayerUtilityIconStyle src={shuffle_icon} isActive={playMode === 'random'} onClick={togglePlayMode}/>
             <MusicPlayerUtilityIconStyle src={repeat_icon} isActive={playMode === 'repeat'} onClick={() => {setPlayMode("repeat")}}/>
-            <MusicPlayerUtilityIconStyle 
-              src={isFavourite ? selected_favourite_icon: favourite_icon}
-              onClick={handleFavourite}
-            />
           </UtilityContainer> 
 
         </MusicPlayerContainer>

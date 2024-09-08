@@ -1,111 +1,188 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
-import { fetchTopMusicList, fetchFavouriteMusicList, fetchYourMusicList, fetchGenreList, fetchGenreMusicList, addToFavouriteMusicList, removeFromFavouriteMusicList, searchMusic } from '../../api/music_api';
-import { appendFavourite, setFavourites, removeFavourite } from '../slices/favouriteMusicListSlice';
-import { setTopMusicList } from '../slices/topMusicListSlice';
-import { setYourMusicList } from '../slices/yourMusicListSlice';
-import { setGenreList } from '../slices/genresSlice';
+import { createMusic, fetchTopMusicList, fetchFavouriteMusicList, fetchYourMusicList, fetchGenreList, fetchGenreMusicList, addToFavouriteMusicList, removeFromFavouriteMusicList, searchMusic, deleteMusic, fetchMusicAudio, fetchMusicCover } from '../../api/music_api';
+import { setFavourites, setFavouritesError } from '../slices/favouriteMusicListSlice';
+import { setTopMusicList, setTopMusicListError } from '../slices/topMusicListSlice';
+import { setYourMusicList, setYourMusicListError } from '../slices/yourMusicListSlice';
+import { setGenreList, setGenreListError } from '../slices/genresSlice';
 import { setGenreMusicList } from '../slices/genreMusicListSlice';
-import { setSearchList } from '../slices/searchedMusicListSlice';
+import { setSearchList, setSearchListError } from '../slices/searchedMusicListSlice';
+import { setMusic } from '../slices/musicSlice';
+import { setAudio, setCover, setError } from '../slices/fetchedMusicSlice';
+
+function* createMusicSaga(action) {
+  const { musicData, musicFile, coverFile } = action.payload;
+
+  try {
+    const formData = new FormData();
+    
+    // Append text fields
+    formData.append('artist', musicData.artist);
+    formData.append('title', musicData.title);
+    formData.append('response', musicData.genre.join(','));
+
+    // Append files
+    if (musicFile) {
+      formData.append('response', musicFile);
+    }
+    if (coverFile) {
+      formData.append('cover_image', coverFile);
+    }
+
+    // Perform the file upload via API
+    const response = yield call(createMusic, formData);
+
+    // Dispatch success action with the uploaded response
+    yield put(setYourMusicList(response)); 
+  } 
+  catch (e) {
+    // Handle error by dispatching an error action
+    yield put(setYourMusicListError(e.response))
+  }
+}
+
+function* deleteMusicSaga(action) {
+  try {
+    const response = yield call(deleteMusic, action.payload);
+    yield put(setYourMusicList(response)); 
+
+  } 
+  catch (e) {
+    // Handle error by dispatching an error action
+    yield put(setYourMusicListError(e.response))
+  }
+}
 
 function* fetchFavouriteMusicListSaga() {
   try {
-    const music = yield call(fetchFavouriteMusicList);
-    yield put(setFavourites(music.data)); 
+    const response = yield call(fetchFavouriteMusicList);
+    yield put(setFavourites(response)); 
   } 
   catch (e) {
-    yield console.log("Failed in fetchFavouriteMusicListSaga");
-    // yield put(fetchMusicListFailed(e.message)); 
+    // Handle error by dispatching an error action
+    yield put(setFavouritesError(e.response))
   }
 }
 
 function* addToFavouriteMusicListSaga(action) {
   try {
-    const _ = yield call(addToFavouriteMusicList, action.payload);
-    const music = yield call(fetchFavouriteMusicList);
-    yield put(setFavourites(music.data)); 
+    const response = yield call(addToFavouriteMusicList, action.payload);
+    yield put(setFavourites(response)); 
   } 
   catch (e) {
-    yield console.log("Failed in addFavouriteMusicListSaga");
-    // yield put(fetchMusicListFailed(e.message)); // Dispatch failure action
+    // Handle error by dispatching an error action
+    yield put(setFavouritesError(e.response))
   }
 }
 
 function* removeFromFavouriteMusicListSaga(action) {
   try {
-    const _ = yield call(removeFromFavouriteMusicList, action.payload);
-    const music = yield call(fetchFavouriteMusicList);
-    yield put(setFavourites(music.data)); 
+    const response = yield call(removeFromFavouriteMusicList, action.payload);
+    yield put(setFavourites(response)); 
   } 
   catch (e) {
-    yield console.log("Failed in removeFavouriteMusicListSaga");
-    // yield put(fetchMusicListFailed(e.message)); // Dispatch failure action
+    // Handle error by dispatching an error action
+    yield put(setFavouritesError(e.response))
   }
 }
 
 function* fetchTopMusicListSaga() {
   try {
-    const music = yield call(fetchTopMusicList);
-    yield put(setTopMusicList(music.data));
+    const response = yield call(fetchTopMusicList);
+    yield put(setTopMusicList(response));
   } 
   catch (e) {
-    yield console.log("Failed in fetchTopMusicListSaga");
-    // yield put(fetchMusicListFailed(e.message));
+    // Handle error by dispatching an error action
+    yield put(setTopMusicListError(e.response))
   }
 }
 
 function* fetchYourMusicListSaga() {
   try {
-    const music = yield call(fetchYourMusicList);
-    yield put(setYourMusicList(music.data)); 
+    const response = yield call(fetchYourMusicList);
+    yield put(setYourMusicList(response)); 
   } 
   catch (e) {
-    yield console.log("Failed in fetchYourListSaga");
-    // yield put(fetchMusicListFailed(e.message)); 
-  }
-}
-
-function* fetchGenreMusicListSaga(action) {
-  try {
-    const music = yield call(fetchGenreMusicList, action.payload);
-    yield put(setGenreMusicList(music.data)); 
-  } 
-  catch (e) {
-    yield console.log("Failed in fetchGenreMusicListSaga");
-    // yield put(fetchMusicListFailed(e.message)); // Dispatch failure action
+    // Handle error by dispatching an error action
+    yield put(setYourMusicListError(e.response))
   }
 }
 
 function* fetchGenreListSaga() {
   try {
-    const genres = yield call(fetchGenreList);
-    yield put(setGenreList(genres.data)); 
+    const response = yield call(fetchGenreList);
+    yield put(setGenreList(response)); 
   } 
   catch (e) {
-    yield console.log("Failed in fetchGenreListSaga");
-    // yield put(fetchMusicListFailed(e.message)); // Dispatch failure action
+    // Handle error by dispatching an error action
+    yield put(setGenreListError(e.response))
+  }
+}
+
+function* fetchGenreMusicListSaga(action) {
+  try {
+    const response = yield call(fetchGenreMusicList, action.payload);
+    yield put(setGenreMusicList(response)); 
+  } 
+  catch (e) {
+    // Handle error by dispatching an error action
+    yield put(setGenreMusicList(e.response))
   }
 }
 
 function* fetchSearchMusicListSaga(action) {
   try {
-    const music = yield call(searchMusic, action.payload);
-    yield put(setSearchList(music.data)); 
+    const response = yield call(searchMusic, action.payload);
+    yield put(setSearchList(response)); 
   } 
   catch (e) {
-    yield console.log("Failed in fetchSearchMusicListSaga");
-    // yield put(fetchMusicListFailed(e.message)); // Dispatch failure action
+    // Handle error by dispatching an error action
+    yield put(setSearchListError(e.response))
   }
 }
 
+function* fetchMusicAudioSaga(action) {
+  try {
+    const blob = yield call(fetchMusicAudio, action.payload);
+    const audioURL = URL.createObjectURL(blob); 
+
+    yield put(setAudio(audioURL)); 
+  } 
+  catch (e) {
+    // Handle error by dispatching an error action
+    yield put(setError(e));
+  }
+}
+
+function* fetchMusicCoverSaga(action) {
+  try {
+    const blob = yield call(fetchMusicCover, action.payload);
+    const coverURL = URL.createObjectURL(blob);
+
+    yield put(setCover(coverURL)); 
+  } 
+  catch (e) {
+    // Handle error by dispatching an error action
+    yield put(setError(e));
+  }
+}
+
+
 function* musicSaga() {
+  yield takeLatest('music/createMusic', createMusicSaga);
+  yield takeLatest('music/deleteMusic', deleteMusicSaga);
+
+  yield takeLatest('music/appendFavourite', addToFavouriteMusicListSaga);
+  yield takeLatest('music/removeFavourite', removeFromFavouriteMusicListSaga);
+
   yield takeLatest('music/fetchFavouriteMusicList', fetchFavouriteMusicListSaga);
   yield takeLatest('music/fetchTopMusicList', fetchTopMusicListSaga);
   yield takeLatest('music/fetchYourMusicList', fetchYourMusicListSaga);
   yield takeLatest('music/fetchGenreMusicList', fetchGenreMusicListSaga);
   yield takeLatest('music/fetchGenreList', fetchGenreListSaga);
-  yield takeLatest('music/appendFavourite', addToFavouriteMusicListSaga);
-  yield takeLatest('music/removeFavourite', removeFromFavouriteMusicListSaga);
   yield takeLatest('music/searchMusic', fetchSearchMusicListSaga);
+
+  yield takeLatest('music/fetchMusicAudio', fetchMusicAudioSaga);
+  yield takeLatest('music/fetchMusicCover', fetchMusicCoverSaga);
 }
 
 export default musicSaga;

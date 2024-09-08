@@ -13,14 +13,14 @@ import (
 type RefreshController struct {
 	RefreshUsecase interfaces.RefreshUsecase
 	JwtService     interfaces.JwtService
-	Env 		  *config.Env
+	Env            *config.Env
 }
 
 func NewRefreshController(refreshUsecase interfaces.RefreshUsecase, jwtService interfaces.JwtService, env *config.Env) *RefreshController {
 	return &RefreshController{
 		RefreshUsecase: refreshUsecase,
 		JwtService:     jwtService,
-		Env: env,
+		Env:            env,
 	}
 }
 
@@ -47,5 +47,5 @@ func (refreshController *RefreshController) Refresh(ctx *gin.Context) {
 		return
 	}
 
-	ctx.IndentedJSON(http.StatusOK, gin.H{"access token": accessToken})
+	ctx.IndentedJSON(http.StatusOK, gin.H{"access_token": accessToken})
 }

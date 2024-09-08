@@ -14,11 +14,11 @@ func NewMongoDBClient(env *Env) *mongo.Client {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	dbHost := env.DB_HOST
-	dbPort := env.DB_PORT
+	dbUsername := env.DB_USERNAME
+	dbPassword := env.DB_PASSWORD
 
 	// set client options
-	URI := fmt.Sprintf("mongodb://%v:%v", dbHost, dbPort)
+	URI := fmt.Sprintf("mongodb+srv://%v:%v@cluster0.qfxszxi.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0", dbUsername, dbPassword)
 	clientOptions := options.Client().ApplyURI(URI)
 
 	// connect to MongoDB

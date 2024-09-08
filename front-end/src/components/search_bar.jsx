@@ -9,7 +9,9 @@ const SearchBar = () => {
 
     const handleSearch = (event) => {
         const searchText = event.target.value;
-        dispatch({ type: 'music/searchMusic', payload: searchText });
+        if (searchText !== "") {
+            dispatch({ type: 'music/searchMusic', payload: searchText });
+        }
     };
 
     return (

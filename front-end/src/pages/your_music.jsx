@@ -11,16 +11,26 @@ const YourMusicPage = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const yourMusicList = useSelector((state) => state.yourMusicList);
+    const loggedIn = useSelector((state) => state.auth);
+    const { yourMusicList, yourMusicMessage, yourMusicError} = useSelector((state) => state.yourMusicList);
     
     useEffect(() => {
-        dispatch({ type: 'music/fetchYourMusicList' });
-    }, [dispatch]);
+        if (!loggedIn) {
+            navigate('/login');
+        }
+        else {
+            dispatch({ type: 'music/fetchYourMusicList' });
+        }
+    }, [dispatch, loggedIn, navigate]);
+    
+    if (!loggedIn) {
+        return null
+    }
 
     return(
         <ThemeProvider theme={my_theme}>
             <GlobalContainer>
-                <MusicContainer type={"your-music"} tracks={yourMusicList}/>
+                <MusicContainer type="your-music" tracks={yourMusicList}/>
                 <AddMusicPageButton onClick={() => {navigate('/your_music/add')}}>
                     <h2>Add New Music</h2>
                 </AddMusicPageButton>

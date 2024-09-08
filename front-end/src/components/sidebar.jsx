@@ -1,31 +1,50 @@
 import React from 'react';
 import { ThemeProvider } from '@emotion/react';
-import { dashboard_icon, search_icon, profile_icon, favourite_icon, your_music_icon } from '../assets/assets';
+import { dashboard_icon, search_icon, profile_icon, favourite_icon, your_music_icon, top_music_header_icon, logo_icon } from '../assets/assets';
 import { my_theme } from '../styles/theme';
-import { SidebarContainer } from '../styles/containers';
+import { SidebarContainer, SidebarLogoContainer, LogoutContainer } from '../styles/containers';
 import SidebarButton from './sidebar_button';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { LogoIconStyle, LogoutIconStyle } from '../styles/icons';
+import { LogoutButton } from '../styles/buttons';
+import { useDispatch } from "react-redux"
 
 
 const SideBar = () => {
   const navigate = useNavigate();
-  const [activeButton, setActiveButton] = useState('');
+  const dispatch = useDispatch();
 
+  const [activeButton, setActiveButton] = useState('');
+  const [showLogout, setShowLogout] = useState(false);
+  
   const handleButtonClick = (text) => {
     setActiveButton(text);
     navigate(`/${text.toLowerCase()}`);
   };
 
+  const handleLogout = () => {
+    dispatch({ type: 'auth/logoutRequest' });
+    navigate('/login');
+  };
+
   return (
     <ThemeProvider theme={my_theme}>
       <SidebarContainer>
-        <SidebarButton
-          text="Profile"
-          icon={profile_icon}
-          isActive={activeButton === 'Profile'}
-          onClick={() => handleButtonClick('Profile')}
-        />
+        <SidebarLogoContainer>
+          <LogoIconStyle src={logo_icon}/>
+          <LogoutContainer>
+            <div>
+            <LogoutIconStyle src={profile_icon} onClick={() => {setShowLogout(!showLogout)}}/>
+            </div>
+            {showLogout && (
+            <div>
+              <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
+            </div>
+            )}
+          </LogoutContainer>
+        </SidebarLogoContainer>
+
         <SidebarButton
           text="Dashboard"
           icon={dashboard_icon}
@@ -33,7 +52,7 @@ const SideBar = () => {
           onClick={() => handleButtonClick('')}
         />
         <SidebarButton
-          text="Favourite"
+          text="Favourites"
           icon={favourite_icon}
           isActive={activeButton === 'favourite'}
           onClick={() => handleButtonClick('favourite')}

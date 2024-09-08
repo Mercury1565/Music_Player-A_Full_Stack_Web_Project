@@ -5,11 +5,52 @@ export const GlobalIconStyle = styled.img`
     width: 20px;
     height: 20px;
 `;
+export const LogoIconStyle = styled.img`
+    width: 120px;
+    height: 70px;
+    margin-top: -20px;
+`;
 
 // sidebar icons
 export const SidebarIconStyle = styled.img`
     width: 20px;
     height: 20px;
+`;
+
+export const LogoutIconStyle = styled.img`
+    width: 20px;
+    height: 20px;
+    &:hover {
+        filter: brightness(5);
+        cursor: pointer
+    }
+`;
+
+export const GarbageIconStyle = styled.img`
+    width: 30px;
+    height: 35px;
+    &:hover {
+        cursor: pointer;
+        animation: wiggle 0.2s infinite;
+    }
+
+    @keyframes wiggle {
+        0% {
+            transform: rotate(0deg);
+        }
+        25% {
+            transform: rotate(-10deg);
+        }
+        50% {
+            transform: rotate(0deg);
+        }
+        75% {
+            transform: rotate(10deg);
+        }
+        100% {
+            transform: rotate(0deg);
+        }
+    }
 `;
 
 // genre section icons

@@ -12,12 +12,13 @@ import acoustic from './acoustic.jpg';
 import left from './left.svg';
 import right from './right.svg';
 
-// top music cards assets
+// music cards assets
 import music_card from './music_card.jpg';
 import music_card_play_icon from './play.svg';
 import music_card_pause_icon from './pause.svg';
 import top_music_header_icon from './top_music_head.svg';
 import favourtie_music_header_icon from './favourite_music_head.svg'
+import trash_icon from './trash_icon.svg'
 
 // music player icon
 import fwd_icon from './fwd_icon.svg';
@@ -30,6 +31,9 @@ import selected_favourite_icon from './selected_favourite_icon.svg';
 
 // add music icons
 import add_music_icon from './add_music_icon.svg';
+
+// logo icon
+import logo_icon from './logo.svg';
 
 export {
     search_icon,
@@ -49,6 +53,7 @@ export {
     music_card_pause_icon,
     top_music_header_icon,
     favourtie_music_header_icon,
+    trash_icon,
 
     fwd_icon,
     bwd_icon,
@@ -59,4 +64,6 @@ export {
     selected_favourite_icon,
 
     add_music_icon,
+
+    logo_icon
 }

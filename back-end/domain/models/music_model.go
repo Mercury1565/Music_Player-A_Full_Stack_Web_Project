@@ -19,6 +19,7 @@ type Music struct {
 }
 
 type Genre struct {
-	Name string `json:"name"`
-	Image string `json:"image_url"`
+	Name string `bson:"name" json:"name"`
+	Image string `bson:"image" json:"image"`
+	Count int `bson:"count" json:"count"`
 }

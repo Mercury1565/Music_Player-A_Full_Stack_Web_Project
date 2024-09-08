@@ -36,6 +36,13 @@ func (musicRepo *musicRepo) CreateMusic(c context.Context, music *models.Music) 
 		return nil, models.InternalServerError("Failed to create music")
 	}
 
+	for _, genre := range music.Genres{
+		_, e := musicRepo.genreCollection.UpdateOne(c, bson.M{"name": genre}, bson.M{"$inc": bson.M{"count": 1}})
+		if e != nil {
+			return nil, models.InternalServerError("Failed to increase genre music count")
+		}
+	}
+
 	return music, nil
 }
 
@@ -178,61 +185,37 @@ func (musicRepo *musicRepo) SearchMusics(ctx context.Context, filter dtos.Filter
 	return musics, nil
 }
 
-func (musicRepo *musicRepo) GetGenreList(c context.Context) ([]map[string]interface{}, *models.ErrorResponse) {
-	// A map to store the genre counts
-	genreCounts := make(map[string]int)
+func (musicRepo *musicRepo) GetGenreList(c context.Context) ([]models.Genre, *models.ErrorResponse) {
+	var genres []models.Genre
 
-	// Find all music entries
-	cursor, err := musicRepo.collection.Find(c, bson.M{})
+	cursor, err := musicRepo.genreCollection.Find(c, bson.M{})
 	if err != nil {
-		return nil, models.InternalServerError("Failed to retrieve music data")
+		return nil, models.InternalServerError("Failed to get genres")
 	}
 	defer cursor.Close(c)
 
-	// Iterate over each music entry
-	for cursor.Next(c) {
-		var music struct {
-			Genres []string `bson:"genres"`
-		}
-		if err := cursor.Decode(&music); err != nil {
-			return nil, models.InternalServerError("Failed to decode music data")
-		}
-
-		// Count each genre in the music entry
-		for _, genre := range music.Genres {
-			genreCounts[genre]++
-		}
+	_ = cursor.All(c, &genres)
+	if genres == nil {
+		return nil, models.NotFound("no genre found")
 	}
 
-	// Query to get image URLs for each genre from the database
-	var genreList []map[string]interface{}
-	for genre, count := range genreCounts {
-		var genreInfo models.Genre
-
-		err := musicRepo.genreCollection.FindOne(c, bson.M{"genre": genre}).Decode(&genreInfo)
-		if err != nil {
-			// If no image found, set default image
-			genreInfo.Image = "https://demofree.sirv.com/nope-not-here.jpg"
-		}
-
-		// Construct the genre object with image
-		genreList = append(genreList, map[string]interface{}{
-			"genre": genre,
-			"count": count,
-			"image": genreInfo.Image,
-		})
-	}
-
-	// Check if any genres were found
-	if len(genreList) == 0 {
-		return nil, models.NotFound("No genres found")
-	}
-
-	return genreList, nil
+	return genres, nil
 }
 
 	
 func (musicRepo *musicRepo) DeleteMusic(c context.Context, musicID primitive.ObjectID) *models.ErrorResponse {
+	music, e := musicRepo.GetMusic(c, musicID)
+	if e != nil {
+		return e
+	}
+
+	for _, genre := range music.Genres{
+		_, e := musicRepo.genreCollection.UpdateOne(c, bson.M{"name": genre}, bson.M{"$inc": bson.M{"count": -1}})
+		if e != nil {
+			return models.InternalServerError("Failed to decrease genre music count")
+		}
+	}
+
 	deleteResult, err := musicRepo.collection.DeleteOne(c, bson.M{"_id": musicID})
 	if err != nil {
 		return models.InternalServerError("Failed to delete music")

@@ -46,7 +46,8 @@ const MusicContainer = ({type, tracks}) => {
                 <TopMusicHeaderIcon src={head_icon}/>
                 <h2>{head_title}</h2>
             </TopMusicHeader>
-            <MusicList tracks={tracks}/>
+            {tracks && <MusicList tracks={tracks} type={type}/>}
+            {(!tracks || tracks.length === 0) && <h3>Nothing to display here...</h3>}
         </MusicListContainer>
     );
 };

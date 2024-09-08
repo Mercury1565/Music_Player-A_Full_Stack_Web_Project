@@ -55,6 +55,24 @@ export const SideBarButtonIdle = styled.button`
   }
 `;
 
+export const LogoutButton = styled.button`
+  background:  #666257;
+  color: ${(props) => props.theme.colors.textPrimary};
+
+  padding: ${(props) => props.theme.space[1]}px ${(props) => props.theme.space[2]}px;
+  font-size: 14px;
+  font-weight: ${(props) => props.theme.fontWeight.small};
+
+  border-radius: ${(props) => props.theme.radii.small};
+  outline: none;
+  border: none;
+
+  &:hover {
+    filter: brightness(1.1);
+    cursor: pointer
+}
+`;
+
 export const AddMusicPageButton = styled.button`
     background: ${(props) => props.theme.colors.primary};
     color: ${(props) => props.theme.colors.textPrimary};

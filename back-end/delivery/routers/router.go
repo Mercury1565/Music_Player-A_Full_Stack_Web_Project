@@ -21,16 +21,14 @@ func Setup(env *config.Env, db mongo.Database, gin *gin.Engine) {
 		AllowOrigins:     []string{"http://localhost:5173"},
 		AllowMethods:     []string{"POST", "GET", "OPTIONS", "PUT", "DELETE"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
-		ExposeHeaders:    []string{"Content-Length"},
+		ExposeHeaders:    []string{"Content-Length", "Content-Type"},
 		AllowCredentials: true,
 		MaxAge:           12 * time.Hour,
 	}))
 
-	gin.Static("/uploads", "../uploads")
-
 	publicRoute := gin.Group("")
 	protectedRoute := gin.Group("")
-	refreshRoute := publicRoute.Group("")
+	refreshRoute := gin.Group("")
 
 	refreshRoute.Use(jwtMiddleware.JWTRefreshAuthMiddelware())
 	protectedRoute.Use(jwtMiddleware.JWTAuthMiddelware())

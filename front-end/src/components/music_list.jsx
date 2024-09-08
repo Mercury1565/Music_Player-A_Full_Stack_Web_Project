@@ -5,12 +5,15 @@ import { useDispatch} from "react-redux";
 import { setMusic } from "../redux/slices/musicSlice";
 import { setNowPlayingMusicList } from "../redux/slices/nowPlayingSlice";
 
-const MusicList = ({ tracks }) => {
+const MusicList = ({ tracks, type }) => {
     const dispatch = useDispatch();    
 
     const handleCardClick = (index) => {
         dispatch(setMusic(tracks[index]));
         dispatch(setNowPlayingMusicList(tracks));
+        
+        dispatch({ type: 'music/fetchMusicAudio', payload: tracks[index].audio_file_path });
+        dispatch({ type: 'music/fetchMusicCover', payload: tracks[index].cover_image_path });
     };
 
     return (
@@ -21,6 +24,7 @@ const MusicList = ({ tracks }) => {
                     music={tracks[index]}
                     index={index}
                     onClick={() => {handleCardClick(index)}}
+                    type= {type}
                 />
             ))}
         </MusicCardsContainer>

@@ -2,7 +2,6 @@ package repository
 
 import (
 	"context"
-	"fmt"
 	"music_player_backend/domain/interfaces"
 	"music_player_backend/domain/models"
 
@@ -58,7 +57,6 @@ func (ur *userRepo) GetUserByEmail(ctx context.Context, email string) (*models.U
 		if err == mongo.ErrNoDocuments {
 			return nil, models.NotFound("user not found")
 		}
-		fmt.Println("right here")
 		return nil, models.NotFound(err.Error())
 	}
 
@@ -157,11 +155,9 @@ func (userRepo *userRepo) GetUserFavouriteMusics(ctx context.Context, userID pri
 	for _, favouriteMusicID := range favourites {
 		var music models.Music
 		err := userRepo.musicCollection.FindOne(ctx, bson.M{"_id": favouriteMusicID}).Decode(&music)
-		if err != nil {
-			return nil, models.InternalServerError("music not found")
+		if err == nil {
+			favouriteMusics = append(favouriteMusics, music)
 		}
-
-		favouriteMusics = append(favouriteMusics, music)
 	}
 
 	return favouriteMusics, nil

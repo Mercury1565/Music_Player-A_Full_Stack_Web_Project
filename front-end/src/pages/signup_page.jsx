@@ -1,8 +1,8 @@
-import { AuthContainer } from "../styles/containers";
+import { AuthContainer, ErrorText } from "../styles/containers";
 import { ThemeProvider } from "@emotion/react";
 import { my_theme } from "../styles/theme";
 import { useState, useEffect } from "react";
-import { AuthButton, AuthForm, AuthHeader, AuthInput, AuthLabel } from "../styles/auth";
+import { AuthButton, AuthForm, AuthHeader, AuthInput, AuthLabel, NavigatorContainer, NavigatorP } from "../styles/auth";
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from "react-router-dom";
 
@@ -10,14 +10,13 @@ const Signup=() => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
+    const { loading, authError, loggedIn } = useSelector((state) => state.auth);
+
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [displayErrorMessage, setDisplayErrorMessage] = useState('');
-
-    const { loading, authError, loggedIn } = useSelector((state) => state.auth);
-    var errorMessage = authError && typeof authError === 'object' ? authError.error || JSON.stringify(authError) : authError;
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -30,7 +29,7 @@ const Signup=() => {
 
     useEffect(() => {
         if (loggedIn) {
-            navigate('/'); // Navigate to the dashboard page or another route after successful login
+            navigate('/'); 
         }
     }, [loggedIn, navigate]);
 
@@ -56,12 +55,18 @@ const Signup=() => {
                         Confirm Password:
                         <AuthInput type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
                     </AuthLabel>
+
+                    <NavigatorContainer>
+                        <p>Already have an account?</p>
+                        <NavigatorP onClick={() => navigate('/login')}>Login</NavigatorP>
+                    </NavigatorContainer>
+                    
                     <AuthButton type="submit">Signup</AuthButton>
                 </AuthForm>
-                {(errorMessage || displayErrorMessage) && (
-                    <p style={{ color: 'pink' }}>
-                        *{errorMessage || displayErrorMessage}
-                    </p>
+                {(authError || displayErrorMessage) && (
+                    <ErrorText>
+                        *{authError || displayErrorMessage}
+                    </ErrorText>
                 )}
             </AuthContainer>
         </ThemeProvider>

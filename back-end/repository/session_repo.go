@@ -60,7 +60,7 @@ func (sr *sessionRepo) updateToken(ctx context.Context, session *models.Session)
 	return nil
 }
 
-// RemoveToken removes a session token from the database based on the user ID.
+// RemoveToken removes all session tokens from the database based on the user ID.
 func (sr *sessionRepo) RemoveToken(ctx context.Context, userID primitive.ObjectID) *models.ErrorResponse {
 	filter := bson.M{"user_id": userID}
 

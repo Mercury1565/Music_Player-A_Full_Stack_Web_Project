@@ -39,6 +39,13 @@ func (uc *refreshUsecase) RefreshToken(ctx context.Context, userID primitive.Obj
 		AccessToken:  accessToken,
 	}
 
+	// remove old session
+	err = uc.sessionRepository.RemoveToken(ctx, userID) 
+	if err != nil {
+		return "", err
+	}
+
+	// create new session
 	err = uc.sessionRepository.SaveToken(ctx, &newSession)
 	if err != nil {
 		return "", err

@@ -31,7 +31,8 @@ func NewMusicRouter(env *config.Env, database mongo.Database, group *gin.RouterG
 	group.GET("/musics/recent", musicController.GetRecentMusicsController)
 	group.GET("/music/genres", musicController.GetGenreListController)
 
-	group.GET("/audio", musicController.GetMusicAudioController)
+	group.GET("/audio/:fileName", musicController.GetMusic)
+    group.GET("/cover/:fileName", musicController.GetCoverImage)
 }
 
 

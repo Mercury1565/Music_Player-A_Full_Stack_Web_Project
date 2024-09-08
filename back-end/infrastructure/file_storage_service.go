@@ -25,7 +25,7 @@ func (fs *FileStorage) SaveFile(directory, filename string, data []byte) (string
 	if err := os.WriteFile(filePath, data, 0666); err != nil {
 		return "", models.InternalServerError("Failed to save file.")
 	}
-	return filePath, nil
+	return filename, nil
 }
 
 func (fs *FileStorage) DeleteFile(musicFilename, coverFilename string) *models.ErrorResponse {

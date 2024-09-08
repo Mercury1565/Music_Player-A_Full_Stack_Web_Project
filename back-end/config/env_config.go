@@ -10,8 +10,8 @@ import (
 type Env struct {
 	JWT_SECRET string `mapstructure:"JWT_SECRET"`
 
-	DB_HOST string `mapstructure:"DB_HOST"`
-	DB_PORT string `mapstructure:"DB_PORT"`
+	DB_USERNAME string `mapstructure:"DB_USERNAME"`
+	DB_PASSWORD string `mapstructure:"DB_PASSWORD"`
 	DB_NAME string `mapstructure:"DB_NAME"`
 
 	ACCESS_TOKEN_EXPIRY_HOUR  int `mapstructure:"ACCESS_TOKEN_EXPIRY_HOUR"`

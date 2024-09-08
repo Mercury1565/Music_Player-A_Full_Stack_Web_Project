@@ -60,3 +60,24 @@ export const AuthHeader = styled.div`
     margin: 15px;
     }
 `;
+
+export const NavigatorContainer = styled.div` 
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    margin-top: ${(props) => props.theme.space[2]}px;
+
+    p {
+        margin-right: ${(props) => props.theme.space[1]}px;
+    }
+`;
+
+export const NavigatorP = styled.p`
+    color: pink;
+
+    &:hover {
+        text-decoration: underline;
+        filter: brightness(0.8);
+        cursor: pointer
+    }
+`;

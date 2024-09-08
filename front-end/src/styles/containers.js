@@ -38,6 +38,21 @@ export const SidebarContainer = styled.div`
   width: 250px;
 `;
 
+export const SidebarLogoContainer = styled.div`
+  display: flex; 
+  justify-content: space-between;
+  margin: ${(props) => props.theme.space[4]}px ${(props) => props.theme.space[2]}px;
+  height: 30px;
+`;
+
+export const LogoutContainer = styled.div`
+  display: flex;
+  width: 20%;
+  flex-direction: column;
+  justify-content: right;
+  align-items: right;
+`;
+
 export const GenreContainer = styled.div`
   width: 75%;
 `;
@@ -73,6 +88,11 @@ export const MusicCardsContainer = styled.div`
 
 export const MusicListContainer = styled.div`
   margin-top: 20px;
+
+  h3 {
+    margin: 40px;
+    color: ${(props) => props.theme.colors.textSecondary};
+  }
 `;
 
 export const TopMusicHeader = styled.div`
@@ -107,4 +127,10 @@ export const AddMusicContainer = styled.div`
   width: 60%;
   margin: 10px 290px;
   padding-bottom: 85px;
+`;
+
+export const ErrorText = styled.h1`
+  color: pink;
+  font-size: 15px;
+  font-weight: 400;
 `;

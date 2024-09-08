@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import GenreCard from "./genre_card";
 import { GenreContainer, GenreHeader, GenreCards } from "../styles/containers";
 import { genre_icon, left, right } from "../assets/assets";
 import { GenreIconStyle, GenreListNavIconStyle } from "../styles/icons";
+import { useDispatch, useSelector } from "react-redux";
 
 const GenreCardsContainer = ({genres}) => {
-
     const [startIndex, setStartIndex] = useState(0);
 
     const handleNext = () => {
@@ -23,8 +23,7 @@ const GenreCardsContainer = ({genres}) => {
         visibleGenres = [...visibleGenres, ...genres.slice(0, remainingGenres)];
     }
 
-    return(
-
+    return (
         <GenreContainer>
             <GenreHeader>
                 <GenreIconStyle src={genre_icon} />
@@ -34,7 +33,10 @@ const GenreCardsContainer = ({genres}) => {
             <GenreCards>
                 <GenreListNavIconStyle src={left} onClick={handlePrevious}/>
                 {visibleGenres.map((genre, index) => (
-                    <GenreCard key={index} genre={genre} />
+                    <GenreCard 
+                        key={index} 
+                        genre={genre} 
+                    />
                 ))}
                 <GenreListNavIconStyle src={right} onClick={handleNext}/>
             </GenreCards>

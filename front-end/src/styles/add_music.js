@@ -57,10 +57,17 @@ export const AddMusicHeader = styled.div`
     }
 `;
 
+export const GenreListContainer = styled.div`
+    display: flex;
+    gap: 50px;
+    justify-content: left;
+    margin: ${(props) => props.theme.space[2]}px 0;
+`;  
+
 export const AddMusicGenreContainer = styled.div`
     display: flex;
-    align-items: center;
-    flex-direction: row;
+    flex-direction: column;
+    justify-content: left;
     gap: ${(props) => props.theme.space[4]}px;
 
     margin: ${(props) => props.theme.space[2]}px 0;
@@ -68,6 +75,7 @@ export const AddMusicGenreContainer = styled.div`
 
 export const AddMusicCheckboxContainer = styled.div`
     display: flex;
+    justify-content: left;
     align-items: center;
     gap: ${(props) => props.theme.space[0]}px;
 `

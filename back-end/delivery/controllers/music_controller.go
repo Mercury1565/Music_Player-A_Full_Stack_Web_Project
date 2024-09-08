@@ -3,6 +3,8 @@ package controllers
 import (
 	"mime/multipart"
 	"net/http"
+	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
@@ -201,7 +203,28 @@ func (musicController *MusicController) DeleteMusicController(ctx *gin.Context) 
 	ctx.IndentedJSON(http.StatusOK, gin.H{"message": "Music deleted successfully"})
 }
 
-func (musicController *MusicController) GetMusicAudioController(ctx *gin.Context) {
-	audioFilePath := ctx.Query("path")
-	ctx.File(audioFilePath)
+func (mc *MusicController) GetMusic(c *gin.Context) {
+	fileName := c.Param("fileName")
+	filePath := filepath.Join("../uploads/music", fileName)
+
+	if _, err := os.Stat(filePath); os.IsNotExist(err) {
+		c.JSON(http.StatusNotFound, gin.H{"message": "File not found"})
+		return
+	}
+
+	c.Header("Content-Type", "audio/mpeg")
+	c.File(filePath)
+}
+
+func (mc *MusicController) GetCoverImage(c *gin.Context) {
+	fileName := c.Param("fileName")
+	filePath := filepath.Join("../uploads/cover", fileName)
+
+	if _, err := os.Stat(filePath); os.IsNotExist(err) {
+		c.JSON(http.StatusNotFound, gin.H{"message": "File not found"})
+		return
+	}
+
+	c.Header("Content-Type", "image/jpeg")
+	c.File(filePath)
 }

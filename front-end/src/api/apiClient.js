@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'music-player-a-full-stack-web-project-mvf7.vercel.app';
+const API_BASE_URL = 'https://music-player-a-full-stack-web-project-6xse.vercel.app';
 // const API_BASE_URL = 'http://localhost:8080';
 
 const api = axios.create({

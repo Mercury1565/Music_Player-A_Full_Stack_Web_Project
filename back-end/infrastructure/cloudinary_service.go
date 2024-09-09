@@ -136,7 +136,6 @@ func (uc *CloudinaryService) GetCoverURL(publicID string) string {
 
 func (uc *CloudinaryService) GetAudioURL(publicID string) string {
 	cloudName := uc.env.CLOUDINARY_CLOUD_NAME
-	fmt.Println(cloudName)
 	imageURL := fmt.Sprintf("https://res.cloudinary.com/%s/video/upload/%s", cloudName, publicID)
 	return imageURL
 }

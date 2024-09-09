@@ -6,6 +6,7 @@ import { my_theme } from "../styles/theme"
 import { useSelector, useDispatch } from "react-redux"
 import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
+import { toggleSidebar } from "../redux/slices/sideBarSlice"
 
 const Favourites=() => {
     const navigate = useNavigate();
@@ -15,6 +16,8 @@ const Favourites=() => {
     const { favouriteMusicList, favouriteMusicMessage, favouriteMusicError} = useSelector((state) => state.favouriteMusicList);
 
     useEffect(() => {
+        dispatch(toggleSidebar(false))
+
         if (!loggedIn) {
             navigate('/login');
         }

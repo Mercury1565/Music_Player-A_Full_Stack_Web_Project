@@ -63,7 +63,6 @@ func (uc *musicUsecase) GetMusic(ctx context.Context, id primitive.ObjectID) (*m
 	ctx, cancel := context.WithTimeout(ctx, uc.timeout)
 	defer cancel()
 
-	uc.musicRepo.IncreasePlayCount(ctx, id)
 	return uc.musicRepo.GetMusic(ctx, id)
 }
 
@@ -126,4 +125,11 @@ func (uc *musicUsecase) DeleteMusic(ctx context.Context, deleteMusicReq dtos.Del
 	uc.cloudinary.DeleteFile(music.CoverImagePath, ctx)
 
 	return uc.musicRepo.DeleteMusic(ctx, deleteMusicReq.MusicID)
+}
+
+func (uc *musicUsecase) IncreasePlayCount(ctx context.Context, id string) (*models.ErrorResponse) {
+	ctx, cancel := context.WithTimeout(ctx, uc.timeout)
+	defer cancel()
+
+	return uc.musicRepo.IncreasePlayCount(ctx, id)
 }

@@ -8,6 +8,7 @@ import { add_music_icon } from "../assets/assets";
 import { useDispatch, useSelector } from "react-redux";
 import { createMusic } from "../api/music_api";
 import { useNavigate } from "react-router-dom";
+import { toggleSidebar } from "../redux/slices/sideBarSlice";
 
 const AddMusicCard = () => {
     const navigate = useNavigate();
@@ -24,6 +25,8 @@ const AddMusicCard = () => {
     const [errorMessage, setErrorMessage] = useState("");
 
     useEffect(() => {
+        dispatch(toggleSidebar(false))
+
         if (!loggedIn) {
             navigate('/login');
         }

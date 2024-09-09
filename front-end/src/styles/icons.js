@@ -61,6 +61,10 @@ export const GenreCardIconStyle = styled.img`
         filter: brightness(5);
         cursor: pointer
     }
+
+    @media (max-width: 768px) {
+        display: none;
+    }
 `;
 
 export const GenreIconStyle = styled.img`
@@ -125,6 +129,15 @@ export const FavouriteIconStyle = styled.img`
     height: 18px;
     &:hover {
         filter: brightness(2);
+        cursor: pointer
+    }
+`;
+
+export const MenuIconStyle = styled.img`
+    width: 25px;
+    height: 25px;
+    &:hover {
+        filter: brightness(0.9);
         cursor: pointer
     }
 `;

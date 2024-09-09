@@ -4,10 +4,14 @@ export const GlobalContainer = styled.div`
   margin: 20px 300px;
   padding-bottom: 85px;
   width: 100%;
+
+  @media (max-width: 768px) {
+    margin: 50px 10px; 
+  }
 `
 
 export const AuthContainer = styled.div`
-  background: ${(props) => props.theme.colors.cardBackground};
+  background: ${(props) => props.theme.colors.sidebarBackground};
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -18,6 +22,10 @@ export const AuthContainer = styled.div`
   margin: 100px 300px;
 
   color: ${(props) => props.theme.colors.textPrimary};
+
+  @media (max-width: 768px) {
+    margin: 50px 10px; 
+  }
 `;
 
 // sidebar containers
@@ -36,6 +44,20 @@ export const SidebarContainer = styled.div`
   top: 0;
   bottom: 0;
   width: 250px;
+
+  z-index: 1000;
+
+  transition: transform 0.4s ease-in-out;
+  transform: ${(props) => (props.isOpen ? 'translateX(0)' : 'translateX(-100%)')};
+
+  @media (min-width: 768px) {
+    transform: translateX(0);
+  }
+
+  @media (max-width: 768px) {
+    padding-top: 50px;
+    background: black;
+  } 
 `;
 
 export const SidebarLogoContainer = styled.div`
@@ -55,6 +77,10 @@ export const LogoutContainer = styled.div`
 
 export const GenreContainer = styled.div`
   width: 75%;
+
+  @media (max-width: 768px) {
+    width: 95%;
+  } 
 `;
 
 // genre card containers
@@ -120,6 +146,11 @@ export const MusicPlayerContainer = styled.div`
 
   width: calc(100vw - 50px); 
   height: 80px;
+  
+  @media (max-width: 768px) {
+    padding: 12px 25px;
+  }
+
 `;
 
 // Add Music Container
@@ -127,6 +158,10 @@ export const AddMusicContainer = styled.div`
   width: 60%;
   margin: 10px 290px;
   padding-bottom: 85px;
+
+  @media (max-width: 768px) {
+    margin: 10px 10px;  /* Adjust the margins for smaller screens */
+  }
 `;
 
 export const ErrorText = styled.h1`

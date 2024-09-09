@@ -154,7 +154,6 @@ function* fetchMusicAudioSaga(action) {
 function* fetchMusicCoverSaga(action) {
   try {
     const coverURL = yield call(fetchMusicCover, action.payload);
-    console.log(coverURL);
     yield put(setCover(coverURL.data)); 
   } 
   catch (e) {

@@ -8,13 +8,19 @@ export const MusicInfoContainer = styled.div`
     align-items: center;
     
     gap: ${(props) => props.theme.space[4]}px;
-    width: 18%;
+    width: 20%;
+
+
 `;
 
 export const MusicImageContainer = styled.img`
     width: 58px;
     height: 58px;
     border-radius: 50%;
+
+    @media (max-width: 768px) {
+        display: none;
+    }    
 `;
 
 export const MusicTitleContainer = styled.div`
@@ -38,12 +44,32 @@ export const ControllerContainer = styled.div`
     gap: ${(props) => props.theme.space[4]}px;
 `;
 
+export const AdjusterController = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 100px;
+
+    width: 60%;
+    padding: 0px 10px;
+
+    @media (max-width: 768px) {
+        flex-direction: column;
+        padding: 0px 0px;
+        gap: 3px;        
+      }    
+`
+
 export const Seeker = styled.div`
-    width: 40%;
+    width: 90%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+
+    @media (max-width: 768px) {
+        display: none;
+    }   
 `;
 
 export const SeekPositionContainer = styled.div`

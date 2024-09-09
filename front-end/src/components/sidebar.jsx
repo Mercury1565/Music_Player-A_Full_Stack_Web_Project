@@ -1,14 +1,15 @@
 import React from 'react';
 import { ThemeProvider } from '@emotion/react';
-import { dashboard_icon, search_icon, profile_icon, favourite_icon, your_music_icon, top_music_header_icon, logo_icon } from '../assets/assets';
+import { dashboard_icon, search_icon, profile_icon, favourite_icon, your_music_icon, top_music_header_icon, logo_icon, menu_icon } from '../assets/assets';
 import { my_theme } from '../styles/theme';
 import { SidebarContainer, SidebarLogoContainer, LogoutContainer } from '../styles/containers';
 import SidebarButton from './sidebar_button';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { LogoIconStyle, LogoutIconStyle } from '../styles/icons';
-import { LogoutButton } from '../styles/buttons';
-import { useDispatch } from "react-redux"
+import { MenuIconStyle, LogoIconStyle, LogoutIconStyle} from '../styles/icons';
+import { LogoutButton, SidebarToggleButton } from '../styles/buttons';
+import { useDispatch, useSelector } from "react-redux"
+import { toggleSidebar } from '../redux/slices/sideBarSlice';
 
 
 const SideBar = () => {
@@ -17,6 +18,7 @@ const SideBar = () => {
 
   const [activeButton, setActiveButton] = useState('');
   const [showLogout, setShowLogout] = useState(false);
+  const isSidebarOpen = useSelector((state) => state.sidebar);
   
   const handleButtonClick = (text) => {
     setActiveButton(text);
@@ -28,9 +30,16 @@ const SideBar = () => {
     navigate('/login');
   };
 
+  const toggleSidebarAction = () => {
+    dispatch(toggleSidebar(!isSidebarOpen));
+  };
+
   return (
     <ThemeProvider theme={my_theme}>
-      <SidebarContainer>
+      <SidebarToggleButton isSidebarOpen={isSidebarOpen} onClick={toggleSidebarAction}>
+        <MenuIconStyle src={menu_icon} />
+      </SidebarToggleButton>
+      <SidebarContainer isOpen={isSidebarOpen}>
         <SidebarLogoContainer>
           <LogoIconStyle src={logo_icon}/>
           <LogoutContainer>

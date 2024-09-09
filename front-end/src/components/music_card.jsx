@@ -86,11 +86,11 @@ const MusicCard = ({ music, index, onClick, type }) => {
         <TopMusicCardContainer isSelected={isSelected}>
             <TopMusicCardDescription onClick={onClick} > 
                 <Styled_h4 isSelected={isSelected}>
-                    {index + 1}
+                    <p>{index + 1}</p>
                 </Styled_h4>
                 <TopMusicCardImage src={coverURL} />
                 <Styled_p isSelected={isSelected}>
-                    {music.artist} - {music.title}
+                    <p>{music.artist} - {music.title}</p>
                 </Styled_p>
             </TopMusicCardDescription>
 

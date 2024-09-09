@@ -3,17 +3,21 @@ import styled from '@emotion/styled';
 export const SearchBarContainerStyle = styled.div`
     background: #414141;
 
-    width: 600px;
-    height: 30px;
     display: flex;
     justify-content: left;
     align-items: center;
 
-    margin: ${(props) => props.theme.space[4]}px 140px;
-
     padding: ${(props) => props.theme.space[0]}px ${(props) => props.theme.space[4]}px;
-
     border-radius: ${(props) => props.theme.radii.xlarge};
+
+    margin-top: 60px;
+    width: 600px;
+    height: 30px;
+
+    @media (max-width: 768px) {
+        width: 325px;
+    }
+
 `
 
 export const SearchBarStyle = styled.input`

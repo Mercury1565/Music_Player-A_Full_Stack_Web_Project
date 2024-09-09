@@ -2,6 +2,8 @@ import { configureStore } from '@reduxjs/toolkit';
 import createSagaMiddleware from 'redux-saga';
 import rootSaga from './sagas'; 
 
+import sidebarReducer from './slices/sideBarSlice';
+
 import musicListReducer from './slices/musicSlice';
 import genreListReducer from './slices/genresSlice';
 import genreMusicListReducer from './slices/genreMusicListSlice'
@@ -19,6 +21,7 @@ const sagaMiddleware = createSagaMiddleware(); // Create the saga middleware
 export const store = configureStore({
   reducer: {
     auth: authReducer,
+    sidebar: sidebarReducer,
 
     track: musicListReducer,
     nowPlaying: nowPlayingListReducer,

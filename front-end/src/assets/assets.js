@@ -35,6 +35,9 @@ import add_music_icon from './add_music_icon.svg';
 // logo icon
 import logo_icon from './logo.svg';
 
+// menu icon
+import menu_icon from './menu_icon.svg'
+
 export {
     search_icon,
     favourite_icon,
@@ -65,5 +68,6 @@ export {
 
     add_music_icon,
 
-    logo_icon
+    logo_icon,
+    menu_icon
 }

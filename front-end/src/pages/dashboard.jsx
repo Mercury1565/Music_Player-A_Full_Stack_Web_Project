@@ -7,6 +7,7 @@ import { my_theme } from "../styles/theme"
 import { useSelector, useDispatch } from "react-redux"
 import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
+import { toggleSidebar } from "../redux/slices/sideBarSlice"
 
 const Dashboard=() => {
     const navigate = useNavigate();
@@ -18,6 +19,7 @@ const Dashboard=() => {
     const { topMusicList, topMusicMessage, topMusicError } = useSelector((state) => state.topMusicList);
 
     useEffect(() => {
+        dispatch(toggleSidebar(false))
         if (!loggedIn) {
             navigate('/login');
         }

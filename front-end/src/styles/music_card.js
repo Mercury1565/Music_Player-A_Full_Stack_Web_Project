@@ -26,6 +26,11 @@ export const TopMusicCardContainer = styled.div`
     &:active {
         background: ${(props) => props.theme.colors.cardBackground};
     }
+
+    @media (max-width: 768px) {
+      width: 87%;
+      padding: ${(props) => props.theme.space[0]}px ${(props) => props.theme.space[3]}px;
+    }    
 `;
 
 export const TopMusicCardDescription = styled.div`
@@ -34,21 +39,29 @@ export const TopMusicCardDescription = styled.div`
     gap: ${(props) => props.theme.space[6]}px;
     width: 400px;
 
-    h4 {
-        font-size: ${(props) => props.theme.fontSizes.large};
-        font-weight: ${(props) => props.theme.fontWeight.medium};
-    }
+    @media (max-width: 768px) {
+      width: 225px;
+      gap: ${(props) => props.theme.space[2]}px;
+    }  
 `
 
 export const TopMusicCardImage = styled.img`
     width: 58px;
     height: 58px;
     border-radius: 50%;
+
+    @media (max-width: 768px) {
+      width: 40px;
+      height: 40px;
+    }
 `;
 
 
-export const Styled_h4 = styled.h4`
+export const Styled_h4 = styled.div`
+    font-size: ${(props) => props.theme.fontSizes.large};
+    font-weight: ${(props) => props.theme.fontWeight.medium};
     width: 30px;
+
   ${({ isSelected, theme }) =>
     isSelected
         && `
@@ -59,9 +72,15 @@ export const Styled_h4 = styled.h4`
         color: transparent;
         `
   }
+
+  @media (max-width: 768px) {
+    font-size: ${(props) => props.theme.fontSizes.small};
+    width: 15px;
+  }    
 `;
 
-export const Styled_p = styled.p`
+export const Styled_p = styled.div`
+  width: 125px;
   ${({ isSelected, theme }) =>
     isSelected
         && `
@@ -72,6 +91,10 @@ export const Styled_p = styled.p`
         color: transparent;
         `
   }
+
+  @media (max-width: 768px) {
+    font-size: ${(props) => props.theme.fontSizes.small};
+  } 
 `;
 
 export const StyledLength = styled.p`
@@ -84,6 +107,10 @@ export const StyledLength = styled.p`
         background-clip: text;
         color: transparent;
         `
+  }
+
+  @media (max-width: 768px) {
+    display: none;  
   }
 `;
 

@@ -9,6 +9,15 @@ export const GenreCardContainer = styled.div`
     height: 269px;
 
     position: relative;
+
+    &:hover {
+        cursor: pointer
+    }
+
+    @media (max-width: 768px) {
+        width: 170px;
+        height: 170px;
+    }
 `;
 
 export const GenreCardImage = styled.img`
@@ -42,6 +51,10 @@ export const GenreCardFooter = styled.div`
     justify-content: space-between;
     flex-direction: row;
     align-items: center;
+
+    @media (max-width: 768px) {
+        padding: ${(props) => props.theme.space[0]}px ${(props) => props.theme.space[2]}px;
+    }
 `;
 
 export const GenreCardTextContainer = styled.div`

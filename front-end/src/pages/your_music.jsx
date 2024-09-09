@@ -6,6 +6,7 @@ import { AddMusicPageButton} from "../styles/buttons";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
+import { toggleSidebar } from "../redux/slices/sideBarSlice";
 
 const YourMusicPage = () => {
     const navigate = useNavigate();
@@ -15,6 +16,8 @@ const YourMusicPage = () => {
     const { yourMusicList, yourMusicMessage, yourMusicError} = useSelector((state) => state.yourMusicList);
     
     useEffect(() => {
+        dispatch(toggleSidebar(false))
+
         if (!loggedIn) {
             navigate('/login');
         }

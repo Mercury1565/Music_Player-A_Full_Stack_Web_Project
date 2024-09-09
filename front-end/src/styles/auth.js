@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 
 export const AuthForm = styled.form`
-    width: 75%;
+    width: 80%;
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -18,13 +18,13 @@ export const AuthInput = styled.input`
     font-size: ${(props) => props.theme.fontSizes.medium};
 
     margin: ${(props) => props.theme.space[0]}px 0;
-    padding: ${(props) => props.theme.space[2]}px ${(props) => props.theme.space[4]}px;
+    padding: ${(props) => props.theme.space[2]}px ${(props) => props.theme.space[3]}px;
 
 `;    
 
 export const AuthLabel = styled.label`
     color: ${(props) => props.theme.colors.textPrimary};
-    padding: ${(props) => props.theme.space[0]}px ${(props) => props.theme.space[0]}px;
+    padding-right: ${(props) => props.theme.space[2]}px;
 
 `;
 

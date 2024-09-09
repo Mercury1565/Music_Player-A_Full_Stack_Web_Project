@@ -90,3 +90,20 @@ export const AddMusicPageButton = styled.button`
         cursor: pointer
     }
 `;
+
+export const SidebarToggleButton = styled.button`
+  position: fixed;
+  left: 10px;
+  top: 10px;
+  z-index: 1001;
+  background: ${(props) => props.theme.colors.sidebarBackground};
+
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  display: none;
+
+  @media (max-width: 768px) {
+    display: block;
+  }
+`;

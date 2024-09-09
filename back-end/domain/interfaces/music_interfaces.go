@@ -17,7 +17,7 @@ type MusicRepository interface {
 	SearchMusics(ctx context.Context, filter dtos.FilterMusicRequest) ([]models.Music, *models.ErrorResponse)
 	// UpdateMusic(ctx context.Context, MusicID primitive.ObjectID, Music *models.Music) *models.ErrorResponse
 	DeleteMusic(ctx context.Context, id primitive.ObjectID) *models.ErrorResponse
-	IncreasePlayCount(ctx context.Context, MusicID primitive.ObjectID) *models.ErrorResponse
+	IncreasePlayCount(ctx context.Context, MusicID string) *models.ErrorResponse
 	GetMusicByArtistID(c context.Context, artistID primitive.ObjectID) ([]models.Music, *models.ErrorResponse)
 	GetTopMusics(c context.Context, limit int) ([]models.Music, *models.ErrorResponse)
 	GetRecentMusics(c context.Context, limit int) ([]models.Music, *models.ErrorResponse) 
@@ -36,6 +36,8 @@ type MusicUsecase interface {
 	GetTopMusics(ctx context.Context, limit int) ([]models.Music, *models.ErrorResponse) 
 	GetRecentMusics(ctx context.Context, limit int) ([]models.Music, *models.ErrorResponse)	
 	GetGenreList(ctx context.Context) ([]models.Genre, *models.ErrorResponse) 
+	IncreasePlayCount(ctx context.Context, id string) (*models.ErrorResponse) 
+
 }
 
 type MusicController interface {

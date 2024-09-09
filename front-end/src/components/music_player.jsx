@@ -1,6 +1,6 @@
 import { ThemeProvider } from "@emotion/react";
 import { MusicPlayerContainer } from "../styles/containers";
-import { MusicInfoContainer, MusicImageContainer, MusicTitleContainer, ControllerContainer, Seeker, SeekPositionContainer, TinyText, UtilityContainer } from "../styles/music_player";
+import { MusicInfoContainer, MusicImageContainer, MusicTitleContainer, ControllerContainer, Seeker, SeekPositionContainer, TinyText, UtilityContainer, AdjusterController } from "../styles/music_player";
 import { MusicPlayerIconStyle, MusicPlayerUtilityIconStyle } from "../styles/icons";
 import { my_theme } from "../styles/theme";
 import { fwd_icon, bwd_icon, player_play_icon, player_pause_icon, shuffle_icon, repeat_icon, favourite_icon, selected_favourite_icon } from "../assets/assets";
@@ -145,6 +145,8 @@ const MusicPlayer = () => {
 
           <audio ref={audioRef} src={audioFile} />
 
+          <AdjusterController>
+
           <ControllerContainer>
             <MusicPlayerIconStyle src={bwd_icon} onClick={handlePreviousTrack} />
             <MusicPlayerIconStyle 
@@ -171,8 +173,8 @@ const MusicPlayer = () => {
           </Seeker>
 
           {/* Volume Slider */}
-          <Box sx={{ width: 140 }}>
-            <Stack spacing={2} direction="row" sx={{ alignItems: 'center', mb: 1 }}>
+          <Box sx={{ width: 140, padding: 0, margin: 0 }}>
+            <Stack width={140} spacing={2} margin={0} padding={0} direction="row" sx={{ alignItems: 'center' }}>
               <VolumeUp style={{ color: '#ffffff' }} />
               <Slider 
                 size="small"
@@ -184,6 +186,7 @@ const MusicPlayer = () => {
               />
             </Stack>
           </Box>
+          </AdjusterController>
 
           <UtilityContainer>
             <MusicPlayerUtilityIconStyle src={shuffle_icon} isActive={playMode === 'random'} onClick={togglePlayMode}/>

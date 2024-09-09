@@ -7,19 +7,40 @@ import { useDispatch, useSelector } from "react-redux";
 
 const GenreCardsContainer = ({genres}) => {
     const [startIndex, setStartIndex] = useState(0);
+    const [cardsToShow, setCardsToShow] = useState(4); // Default to 4 cards
+
+    // Detect screen size and adjust the number of cards to show
+    useEffect(() => {
+        const updateCardsToShow = () => {
+            if (window.innerWidth <= 768) {
+                setCardsToShow(2); // Show 2 cards on small screens
+            } else {
+                setCardsToShow(4); // Show 4 cards on larger screens
+            }
+        };
+
+        // Initial check
+        updateCardsToShow();
+
+        // Add resize event listener to dynamically adjust cards
+        window.addEventListener("resize", updateCardsToShow);
+
+        // Cleanup event listener on component unmount
+        return () => window.removeEventListener("resize", updateCardsToShow);
+    }, []);
 
     const handleNext = () => {
-        setStartIndex(prevIndex => (prevIndex + 4) % genres.length);
+        setStartIndex(prevIndex => (prevIndex + cardsToShow) % genres.length);
     };
 
     const handlePrevious = () => {
-        setStartIndex(prevIndex => (prevIndex - 4 + genres.length) % genres.length);
+        setStartIndex(prevIndex => (prevIndex - cardsToShow + genres.length) % genres.length);
     };
 
-    let visibleGenres = genres.slice(startIndex, startIndex + 4);
+    let visibleGenres = genres.slice(startIndex, startIndex + cardsToShow);
 
-    if (visibleGenres.length < 4) {
-        const remainingGenres = 4 - visibleGenres.length;
+    if (visibleGenres.length < cardsToShow) {
+        const remainingGenres = cardsToShow - visibleGenres.length;
         visibleGenres = [...visibleGenres, ...genres.slice(0, remainingGenres)];
     }
 
@@ -41,8 +62,8 @@ const GenreCardsContainer = ({genres}) => {
                 <GenreListNavIconStyle src={right} onClick={handleNext}/>
             </GenreCards>
         </GenreContainer>
-
     );
 };
+
 
 export default GenreCardsContainer;

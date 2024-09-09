@@ -229,18 +229,22 @@ func (musicRepo *musicRepo) DeleteMusic(c context.Context, musicID primitive.Obj
 	return nil
 }
 
-func (musicRepo *musicRepo) IncreasePlayCount(c context.Context, musicID primitive.ObjectID) *models.ErrorResponse {
-	music, err := musicRepo.GetMusic(c, musicID)
+func (musicRepo *musicRepo) IncreasePlayCount(c context.Context, musicPublicID string) *models.ErrorResponse {
+	var music *models.Music
+
+	err := musicRepo.collection.FindOne(c, bson.M{"audio_file_path": musicPublicID}).Decode(&music)
 	if err != nil {
-		return err
+		return models.NotFound("music not found")
 	}
 
 	music.PlayCount++ // Increase the play count by 1
 
-	_, e := musicRepo.collection.UpdateOne(c, bson.M{"_id": musicID}, bson.M{"$set": bson.M{"play_count": music.PlayCount}})
+	_, e := musicRepo.collection.UpdateOne(c, bson.M{"_id": music.ID}, bson.M{"$set": bson.M{"play_count": music.PlayCount}})
 	if e != nil {
 		return models.InternalServerError("Failed to increase play count")
 	}
 
 	return nil
+
+	
 }

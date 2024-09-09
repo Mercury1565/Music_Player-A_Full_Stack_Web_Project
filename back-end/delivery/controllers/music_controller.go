@@ -206,7 +206,6 @@ func (musicController *MusicController) DeleteMusicController(ctx *gin.Context) 
 func (mc *MusicController) GetMusic(c *gin.Context) {
 	musicPublicID := c.Param("publicID")
 	musicURL := mc.cloudinary.GetAudioURL(musicPublicID)
-
 	c.IndentedJSON(http.StatusOK, gin.H{"data": musicURL})
 }
 

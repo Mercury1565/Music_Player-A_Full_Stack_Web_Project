@@ -42,6 +42,10 @@ export const AddMusicButton = styled.button`
         filter: brightness(0.8);
         cursor: pointer
     }
+
+    @media (max-width: 768px) {
+        margin-left: 100px;  
+    }
 `;
 
 export const AddMusicHeader = styled.div`

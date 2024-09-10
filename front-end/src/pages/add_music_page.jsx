@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { AddMusicButton, AddMusicForm, AddMusicInput, AddMusicLabel, AddMusicHeader, AddMusicCheckbox, AddMusicCheckboxContainer, AddMusicGenreContainer, GenreListContainer } from "../styles/add_music";
 import { ThemeProvider } from "@emotion/react";
 import { my_theme } from "../styles/theme";
-import { AddMusicContainer, ErrorText } from "../styles/containers";
+import { AddMusicContainer, ErrorText, LoadingText } from "../styles/containers";
 import { TopMusicHeaderIcon } from "../styles/icons";
 import { add_music_icon } from "../assets/assets";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,6 +23,7 @@ const AddMusicCard = () => {
     const [musicFile, setMusicFile] = useState(null);
     const [coverFile, setCoverFile] = useState(null);
     const [errorMessage, setErrorMessage] = useState("");
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         dispatch(toggleSidebar(false))
@@ -102,10 +103,14 @@ const AddMusicCard = () => {
             formData.append('cover_image', coverFile);
         }   
 
+        setLoading(true);
         try {
             const response = await createMusic(formData);
+            setLoading(false);  
+            navigate("/your_music");
         } 
         catch (error) {
+            setLoading(false); 
             setErrorMessage("Error uploading music.");
         }
 
@@ -202,6 +207,7 @@ const AddMusicCard = () => {
                     </AddMusicLabel>
                     <AddMusicButton type="submit">Add Music</AddMusicButton>
                     {errorMessage && <ErrorText>*{errorMessage}</ErrorText>}
+                    {loading && <LoadingText>Loading...</LoadingText>}
                 </AddMusicForm>
             </AddMusicContainer>
         </ThemeProvider>

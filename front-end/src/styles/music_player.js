@@ -72,6 +72,12 @@ export const Seeker = styled.div`
     }   
 `;
 
+export const VolumeBox = styled.div`
+    @media (max-width: 768px) {
+        display: none;
+    }   
+`;
+
 export const SeekPositionContainer = styled.div`
     width: 100%;
     display: flex;

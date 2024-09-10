@@ -1,6 +1,6 @@
 import { ThemeProvider } from "@emotion/react";
 import { MusicPlayerContainer } from "../styles/containers";
-import { MusicInfoContainer, MusicImageContainer, MusicTitleContainer, ControllerContainer, Seeker, SeekPositionContainer, TinyText, UtilityContainer, AdjusterController } from "../styles/music_player";
+import { MusicInfoContainer, MusicImageContainer, MusicTitleContainer, ControllerContainer, Seeker, SeekPositionContainer, TinyText, UtilityContainer, AdjusterController, VolumeBox } from "../styles/music_player";
 import { MusicPlayerIconStyle, MusicPlayerUtilityIconStyle } from "../styles/icons";
 import { my_theme } from "../styles/theme";
 import { fwd_icon, bwd_icon, player_play_icon, player_pause_icon, shuffle_icon, repeat_icon, favourite_icon, selected_favourite_icon } from "../assets/assets";
@@ -32,7 +32,7 @@ const MusicPlayer = () => {
           if (!loggedIn || !current_track) return
 
           setCurrentTrackIndex(nowPlaying.findIndex(track => track._id === current_track._id));
-      }, [dispatch, loggedIn]);
+      }, [loggedIn, current_track, nowPlaying]);
 
       const audioRef = useRef(null);
       const [isPlaying, setIsPlaying] = useState(true);
@@ -100,40 +100,28 @@ const MusicPlayer = () => {
     };
 
     const handleNextTrack = () => {
-      if (playMode == 'random') {
-        handleRandomTrack();
-      }
-      else {
-        if (currentTrackIndex < nowPlaying.length - 1) {
-            setCurrentTrackIndex((prev_index) => prev_index + 1);
-        } 
-        else {
-          setCurrentTrackIndex(0);  // Loop back to the first track
-        }
+      setCurrentTrackIndex((prevIndex) => {
+        const nextIndex = prevIndex < nowPlaying.length - 1 ? prevIndex + 1 : 0;
         
-        dispatch(setMusic(nowPlaying[currentTrackIndex]));
-        dispatch({ type: 'music/fetchMusicAudio', payload: nowPlaying[currentTrackIndex].audio_file_path });
-        dispatch({ type: 'music/fetchMusicCover', payload: nowPlaying[currentTrackIndex].cover_image_path });
-      }
+        dispatch(setMusic(nowPlaying[nextIndex]));
+        dispatch({ type: 'music/fetchMusicAudio', payload: nowPlaying[nextIndex].audio_file_path });
+        dispatch({ type: 'music/fetchMusicCover', payload: nowPlaying[nextIndex].cover_image_path });
+
+        return nextIndex;
+      });
     };
 
     const handlePreviousTrack = () => {
-      if (playMode == 'random') {
-        handleRandomTrack();
-      }
-      else {
-        if (currentTrackIndex > 0) {
-          setCurrentTrackIndex((prev_index) => prev_index - 1);
-        } 
-        else {
-          setCurrentTrackIndex(nowPlaying.length - 1);  // Loop to the last track
-        }
+      setCurrentTrackIndex((prevIndex) => {
+        const prevTrackIndex = prevIndex > 0 ? prevIndex - 1 : nowPlaying.length - 1;
 
-        dispatch(setMusic(nowPlaying[currentTrackIndex]));
-        dispatch({ type: 'music/fetchMusicAudio', payload: nowPlaying[currentTrackIndex].audio_file_path });
-        dispatch({ type: 'music/fetchMusicCover', payload: nowPlaying[currentTrackIndex].cover_image_path });
-      }
-    };
+        dispatch(setMusic(nowPlaying[prevTrackIndex]));
+        dispatch({ type: 'music/fetchMusicAudio', payload: nowPlaying[prevTrackIndex].audio_file_path });
+        dispatch({ type: 'music/fetchMusicCover', payload: nowPlaying[prevTrackIndex].cover_image_path });
+
+        return prevTrackIndex;
+      });
+    };    
 
     const handleRandomTrack = () => {
       const randomIndex = Math.floor(Math.random() * nowPlaying.length);
@@ -193,7 +181,7 @@ const MusicPlayer = () => {
           </Seeker>
 
           {/* Volume Slider */}
-          <Box sx={{ width: 140, padding: 0, margin: 0 }}>
+          <VolumeBox>
             <Stack width={140} spacing={2} margin={0} padding={0} direction="row" sx={{ alignItems: 'center' }}>
               <VolumeUp style={{ color: '#ffffff' }} />
               <Slider 
@@ -205,7 +193,7 @@ const MusicPlayer = () => {
                 onChange={handleVolumeChange}
               />
             </Stack>
-          </Box>
+          </VolumeBox>
           </AdjusterController>
 
           <UtilityContainer>

@@ -160,12 +160,19 @@ export const AddMusicContainer = styled.div`
   padding-bottom: 85px;
 
   @media (max-width: 768px) {
-    margin: 10px 10px;  /* Adjust the margins for smaller screens */
+    margin: 50px 12px;  
+    width: 100%;
   }
 `;
 
 export const ErrorText = styled.h1`
   color: pink;
+  font-size: 15px;
+  font-weight: 400;
+`;
+
+export const LoadingText = styled.h1`
+  color: ${(props) => props.theme.colors.textPrimary};
   font-size: 15px;
   font-weight: 400;
 `;

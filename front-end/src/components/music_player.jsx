@@ -94,6 +94,8 @@ const MusicPlayer = () => {
       }
       else if (playMode === 'repeat') {
         dispatch(setMusic(current_track));
+        dispatch({ type: 'music/fetchMusicAudio', payload: nowPlaying[currentTrackIndex].audio_file_path });
+        dispatch({ type: 'music/fetchMusicCover', payload: nowPlaying[currentTrackIndex].cover_image_path });
       }
     };
 
@@ -106,9 +108,8 @@ const MusicPlayer = () => {
       }
       
       dispatch(setMusic(nowPlaying[currentTrackIndex]));
-
-      dispatch({ type: 'music/fetchMusicAudio', payload: current_track.audio_file_path });
-      dispatch({ type: 'music/fetchMusicCover', payload: current_track.cover_image_path });
+      dispatch({ type: 'music/fetchMusicAudio', payload: nowPlaying[currentTrackIndex].audio_file_path });
+      dispatch({ type: 'music/fetchMusicCover', payload: nowPlaying[currentTrackIndex].cover_image_path });
     };
 
     const handlePreviousTrack = () => {
@@ -120,15 +121,17 @@ const MusicPlayer = () => {
       }
 
       dispatch(setMusic(nowPlaying[currentTrackIndex]));
-
-      dispatch({ type: 'music/fetchMusicAudio', payload: current_track.audio_file_path });
-      dispatch({ type: 'music/fetchMusicCover', payload: current_track.cover_image_path });
+      dispatch({ type: 'music/fetchMusicAudio', payload: nowPlaying[currentTrackIndex].audio_file_path });
+      dispatch({ type: 'music/fetchMusicCover', payload: nowPlaying[currentTrackIndex].cover_image_path });
     };
 
     const handleRandomTrack = () => {
       const randomIndex = Math.floor(Math.random() * nowPlaying.length);
       setCurrentTrackIndex(randomIndex);
+
       dispatch(setMusic(nowPlaying[currentTrackIndex]));
+      dispatch({ type: 'music/fetchMusicAudio', payload: nowPlaying[currentTrackIndex].audio_file_path });
+      dispatch({ type: 'music/fetchMusicCover', payload: nowPlaying[currentTrackIndex].cover_image_path });
     };
 
     const togglePlayMode = () => {

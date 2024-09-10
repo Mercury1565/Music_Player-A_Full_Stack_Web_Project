@@ -104,7 +104,11 @@ const MusicPlayer = () => {
       else {
         setCurrentTrackIndex(0);  // Loop back to the first track
       }
+      
       dispatch(setMusic(nowPlaying[currentTrackIndex]));
+
+      dispatch({ type: 'music/fetchMusicAudio', payload: tracks[index].audio_file_path });
+      dispatch({ type: 'music/fetchMusicCover', payload: tracks[index].cover_image_path });
 
     };
 

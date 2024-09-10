@@ -107,19 +107,22 @@ const MusicPlayer = () => {
       
       dispatch(setMusic(nowPlaying[currentTrackIndex]));
 
-      dispatch({ type: 'music/fetchMusicAudio', payload: tracks[index].audio_file_path });
-      dispatch({ type: 'music/fetchMusicCover', payload: tracks[index].cover_image_path });
-
+      dispatch({ type: 'music/fetchMusicAudio', payload: current_track.audio_file_path });
+      dispatch({ type: 'music/fetchMusicCover', payload: current_track.cover_image_path });
     };
 
     const handlePreviousTrack = () => {
       if (currentTrackIndex > 0) {
         setCurrentTrackIndex((prev_index) => prev_index - 1);
-      } else {
+      } 
+      else {
         setCurrentTrackIndex(nowPlaying.length - 1);  // Loop to the last track
       }
+
       dispatch(setMusic(nowPlaying[currentTrackIndex]));
 
+      dispatch({ type: 'music/fetchMusicAudio', payload: current_track.audio_file_path });
+      dispatch({ type: 'music/fetchMusicCover', payload: current_track.cover_image_path });
     };
 
     const handleRandomTrack = () => {

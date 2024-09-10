@@ -67,20 +67,31 @@ const MusicCard = ({ music, index, onClick, type }) => {
 
 
     useEffect(() => {
+        if (!audioURL) return; 
+    
         const audio = new Audio(audioURL);
-        
+    
         const handleMetadata = () => {
-          setDuration(audio.duration);
+            setDuration(audio.duration);
+        };
+    
+        const handleError = () => {
+            setDuration(0); 
         };
     
         // Load the metadata to get the duration
         audio.addEventListener("loadedmetadata", handleMetadata);
+        audio.addEventListener("error", handleError);
     
-        // Clean up the event listener when the component unmounts
+        // Clean up the event listeners and audio object when the component unmounts
         return () => {
-          audio.removeEventListener("loadedmetadata", handleMetadata);
+            audio.removeEventListener("loadedmetadata", handleMetadata);
+            audio.removeEventListener("error", handleError);
+            audio.pause();
+            audio.src = '';
         };
-      }, [music, audioURL]);
+    }, [audioURL]);
+    
 
     return (
         <TopMusicCardContainer isSelected={isSelected}>

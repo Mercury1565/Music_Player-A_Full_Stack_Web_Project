@@ -17,14 +17,14 @@ const GenreCard = ({ genre}) => {
         if (genreMusicList && genreMusicList.length > 0) {
             dispatch(setMusic(genreMusicList[0]));
             dispatch(setNowPlayingMusicList(genreMusicList));
-
-            dispatch({ type: 'music/fetchMusicAudio', payload: genreMusicList[0].audio_file_path });
-            dispatch({ type: 'music/fetchMusicCover', payload: genreMusicList[0].cover_image_path });
         }
     }, [genreMusicList]);
     
     const handleCardClick = () => {
         dispatch({ type: 'music/fetchGenreMusicList', payload: genre.name });
+        
+        dispatch({ type: 'music/fetchMusicAudio', payload: genreMusicList[0].audio_file_path });
+        dispatch({ type: 'music/fetchMusicCover', payload: genreMusicList[0].cover_image_path });
     };
 
     return(

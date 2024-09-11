@@ -13,7 +13,7 @@
 
 ## Introduction
 
-This is a full-stack music player application that allows users to manage and play music. The backend is built with Go while the frontend is developed using React for a smooth user interface. Users can upload, delete, filter, and play music from the server.
+This is a full-stack music player application that allows users to manage and play music. The backend is built with Go while the frontend is developed using React for a smooth user interface. Users can upload, delete, filter, and play music from the server. You can view the full project deployed and in action on this [link](https://music-player-a-full-stack-web-project.vercel.app).
 
 ## Features
 - Upload and store music files.

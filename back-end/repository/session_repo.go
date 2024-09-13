@@ -29,7 +29,7 @@ func (sr *sessionRepo) SaveToken(ctx context.Context, session *models.Session) *
 
 	if err == nil {
 		// updating an existing session
-		sr.updateToken(ctx, session)
+		return sr.updateToken(ctx, session)
 	}
 
 	// creating new session

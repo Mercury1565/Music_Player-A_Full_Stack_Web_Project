@@ -1,3 +1,5 @@
+import { combineReducers } from 'redux';
+
 import sidebarReducer from './slices/sideBarSlice';
 import musicListReducer from './slices/musicSlice';
 import genreListReducer from './slices/genresSlice';

@@ -1,20 +1,15 @@
-import { TopMusicCardContainer, TopMusicCardDescription, TopMusicCardImage, Styled_h4, Styled_p, StyledLength, DeleteWarning} from "../styles/music_card";
-import { FavouriteIconStyle, GarbageIconStyle, TopMusicCardPlayPauseIconStyle } from "../styles/icons";
-import { music_card_play_icon, music_card_pause_icon, favourite_icon, selected_favourite_icon, trash_icon } from "../assets/assets";
-import { useState, useEffect, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchMusicAudio, fetchMusicCover } from "../api/music_api";
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
 
 const MusicCard = ({ music, index, onClick, type }) => {
     const dispatch = useDispatch();
 
     const isSelected = useSelector((state) => state.track._id === music._id);
-    const { favouriteMusicList, favouriteMusicMessage, favouriteMusicError } = useSelector((state) => state.favouriteMusicList);
-    
+    const audioURL = useSelector((state) => state.fetchedMusic.audioFile);
+    const coverURL = useSelector((state) => state.fetchedMusic.cover);
+
     const [isFavourite, setIsFavourite] =  useState(favouriteMusicList && favouriteMusicList.some((m) => m._id === music._id));
 
-    const [audioURL, setAudioURL] = useState(null);
-    const [coverURL, setCoverURL] = useState(null);
     const [duration, setDuration] = useState(0);
 
     const formatDuration = (seconds) => {
@@ -50,20 +45,13 @@ const MusicCard = ({ music, index, onClick, type }) => {
     }
 
     useEffect(() => {
-        const fetchAudioAndCover = async () => {
-            try {
-                const audioUrl = await fetchMusicAudio(music.audio_file_path);
-                const coverUrl = await fetchMusicCover(music.cover_image_path);
-    
-                setAudioURL(audioUrl.data);
-                setCoverURL(coverUrl.data);
-            } 
-            catch (error) {
-            }
-        };
-    
-        fetchAudioAndCover();
-    }, []);
+        if (music.audio_file_path) {
+            dispatch({ type: 'music/fetchMusicAudio', payload: music.audio_file_path });
+        }
+        if (music.cover_image_path) {
+            dispatch({ type: 'music/fetchMusicCover', payload: music.cover_image_path });
+        }
+    }, [dispatch, music.audio_file_path, music.cover_image_path]);
 
 
     useEffect(() => {
@@ -83,7 +71,6 @@ const MusicCard = ({ music, index, onClick, type }) => {
         audio.addEventListener("loadedmetadata", handleMetadata);
         audio.addEventListener("error", handleError);
     
-        // Clean up the event listeners and audio object when the component unmounts
         return () => {
             audio.removeEventListener("loadedmetadata", handleMetadata);
             audio.removeEventListener("error", handleError);
@@ -91,7 +78,6 @@ const MusicCard = ({ music, index, onClick, type }) => {
             audio.src = '';
         };
     }, [audioURL]);
-    
 
     return (
         <TopMusicCardContainer isSelected={isSelected}>
@@ -129,7 +115,6 @@ const MusicCard = ({ music, index, onClick, type }) => {
                 onClick={onClick} 
             />
 
-           
         </TopMusicCardContainer>
     );
 }

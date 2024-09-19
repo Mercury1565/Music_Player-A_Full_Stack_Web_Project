@@ -10,7 +10,7 @@ import yourMusicListReducer from './slices/yourMusicListSlice';
 import nowPlayingListReducer from './slices/nowPlayingSlice';
 import fetchedMusicReducer from './slices/fetchedMusicSlice';
 
-export const rootReducer = combineReducers({
+const rootReducer = combineReducers({
   auth: authReducer,
   sidebar: sidebarReducer,
   track: musicListReducer,
@@ -22,4 +22,6 @@ export const rootReducer = combineReducers({
   searchedMusicList: searchedMusicListReducer,
   yourMusicList: yourMusicListReducer,
   fetchedMusic: fetchedMusicReducer,
-})
+});
+
+export default rootReducer;

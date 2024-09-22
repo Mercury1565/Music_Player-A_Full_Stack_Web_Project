@@ -1,6 +1,6 @@
 import { ThemeProvider } from "@emotion/react";
 import { my_theme } from "../styles/theme";
-import { GlobalContainer } from "../styles/containers";
+import { ErrorText, GlobalContainer } from "../styles/containers";
 import MusicContainer from "../components/music_list_container";
 import { AddMusicPageButton} from "../styles/buttons";
 import { useNavigate } from "react-router-dom";
@@ -24,7 +24,7 @@ const YourMusicPage = () => {
         else {
             dispatch({ type: 'music/fetchYourMusicList' });
         }
-    }, [dispatch, loggedIn, navigate]);
+    }, [dispatch, navigate, loggedIn]);
     
     if (!loggedIn) {
         return null
@@ -40,7 +40,6 @@ const YourMusicPage = () => {
             </GlobalContainer>
         </ThemeProvider>
     )
-   
 }
 
 export default YourMusicPage;

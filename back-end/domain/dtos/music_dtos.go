@@ -10,6 +10,7 @@ type CreateMusicRequest struct {
 	Title    string             `json:"title" validate:"required"`
 	Artist   string             `json:"artist" validate:"required"`
 	ArtistID primitive.ObjectID `bson:"artist_id" json:"artist_id"`
+	Duration string             `json:"duration" validate:"required"`
 	Genres   []string           `json:"genres" validate:"required"`
 }
 

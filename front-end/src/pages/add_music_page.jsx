@@ -6,7 +6,6 @@ import { AddMusicContainer, ErrorText, LoadingText } from "../styles/containers"
 import { TopMusicHeaderIcon } from "../styles/icons";
 import { add_music_icon } from "../assets/assets";
 import { useDispatch, useSelector } from "react-redux";
-import { createMusic } from "../api/music_api";
 import { useNavigate } from "react-router-dom";
 import { toggleSidebar } from "../redux/slices/sideBarSlice";
 
@@ -15,7 +14,8 @@ const AddMusicCard = () => {
     const dispatch = useDispatch();
 
     const { loggedIn } = useSelector((state) => state.auth);
-    const { genreList, genreMessage, genreError} = useSelector((state) => state.genreList);
+    const { genreList, genreMessage, genreError } = useSelector((state) => state.genreList);
+    const { yourMusicList, yourMusicLoading, yourMusicMessage, yourMusicError } = useSelector((state) => state.yourMusicList);
 
     const [title, setTitle] = useState("");
     const [artist, setArtist] = useState("");
@@ -23,18 +23,22 @@ const AddMusicCard = () => {
     const [musicFile, setMusicFile] = useState(null);
     const [coverFile, setCoverFile] = useState(null);
     const [errorMessage, setErrorMessage] = useState("");
-    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         dispatch(toggleSidebar(false))
 
         if (!loggedIn) {
             navigate('/login');
-        }
-        else {
+        } else {
             dispatch({ type: 'music/fetchGenreList' });
         }
     }, [dispatch, loggedIn, navigate]);
+
+    useEffect(() => {
+        if (yourMusicError) {
+            setErrorMessage('Error creating music. Please try again.');
+        }
+    }, [yourMusicError, navigate]);
 
     if (!loggedIn) {
         return null;
@@ -83,39 +87,35 @@ const AddMusicCard = () => {
         }
     };
 
-    const handleSubmit = async(e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!musicFile || !coverFile) {
-            setErrorMessage("Please ensure you have uploaded a valid music file and cover image.");
-            return;
+        
+        if (!musicFile) {
+          setErrorMessage("Please ensure you have uploaded a valid music file and cover image.");
+          return;
         }
+      
+        const audio = new Audio(URL.createObjectURL(musicFile));
 
-        const formData = new FormData();
-        formData.append('artist', artist);
-        formData.append('title', title);
-        formData.append('genres', genre);
-
-        // Append files
-        if (musicFile) {
-            formData.append('music', musicFile);
-        }
-        if (coverFile) {
-            formData.append('cover_image', coverFile);
-        }   
-
-        setLoading(true);
-        try {
-            const response = await createMusic(formData);
-            setLoading(false);  
-            navigate("/your_music");
-        } 
-        catch (error) {
-            setLoading(false); 
-            setErrorMessage("Error uploading music.");
-        }
-
-        navigate("/your_music");
-    };
+        audio.addEventListener('loadedmetadata', () => {
+          const audioDuration = audio.duration;
+      
+          dispatch({
+            type: 'music/createMusic',
+            payload: {
+              musicData: { artist, title, genre, duration: audioDuration },
+              musicFile,
+              coverFile,
+            },
+          });      
+        });
+      
+        // Handle errors while loading metadata (invalid file, etc.)
+        audio.addEventListener('error', () => {
+          setErrorMessage('Invalid audio file');
+        });
+      };
+      
 
     return (
         <ThemeProvider theme={my_theme}>
@@ -206,9 +206,11 @@ const AddMusicCard = () => {
                         <AddMusicInput type="file" onChange={handleCoverFileChange} />
                     </AddMusicLabel>
                     <AddMusicButton type="submit">Add Music</AddMusicButton>
-                    {errorMessage && <ErrorText>*{errorMessage}</ErrorText>}
-                    {loading && <LoadingText>Loading...</LoadingText>}
                 </AddMusicForm>
+
+                {errorMessage && <ErrorText>*{errorMessage}</ErrorText>}
+                {yourMusicMessage && <ErrorText>{yourMusicMessage}</ErrorText>}
+                {yourMusicLoading && <LoadingText>Loading...</LoadingText>}
             </AddMusicContainer>
         </ThemeProvider>
     );

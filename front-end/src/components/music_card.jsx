@@ -1,16 +1,20 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { TopMusicCardContainer, TopMusicCardDescription, TopMusicCardImage, Styled_h4, Styled_p, StyledLength, DeleteWarning} from "../styles/music_card";
+import { FavouriteIconStyle, GarbageIconStyle, TopMusicCardPlayPauseIconStyle } from "../styles/icons";
+import { music_card_play_icon, music_card_pause_icon, favourite_icon, selected_favourite_icon, trash_icon } from "../assets/assets";
+import { useState, useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 const MusicCard = ({ music, index, onClick, type }) => {
     const dispatch = useDispatch();
 
     const isSelected = useSelector((state) => state.track._id === music._id);
-    const audioURL = useSelector((state) => state.fetchedMusic.audioFile);
-    const coverURL = useSelector((state) => state.fetchedMusic.cover);
-
+    const { favouriteMusicList, favouriteMusicMessage, favouriteMusicError } = useSelector((state) => state.favouriteMusicList);
+    
     const [isFavourite, setIsFavourite] =  useState(favouriteMusicList && favouriteMusicList.some((m) => m._id === music._id));
 
-    const [duration, setDuration] = useState(0);
+    // const audioURL = music.audio_file_path;
+    const coverURL = music.cover_image_path;
+    const duration = music.duration;
 
     const formatDuration = (seconds) => {
         const minutes = Math.floor(seconds / 60);
@@ -44,40 +48,21 @@ const MusicCard = ({ music, index, onClick, type }) => {
         }
     }
 
-    useEffect(() => {
-        if (music.audio_file_path) {
-            dispatch({ type: 'music/fetchMusicAudio', payload: music.audio_file_path });
-        }
-        if (music.cover_image_path) {
-            dispatch({ type: 'music/fetchMusicCover', payload: music.cover_image_path });
-        }
-    }, [dispatch, music.audio_file_path, music.cover_image_path]);
-
-
-    useEffect(() => {
-        if (!audioURL) return; 
+    // useEffect(() => {
+    //     const fetchAudioAndCover = async () => {
+    //         try {
+    //             const audioUrl = await fetchMusicAudio(music.audio_file_path);
+    //             const coverUrl = await fetchMusicCover(music.cover_image_path);
     
-        const audio = new Audio(audioURL);
+    //             setAudioURL(audioUrl.data);
+    //             setCoverURL(coverUrl.data);
+    //         } 
+    //         catch (error) {
+    //         }
+    //     };
     
-        const handleMetadata = () => {
-            setDuration(audio.duration);
-        };
-    
-        const handleError = () => {
-            setDuration(0); 
-        };
-    
-        // Load the metadata to get the duration
-        audio.addEventListener("loadedmetadata", handleMetadata);
-        audio.addEventListener("error", handleError);
-    
-        return () => {
-            audio.removeEventListener("loadedmetadata", handleMetadata);
-            audio.removeEventListener("error", handleError);
-            audio.pause();
-            audio.src = '';
-        };
-    }, [audioURL]);
+    //     fetchAudioAndCover();
+    // }, []);
 
     return (
         <TopMusicCardContainer isSelected={isSelected}>
@@ -115,6 +100,7 @@ const MusicCard = ({ music, index, onClick, type }) => {
                 onClick={onClick} 
             />
 
+           
         </TopMusicCardContainer>
     );
 }

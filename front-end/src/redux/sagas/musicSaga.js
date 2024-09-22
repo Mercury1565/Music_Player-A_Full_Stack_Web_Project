@@ -2,7 +2,7 @@ import { call, put, takeLatest } from 'redux-saga/effects';
 import { createMusic, fetchTopMusicList, fetchFavouriteMusicList, fetchYourMusicList, fetchGenreList, fetchGenreMusicList, addToFavouriteMusicList, removeFromFavouriteMusicList, searchMusic, deleteMusic, fetchMusicAudio, fetchMusicCover } from '../../api/music_api';
 import { setFavourites, setFavouritesError } from '../slices/favouriteMusicListSlice';
 import { setTopMusicList, setTopMusicListError } from '../slices/topMusicListSlice';
-import { setYourMusicList, setYourMusicListError } from '../slices/yourMusicListSlice';
+import { setYourMusicList, setYourMusicListError, setYourMusicListRequest, setYourMusicListSuccess } from '../slices/yourMusicListSlice';
 import { setGenreList, setGenreListError } from '../slices/genresSlice';
 import { setGenreMusicList } from '../slices/genreMusicListSlice';
 import { setSearchList, setSearchListError } from '../slices/searchedMusicListSlice';
@@ -10,6 +10,7 @@ import { setMusic } from '../slices/musicSlice';
 import { setAudio, setCover, setError } from '../slices/fetchedMusicSlice';
 
 function* createMusicSaga(action) {
+  yield put(setYourMusicListRequest());
   const { musicData, musicFile, coverFile } = action.payload;
 
   try {
@@ -18,11 +19,12 @@ function* createMusicSaga(action) {
     // Append text fields
     formData.append('artist', musicData.artist);
     formData.append('title', musicData.title);
-    formData.append('response', musicData.genre.join(','));
+    formData.append('duration', musicData.duration);
+    formData.append('genres', musicData.genre.join(','));
 
     // Append files
     if (musicFile) {
-      formData.append('response', musicFile);
+      formData.append('music', musicFile);
     }
     if (coverFile) {
       formData.append('cover_image', coverFile);
@@ -32,18 +34,18 @@ function* createMusicSaga(action) {
     const response = yield call(createMusic, formData);
 
     // Dispatch success action with the uploaded response
-    yield put(setYourMusicList(response)); 
+    yield put(setYourMusicListSuccess(response)); 
   } 
   catch (e) {
     // Handle error by dispatching an error action
-    yield put(setYourMusicListError(e.response))
+    yield put(setYourMusicListError(e))
   }
 }
 
 function* deleteMusicSaga(action) {
   try {
     const response = yield call(deleteMusic, action.payload);
-    yield put(setYourMusicList(response)); 
+    // yield put(setYourMusicListSuccess(response)); 
 
   } 
   catch (e) {
@@ -99,7 +101,7 @@ function* fetchTopMusicListSaga() {
 function* fetchYourMusicListSaga() {
   try {
     const response = yield call(fetchYourMusicList);
-    yield put(setYourMusicList(response)); 
+    yield put(setYourMusicList(response.data)); 
   } 
   catch (e) {
     // Handle error by dispatching an error action

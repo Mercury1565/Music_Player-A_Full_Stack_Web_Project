@@ -6,6 +6,7 @@ import (
 	"music_player_backend/domain/dtos"
 	"music_player_backend/domain/interfaces"
 	"music_player_backend/domain/models"
+	"strconv"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -41,6 +42,12 @@ func (uc *musicUsecase) CreateMusic(ctx context.Context, newMusic *dtos.CreateMu
 	music.Title = newMusic.Title
 	music.Genres = newMusic.Genres
 
+	numDuration, e := strconv.ParseFloat(newMusic.Duration, 64)
+	if e != nil {
+		return nil, models.BadRequest("Duration must be a number")
+	}
+	music.Duration = numDuration
+
 	// Upload the audio file to cloudinary
 	audioPublicID, err := uc.cloudinary.UploadAudio(audioFile, ctx)
 	if err != nil {
@@ -53,8 +60,11 @@ func (uc *musicUsecase) CreateMusic(ctx context.Context, newMusic *dtos.CreateMu
 		return nil, err
 	}
 
-	music.AudioFilePath = audioPublicID
-	music.CoverImagePath = coverPublicID
+	audioURL := uc.cloudinary.GetAudioURL(audioPublicID)
+	coverURL := uc.cloudinary.GetCoverURL(coverPublicID)
+
+	music.AudioFilePath = audioURL
+	music.CoverImagePath = coverURL
 
 	return uc.musicRepo.CreateMusic(ctx, &music)
 }
@@ -127,7 +137,7 @@ func (uc *musicUsecase) DeleteMusic(ctx context.Context, deleteMusicReq dtos.Del
 	return uc.musicRepo.DeleteMusic(ctx, deleteMusicReq.MusicID)
 }
 
-func (uc *musicUsecase) IncreasePlayCount(ctx context.Context, id string) (*models.ErrorResponse) {
+func (uc *musicUsecase) IncreasePlayCount(ctx context.Context, id string) *models.ErrorResponse {
 	ctx, cancel := context.WithTimeout(ctx, uc.timeout)
 	defer cancel()
 

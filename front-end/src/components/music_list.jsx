@@ -11,9 +11,6 @@ const MusicList = ({ tracks, type }) => {
     const handleCardClick = (index) => {
         dispatch(setMusic(tracks[index]));
         dispatch(setNowPlayingMusicList(tracks));
-        
-        dispatch({ type: 'music/fetchMusicAudio', payload: tracks[index].audio_file_path });
-        dispatch({ type: 'music/fetchMusicCover', payload: tracks[index].cover_image_path });
     };
 
     return (

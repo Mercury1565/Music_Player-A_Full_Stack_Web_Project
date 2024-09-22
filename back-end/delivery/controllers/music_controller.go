@@ -35,6 +35,7 @@ func (musicController *MusicController) CreateMusicController(ctx *gin.Context) 
 	newMusic.ArtistID, _ = primitive.ObjectIDFromHex(artistId)
 	newMusic.Artist = ctx.PostForm("artist")
 	newMusic.Title = ctx.PostForm("title")
+	newMusic.Duration = ctx.PostForm("duration");
 	newMusic.Genres = strings.Split(ctx.PostForm("genres"), ",")
 
 	audioFile, err := ctx.FormFile("music")

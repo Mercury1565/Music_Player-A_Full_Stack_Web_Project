@@ -6,10 +6,7 @@ import { my_theme } from "../styles/theme";
 import { fwd_icon, bwd_icon, player_play_icon, player_pause_icon, shuffle_icon, repeat_icon, favourite_icon, selected_favourite_icon } from "../assets/assets";
 
 import Slider from '@mui/material/Slider';
-
-import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
-
 import {VolumeUp} from '@mui/icons-material';
 
 import { useEffect, useState, useRef } from 'react';
@@ -23,10 +20,13 @@ const MusicPlayer = () => {
 
       const current_track = useSelector((state) => state.track);
       const nowPlaying = useSelector((state) => state.nowPlaying);
-      const { cover, audioFile, error} = useSelector((state) => state.fetchedMusic);
 
       const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
       const [playMode, setPlayMode] = useState('sequential');  // Mode: 'sequential' or 'random'
+
+      const audioURL = current_track.audio_file_path;
+      const coverURL = current_track.cover_image_path;
+      const duration = current_track.duration;
 
       useEffect(() => {
           if (!loggedIn || !current_track) return
@@ -38,16 +38,10 @@ const MusicPlayer = () => {
       const [isPlaying, setIsPlaying] = useState(true);
       const [position, setPosition] = useState(0);
       const [volume, setVolume] = useState(30);  
-      const [duration, setDuration] = useState(0);
 
       useEffect(() => {
         if (audioRef.current && current_track) {
           const audio = audioRef.current;
-
-          // Update duration when the metadata is loaded
-          audio.onloadedmetadata = () => {
-            setDuration(audio.duration);
-          };
 
           // Update position as the audio plays
           audio.ontimeupdate = () => {
@@ -58,7 +52,7 @@ const MusicPlayer = () => {
           audio.play();
           setIsPlaying(true);
         }
-      }, [current_track, audioFile, cover]);  // Re-run when current_track or isPlaying changes
+      }, [current_track, audioURL, coverURL]);  // Re-run when current_track or isPlaying changes
 
       const formatDuration = (seconds) => {
         const minutes = Math.floor(seconds / 60);
@@ -94,19 +88,13 @@ const MusicPlayer = () => {
       }
       else if (playMode === 'repeat') {
         dispatch(setMusic(current_track));
-        dispatch({ type: 'music/fetchMusicAudio', payload: nowPlaying[currentTrackIndex].audio_file_path });
-        dispatch({ type: 'music/fetchMusicCover', payload: nowPlaying[currentTrackIndex].cover_image_path });
       }
     };
 
     const handleNextTrack = () => {
       setCurrentTrackIndex((prevIndex) => {
         const nextIndex = prevIndex < nowPlaying.length - 1 ? prevIndex + 1 : 0;
-        
         dispatch(setMusic(nowPlaying[nextIndex]));
-        dispatch({ type: 'music/fetchMusicAudio', payload: nowPlaying[nextIndex].audio_file_path });
-        dispatch({ type: 'music/fetchMusicCover', payload: nowPlaying[nextIndex].cover_image_path });
-
         return nextIndex;
       });
     };
@@ -114,11 +102,7 @@ const MusicPlayer = () => {
     const handlePreviousTrack = () => {
       setCurrentTrackIndex((prevIndex) => {
         const prevTrackIndex = prevIndex > 0 ? prevIndex - 1 : nowPlaying.length - 1;
-
         dispatch(setMusic(nowPlaying[prevTrackIndex]));
-        dispatch({ type: 'music/fetchMusicAudio', payload: nowPlaying[prevTrackIndex].audio_file_path });
-        dispatch({ type: 'music/fetchMusicCover', payload: nowPlaying[prevTrackIndex].cover_image_path });
-
         return prevTrackIndex;
       });
     };    
@@ -126,10 +110,7 @@ const MusicPlayer = () => {
     const handleRandomTrack = () => {
       const randomIndex = Math.floor(Math.random() * nowPlaying.length);
       setCurrentTrackIndex(randomIndex);
-
       dispatch(setMusic(nowPlaying[currentTrackIndex]));
-      dispatch({ type: 'music/fetchMusicAudio', payload: nowPlaying[currentTrackIndex].audio_file_path });
-      dispatch({ type: 'music/fetchMusicCover', payload: nowPlaying[currentTrackIndex].cover_image_path });
     };
 
     const togglePlayMode = () => {
@@ -144,14 +125,14 @@ const MusicPlayer = () => {
       <ThemeProvider theme={my_theme}>
         <MusicPlayerContainer>
           <MusicInfoContainer>
-            <MusicImageContainer src={cover}/>
+            <MusicImageContainer src={coverURL}/>
             <MusicTitleContainer>
               <h3>{current_track.title}</h3>
               <p>{current_track.artist}</p>
             </MusicTitleContainer>
           </MusicInfoContainer>
 
-          <audio ref={audioRef} src={audioFile} />
+          <audio ref={audioRef} src={audioURL} />
 
           <AdjusterController>
 

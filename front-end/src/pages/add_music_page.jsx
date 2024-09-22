@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { AddMusicButton, AddMusicForm, AddMusicInput, AddMusicLabel, AddMusicHeader, AddMusicCheckbox, AddMusicCheckboxContainer, AddMusicGenreContainer, GenreListContainer } from "../styles/add_music";
 import { ThemeProvider } from "@emotion/react";
 import { my_theme } from "../styles/theme";
-import { AddMusicContainer, ErrorText, LoadingText } from "../styles/containers";
+import { AddMusicContainer, ErrorText, LoadingText, SuccessText } from "../styles/containers";
 import { TopMusicHeaderIcon } from "../styles/icons";
 import { add_music_icon } from "../assets/assets";
 import { useDispatch, useSelector } from "react-redux";
@@ -209,8 +209,8 @@ const AddMusicCard = () => {
                 </AddMusicForm>
 
                 {errorMessage && <ErrorText>*{errorMessage}</ErrorText>}
-                {yourMusicMessage && <ErrorText>{yourMusicMessage}</ErrorText>}
-                {yourMusicLoading && <LoadingText>Loading...</LoadingText>}
+                {yourMusicMessage && <SuccessText>HORRAH!!! Music Added Successfully!!!</SuccessText>}
+                {yourMusicLoading && <LoadingText>Adding Music...</LoadingText>}
             </AddMusicContainer>
         </ThemeProvider>
     );

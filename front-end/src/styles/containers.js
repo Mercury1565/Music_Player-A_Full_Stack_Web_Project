@@ -179,6 +179,6 @@ export const LoadingText = styled.h1`
 
 export const SuccessText = styled.h1`
   color: ${(props) => props.theme.colors.textPrimary};
-  font-size: 18px;
+  font-size: 15px;
   font-weight: 400;
 `;
